@@ -138,11 +138,9 @@ export class AppComponent implements OnInit {
       this.darkMode = toggle;
       const element = window.document.body;
       if (this.darkMode) {
-        element.classList.add('dark-theme');
-        element.classList.remove('lite-theme');
+        document.documentElement.setAttribute('theme', null);
       } else {
-        element.classList.add('lite-theme');
-        element.classList.remove('dark-theme');
+        document.documentElement.setAttribute('theme', 'light');
       }
     });
   }
