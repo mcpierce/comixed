@@ -27,18 +27,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 
 @RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
-@TestPropertySource(locations = "classpath:application.properties")
-public class ImageContentAdaptorTest extends BaseContentAdaptorTest {
+public class ImageFileTypeContentAdaptorTest extends BaseContentAdaptorTest {
   private static final String TEST_JPEG_FILENAME = "src/test/resources/example.jpg";
   private static final String TEST_WEBP_FILENAME = "src/test/resources/example.webp";
   private static final String TEST_GIF_FILENAME = "src/test/resources/example.gif";
 
-  @InjectMocks private ImageContentAdaptor loader;
+  @InjectMocks private ImageFileTypeContentAdaptor loader;
 
   private ComicBook comicBook = new ComicBook();
   private ContentAdaptorRules contentAdaptorRules = new ContentAdaptorRules();

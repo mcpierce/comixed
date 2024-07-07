@@ -1,6 +1,6 @@
 /*
  * ComiXed - A digital comic book library management application.
- * Copyright (C) 2017, The ComiXed Project
+ * Copyright (C) 2024, The ComiXed Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,26 +18,33 @@
 
 package org.comixedproject.adaptors.content;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 /**
- * <code>AbstractContentAdaptor</code> provides a base class for creating new implementations of
- * {@link ContentAdaptor}.
+ * <code>ImageFileTypeContentAdaptorProvider</code> provides for creating instances of {@link
+ * ImageFileTypeContentAdaptor}.
  *
  * @author Darryl L. Pierce
  */
 @Log4j2
-public abstract class AbstractContentAdaptor implements ContentAdaptor {
-  @Autowired private ApplicationContext applicationContext;
+public class ImageFileTypeContentAdaptorProvider implements FileTypeContentAdaptorProvider {
+  private List<String> supportedTypes = new ArrayList<>(Arrays.asList("jpg", "gif", "png", "webp"));
 
-  protected ContentAdaptor getBean(final String name) throws ContentAdaptorException {
-    try {
-      return this.applicationContext.getBean(name, ContentAdaptor.class);
-    } catch (BeansException error) {
-      throw new ContentAdaptorException("Failed to load bean: " + name, error);
-    }
+  @Override
+  public FileTypeContentAdaptor create() {
+    return new ImageFileTypeContentAdaptor();
+  }
+
+  @Override
+  public String getName() {
+    return this.getClass().getSimpleName();
+  }
+
+  @Override
+  public boolean supportedContentType(final String contentType) {
+    return this.supportedTypes.contains(contentType);
   }
 }

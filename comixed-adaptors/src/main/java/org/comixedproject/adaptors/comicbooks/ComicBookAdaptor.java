@@ -18,9 +18,14 @@
 
 package org.comixedproject.adaptors.comicbooks;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import java.io.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.utils.FileNameUtils;
@@ -34,17 +39,19 @@ import org.comixedproject.adaptors.archive.model.ArchiveEntryType;
 import org.comixedproject.adaptors.archive.model.ArchiveReadHandle;
 import org.comixedproject.adaptors.archive.model.ArchiveWriteHandle;
 import org.comixedproject.adaptors.archive.model.ComicArchiveEntry;
-import org.comixedproject.adaptors.content.ComicMetadataContentAdaptor;
 import org.comixedproject.adaptors.content.ContentAdaptor;
 import org.comixedproject.adaptors.content.ContentAdaptorException;
 import org.comixedproject.adaptors.content.ContentAdaptorRules;
 import org.comixedproject.adaptors.file.FileAdaptor;
 import org.comixedproject.adaptors.file.FileTypeAdaptor;
 import org.comixedproject.model.archives.ArchiveType;
-import org.comixedproject.model.comicbooks.ComicBook;
-import org.comixedproject.model.comicbooks.ComicDetail;
+import org.comixedproject.model.comicbooks.*;
 import org.comixedproject.model.comicpages.ComicPage;
+import org.comixedproject.model.metadata.ComicInfo;
+import org.comixedproject.model.metadata.ComicInfoMetadataSource;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.stereotype.Component;
 
 /**
@@ -54,12 +61,19 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Log4j2
-public class ComicBookAdaptor {
+public class ComicBookAdaptor implements InitializingBean {
   @Autowired private FileTypeAdaptor fileTypeAdaptor;
   @Autowired private ComicFileAdaptor comicFileAdaptor;
   @Autowired private ComicPageAdaptor comicPageAdaptor;
-  @Autowired private ComicMetadataContentAdaptor comicMetadataContentAdaptor;
+  @Autowired MappingJackson2XmlHttpMessageConverter xmlConverter;
   @Autowired private FileAdaptor fileAdaptor;
+
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    this.xmlConverter
+        .getObjectMapper()
+        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+  }
 
   /**
    * Creates a new comic. Determines the archive type for the underlying file.
@@ -105,7 +119,8 @@ public class ComicBookAdaptor {
           final byte[] content = archiveAdaptor.readEntry(readHandle, entry.getFilename());
           if (content.length > 0) {
             log.trace("Getting content adaptor for entry: {}", entry.getFilename());
-            final ContentAdaptor adaptor = this.fileTypeAdaptor.getContentAdaptorFor(content);
+            final ContentAdaptor adaptor =
+                this.fileTypeAdaptor.getContentAdaptorFor(entry.getFilename(), content);
             if (adaptor != null) {
               log.trace("Invoking content adaptor");
               adaptor.loadContent(comicBook, entry.getFilename(), content, rules);
@@ -171,7 +186,7 @@ public class ComicBookAdaptor {
 
       log.trace("Writing comic book metadata");
       destinationArchive.writeEntry(
-          writeHandle, "ComicInfo.xml", this.comicMetadataContentAdaptor.createContent(comicBook));
+          writeHandle, "ComicInfo.xml", this.createComicInfoXmlFromComic(comicBook));
 
       log.trace("Writing comic book pages");
       final int length = String.valueOf(comicBook.getPages().size()).length();
@@ -241,9 +256,124 @@ public class ComicBookAdaptor {
         filename);
     try (OutputStream outstream = new FileOutputStream(new File(filename), false)) {
       log.trace("Writing metadata content");
-      outstream.write(this.comicMetadataContentAdaptor.createContent(comicBook));
+      outstream.write(this.createComicInfoXmlFromComic(comicBook));
     } catch (IOException | ContentAdaptorException error) {
       throw new AdaptorException("failed to write metadata file: " + filename, error);
+    }
+  }
+
+  private byte[] createComicInfoXmlFromComic(final ComicBook comicBook)
+      throws ContentAdaptorException {
+    log.trace("Mapping comic metadata to ComicInfo");
+    final ComicInfo comicInfo = new ComicInfo();
+    var comicDetail = comicBook.getComicDetail();
+    comicInfo.setWeb(comicDetail.getWebAddress());
+    comicInfo.setPublisher(comicDetail.getPublisher());
+    comicInfo.setSeries(comicDetail.getSeries());
+    comicInfo.setVolume(comicDetail.getVolume());
+    comicInfo.setIssueNumber(comicDetail.getIssueNumber());
+    if (comicDetail.getCoverDate() != null) {
+      final GregorianCalendar calendar = new GregorianCalendar();
+      calendar.setTime(comicDetail.getCoverDate());
+      comicInfo.setYear(calendar.get(Calendar.YEAR));
+      comicInfo.setMonth(calendar.get(Calendar.MONTH) + 1);
+    }
+    comicInfo.setTitle(comicDetail.getTitle());
+    final ComicDetail detail = comicDetail;
+    comicInfo.setCharacters(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.CHARACTER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setTeams(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.TEAM)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setLocations(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.LOCATION)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setAlternateSeries(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.STORY)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setWriter(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.WRITER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setEditor(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.EDITOR)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setPenciller(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.PENCILLER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setInker(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.INKER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setColorist(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.COLORIST)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setLetterer(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.LETTERER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setCoverArtist(
+        String.join(
+            ",",
+            detail.getTags().stream()
+                .filter(tag -> tag.getType() == ComicTagType.COVER)
+                .map(ComicTag::getValue)
+                .collect(Collectors.toList())));
+    comicInfo.setNotes(comicDetail.getNotes());
+    comicInfo.setSummary(comicDetail.getDescription());
+    final ComicMetadataSource metadata = comicBook.getMetadata();
+    if (metadata != null
+        && org.springframework.util.StringUtils.hasLength(
+            metadata.getMetadataSource().getAdaptorName())
+        && org.springframework.util.StringUtils.hasLength(metadata.getReferenceId())) {
+      log.debug("Adding metadata source details");
+      comicInfo.setMetadata(
+          new ComicInfoMetadataSource(
+              metadata.getMetadataSource().getAdaptorName(), metadata.getReferenceId()));
+    }
+    try {
+      log.trace("Generating ComicInfo.xml data");
+      return this.xmlConverter.getObjectMapper().writeValueAsBytes(comicInfo);
+    } catch (JsonProcessingException error) {
+      throw new ContentAdaptorException("Failed to write ComicInfo.xml data", error);
     }
   }
 

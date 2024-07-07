@@ -18,19 +18,22 @@
 
 package org.comixedproject.adaptors.content;
 
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.comixedproject.adaptors.archive.model.ArchiveEntryType;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicpages.ComicPage;
-import org.springframework.stereotype.Component;
 
 /**
- * <code>ImageContentAdaptor</code> loads an image and makes it a {@link ComicPage} for a comic.
+ * <code>ImageFileTypeContentAdaptor</code> loads an image and makes it a {@link ComicPage} for a
+ * comic.
  *
  * @author Darryl L. Pierce
  */
-@Component
 @Log4j2
-public class ImageContentAdaptor extends AbstractContentAdaptor {
+public class ImageFileTypeContentAdaptor implements FileTypeContentAdaptor {
+  @Getter private ArchiveEntryType archiveEntryType = ArchiveEntryType.IMAGE;
+
   @Override
   public void loadContent(
       final ComicBook comicBook,

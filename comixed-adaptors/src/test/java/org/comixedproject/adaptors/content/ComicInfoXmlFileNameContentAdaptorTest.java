@@ -21,26 +21,18 @@ package org.comixedproject.adaptors.content;
 import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static junit.framework.TestCase.*;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import org.comixedproject.model.archives.ArchiveType;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
-import org.comixedproject.model.comicbooks.ComicMetadataSource;
-import org.comixedproject.model.metadata.ComicInfo;
-import org.comixedproject.model.metadata.MetadataSource;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.InjectMocks;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-    classes = {ComicMetadataContentAdaptor.class, MappingJackson2XmlHttpMessageConverter.class})
-public class ComicMetadataContentAdaptorTest extends BaseContentAdaptorTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ComicInfoXmlFileNameContentAdaptorTest extends BaseContentAdaptorTest {
   private static final String TEST_COMICINFO_FILE_COMPLETE =
       "src/test/resources/ComicInfo-complete.xml";
   private static final String TEST_COMICINFO_FILE_NOT_XML =
@@ -55,7 +47,7 @@ public class ComicMetadataContentAdaptorTest extends BaseContentAdaptorTest {
   private static final String TEST_METADATA_SOURCE_NAME = "ComicVine";
   private static final String TEST_METADATA_REFERENCE_ID = "12971";
 
-  @Autowired ComicMetadataContentAdaptor adaptor;
+  @InjectMocks ComicInfoXmlFileNameContentAdaptor adaptor;
 
   private ComicBook comicBook = new ComicBook();
   private ContentAdaptorRules contentAdaptorRules = new ContentAdaptorRules();
@@ -116,50 +108,5 @@ public class ComicMetadataContentAdaptorTest extends BaseContentAdaptorTest {
     assertNull(comicBook.getComicDetail().getIssueNumber());
     assertNull(comicBook.getComicDetail().getTitle());
     assertNull(comicBook.getComicDetail().getDescription());
-  }
-
-  @Test
-  public void testCreateContent() throws ContentAdaptorException, IOException {
-    adaptor.loadContent(
-        comicBook,
-        TEST_COMICINFO_FILE_COMPLETE,
-        loadFile(TEST_COMICINFO_FILE_COMPLETE),
-        contentAdaptorRules);
-    comicBook.setMetadata(null);
-
-    final byte[] result = adaptor.createContent(comicBook);
-
-    final ComicInfo outcome =
-        adaptor
-            .xmlConverter
-            .getObjectMapper()
-            .readValue(new ByteArrayInputStream(result), ComicInfo.class);
-
-    assertNotNull(outcome);
-  }
-
-  @Test
-  public void testCreateContentWithMetadataContent() throws ContentAdaptorException, IOException {
-    adaptor.loadContent(
-        comicBook,
-        TEST_COMICINFO_FILE_COMPLETE,
-        loadFile(TEST_COMICINFO_FILE_COMPLETE),
-        contentAdaptorRules);
-
-    comicBook.setMetadata(
-        new ComicMetadataSource(
-            comicBook, new MetadataSource(TEST_METADATA_SOURCE_NAME), TEST_METADATA_REFERENCE_ID));
-    comicBook.getMetadata().getMetadataSource().setAdaptorName(comicBook.getMetadataSourceName());
-    comicBook.getMetadata().setReferenceId(comicBook.getMetadataReferenceId());
-
-    final byte[] result = adaptor.createContent(comicBook);
-
-    final ComicInfo outcome =
-        adaptor
-            .xmlConverter
-            .getObjectMapper()
-            .readValue(new ByteArrayInputStream(result), ComicInfo.class);
-
-    assertNotNull(outcome);
   }
 }
