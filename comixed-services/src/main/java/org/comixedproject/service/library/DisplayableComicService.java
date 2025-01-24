@@ -54,6 +54,18 @@ public class DisplayableComicService {
   @Autowired private ReadingListService readingListService;
 
   /**
+   * Returns all records sorted by the given field and direction.
+   *
+   * @param sortField the optional sort field
+   * @param sortDirection the optional sort direction
+   * @return the comics
+   */
+  @Transactional(readOnly = true)
+  public List<DisplayableComic> loadComics(final String sortField, final String sortDirection) {
+    return this.displayableComicRepository.findAll(this.createSort(sortField, sortDirection));
+  }
+
+  /**
    * Loads comics filtered by the optional fields values provided.
    *
    * @param pageSize the page size
@@ -106,7 +118,7 @@ public class DisplayableComicService {
       return this.displayableComicRepository
           .findAll(
               displayableComicExample,
-              PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)))
+              PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)))
           .stream()
           .toList();
     } else {
@@ -301,7 +313,7 @@ public class DisplayableComicService {
       final String sortDirection,
       final List<Long> idList) {
     return this.displayableComicRepository.loadComicsById(
-        idList, PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+        idList, PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
   }
 
   /**
@@ -326,7 +338,7 @@ public class DisplayableComicService {
     return this.displayableComicRepository.loadComicsByTagTypeAndValue(
         tagType,
         tagValue,
-        PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+        PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
   }
 
   /**
@@ -424,7 +436,7 @@ public class DisplayableComicService {
       final String sortDirection) {
     return this.displayableComicRepository.loadUnreadComics(
         user.getReadComicBooks(),
-        PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+        PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
   }
 
   /**
@@ -446,7 +458,7 @@ public class DisplayableComicService {
       final String sortDirection) {
     return this.displayableComicRepository.loadReadComics(
         user.getReadComicBooks(),
-        PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+        PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
   }
 
   /**
@@ -476,7 +488,7 @@ public class DisplayableComicService {
           this.readingListService.loadReadingListForUser(email, readingListId);
       return this.displayableComicRepository.loadComicsForList(
           readingList.getId(),
-          PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+          PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
     } catch (ReadingListException error) {
       throw new LibraryException("Failed to load entries for reading list", error);
     }
@@ -501,7 +513,7 @@ public class DisplayableComicService {
         sortBy,
         sortDirection);
     return this.displayableComicRepository.loadDuplicateComics(
-        PageRequest.of(pageIndex, pageSize, this.doCreateSort(sortBy, sortDirection)));
+        PageRequest.of(pageIndex, pageSize, this.createSort(sortBy, sortDirection)));
   }
 
   /**
@@ -551,7 +563,7 @@ public class DisplayableComicService {
     return builder.build();
   }
 
-  Sort doCreateSort(final String sortField, final String sortDirection) {
+  Sort createSort(final String sortField, final String sortDirection) {
     if (!StringUtils.hasLength(sortField) || !StringUtils.hasLength(sortDirection)) {
       return Sort.unsorted();
     }

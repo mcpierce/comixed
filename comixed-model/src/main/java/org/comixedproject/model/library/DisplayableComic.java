@@ -95,6 +95,7 @@ public class DisplayableComic {
   @Column(name = "issue_number")
   @JsonView({View.ComicDetailsView.class})
   @Getter
+  @Setter
   private String issueNumber;
 
   @Column(name = "sortable_issue_number")
@@ -105,11 +106,13 @@ public class DisplayableComic {
   @Column(name = "title")
   @JsonView({View.ComicDetailsView.class})
   @Getter
+  @Setter
   private String title;
 
   @Column(name = "page_count")
   @JsonView({View.ComicDetailsView.class})
   @Getter
+  @Setter
   private String pageCount;
 
   @Column(name = "cover_date")
@@ -133,6 +136,7 @@ public class DisplayableComic {
   @Column(name = "store_date")
   @JsonView({View.ComicDetailsView.class})
   @Getter
+  @Setter
   private Date storeDate;
 
   @Column(name = "added_date")
@@ -140,4 +144,7 @@ public class DisplayableComic {
   @Getter
   @Setter
   private Date addedDate;
+
+  /** This field is used when working with the rules service. */
+  @Transient @Getter @Setter private boolean ruleMatch = false;
 }

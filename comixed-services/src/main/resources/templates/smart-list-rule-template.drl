@@ -1,0 +1,19 @@
+template header
+
+rule
+eventType
+
+package org.comixedproject;
+
+global org.comixedproject.model.library.DisplayableComic comic;
+
+template "meets_rule_requirements"
+
+rule "rule_@{ruleIndex}"
+when
+  @{eventType}(@{rule})
+then
+  comic.setMeetsRule(Boolean.TRUE);
+end
+
+end template

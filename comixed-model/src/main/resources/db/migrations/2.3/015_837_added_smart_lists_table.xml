@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="015_837_added_smart_lists_table.xml" author="mcpierce">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="smart_lists"/>
+                <tableExists tableName="smart_list_rules"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="smart_lists">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="list_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="owner_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="smart_lists_unique_owner_and_name_idx" columnNames="list_name,owner_id"/>
+
+        <createTable tableName="smart_list_rules">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="smart_list_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_type" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_order" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_field" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_value" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_operator" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="smart_list_rules" baseColumnNames="smart_list_id"
+                                 constraintName="smart_lists_rule_smart_list_fk"
+                                 referencedTableName="smart_lists"
+                                 referencedColumnNames="id"/>
+
+        <addUniqueConstraint tableName="smart_list" constraintName="smart_list_rules_unique_order_idx"
+                             columnNames="smart_list_id,rule_order"/>
+
+
+    </changeSet>
+</databaseChangeLog>

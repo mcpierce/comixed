@@ -53,81 +53,81 @@ public class DisplayableComicExampleBuilder {
   @Setter private String volume;
 
   public Example<DisplayableComic> build() {
-    log.trace("Building ComicDetail example");
-    final DisplayableComic detail = new DisplayableComic();
+    log.trace("Building simple comic search example");
+    final DisplayableComic comicExample = new DisplayableComic();
 
-    detail.setComicState(null);
-    detail.setCoverDate(null);
-    detail.setMonthPublished(null);
-    detail.setYearPublished(null);
-    detail.setAddedDate(null);
-    detail.setComicType(null);
-    detail.setUnscraped(null);
+    comicExample.setComicState(null);
+    comicExample.setCoverDate(null);
+    comicExample.setMonthPublished(null);
+    comicExample.setYearPublished(null);
+    comicExample.setAddedDate(null);
+    comicExample.setComicType(null);
+    comicExample.setUnscraped(null);
 
     ExampleMatcher matcher = ExampleMatcher.matching();
 
     if (coverYear != null) {
       log.debug("Setting cover year filter: {}", coverYear);
-      detail.setYearPublished(coverYear);
+      comicExample.setYearPublished(coverYear);
       matcher = matcher.withMatcher("coverYear", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (coverMonth != null) {
       log.debug("Setting cover month filter: {}", coverMonth);
-      detail.setMonthPublished(coverMonth);
+      comicExample.setMonthPublished(coverMonth);
       matcher = matcher.withMatcher("coverMonth", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (archiveType != null) {
       log.debug("Setting archive type filter: {}", archiveType);
-      detail.setArchiveType(archiveType);
+      comicExample.setArchiveType(archiveType);
       matcher = matcher.withMatcher("archiveType", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (comicType != null) {
       log.debug("Setting comic type filter: {}", comicType);
-      detail.setComicType(comicType);
+      comicExample.setComicType(comicType);
       matcher = matcher.withMatcher("comicType", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (comicState != null) {
       log.debug("Setting comic state filter: {}", comicState);
-      detail.setComicState(comicState);
+      comicExample.setComicState(comicState);
       matcher = matcher.withMatcher("comicState", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (unscrapedState) {
       log.debug("Enabling unscraped filter");
-      detail.setUnscraped(Boolean.TRUE);
+      comicExample.setUnscraped(Boolean.TRUE);
       matcher = matcher.withMatcher("unscraped", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (StringUtils.hasLength(publisher)) {
       log.debug("Enabling publisher filter");
-      detail.setPublisher(publisher);
+      comicExample.setPublisher(publisher);
       matcher = matcher.withMatcher("publisher", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (StringUtils.hasLength(series)) {
       log.debug("Enabling series filter");
-      detail.setSeries(series);
+      comicExample.setSeries(series);
       matcher = matcher.withMatcher("series", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (StringUtils.hasLength(volume)) {
       log.debug("Enabling volume filter");
-      detail.setVolume(volume);
+      comicExample.setVolume(volume);
       matcher = matcher.withMatcher("volume", ExampleMatcher.GenericPropertyMatchers.exact());
     }
 
     if (StringUtils.hasLength(searchText)) {
       log.debug("Returning comics with filter text: {}", searchText);
-      detail.setSeries(searchText);
+      comicExample.setSeries(searchText);
       matcher =
           matcher.withMatcher(
               "series", ExampleMatcher.GenericPropertyMatchers.ignoreCase().contains());
     }
 
-    return Example.of(detail, matcher);
+    return Example.of(comicExample, matcher);
   }
 }

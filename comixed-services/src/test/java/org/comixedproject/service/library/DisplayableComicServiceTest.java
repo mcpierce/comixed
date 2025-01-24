@@ -565,7 +565,7 @@ public class DisplayableComicServiceTest {
 
   @Test
   public void testCreateSort_noFields() {
-    final Sort result = service.doCreateSort(null, null);
+    final Sort result = service.createSort(null, null);
 
     assertSame(Sort.unsorted(), result);
   }
@@ -591,13 +591,13 @@ public class DisplayableComicServiceTest {
 
     for (String[] field : fields) {
       // ascending
-      Sort result = service.doCreateSort(field[0], "asc");
+      Sort result = service.createSort(field[0], "asc");
 
       assertNotNull(result);
       assertEquals(String.format("%s: ASC", field[1]), result.toString());
 
       // descending
-      result = service.doCreateSort(field[0], "desc");
+      result = service.createSort(field[0], "desc");
 
       assertNotNull(result);
       assertEquals(String.format("%s: DESC", field[1]), result.toString());
