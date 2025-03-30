@@ -28,7 +28,7 @@
                             d.volume          as volume,
                             d.issue_number    as issue_number,
                             (SELECT RIGHT(CONCAT('0000000000', d.issue_number), 10)) as sortable_issue_number, d.title as title, (
-            SELECT COUNT (*)
+            SELECT COUNT(*)
             FROM comic_pages cp
             WHERE cp.comic_book_id = d.comic_book_id) as page_count
                 , d.cover_date as cover_date

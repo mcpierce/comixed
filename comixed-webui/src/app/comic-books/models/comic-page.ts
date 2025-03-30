@@ -18,8 +18,8 @@
 
 import { ComicBook } from '@app/comic-books/models/comic-book';
 
-export interface Page {
-  id: number;
+export interface ComicPage {
+  comicPageId: number;
   comic?: ComicBook;
   filename: string;
   hash: string;
