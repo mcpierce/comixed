@@ -1,0 +1,82 @@
+<mat-toolbar color="accent">
+  <div class="cx-spacer"></div>
+  <button
+    id="skip-cache-button"
+    class="cx-toolbar-button cx-margin-left-5"
+    mat-icon-button
+    [matTooltip]="
+      'scraping.tooltip.skip-cache' | translate: { enabled: skipCache }
+    "
+    (click)="skipCache = !skipCache"
+  >
+    <mat-icon *ngIf="skipCache">block</mat-icon>
+    <mat-icon *ngIf="!skipCache">remove_circle_outline</mat-icon>
+  </button>
+  <button
+    id="scrape-button"
+    class="cx-toolbar-button cx-margin-left-5"
+    mat-icon-button
+    [matTooltip]="'comic-book.tooltip.scrape-comic' | translate"
+    [disabled]="!storyScrapingForm.valid"
+    (click)="onLoadStoryCandidates()"
+  >
+    <mat-icon>find_replace</mat-icon>
+  </button>
+</mat-toolbar>
+
+<form [formGroup]="storyScrapingForm">
+  <mat-card>
+    <mat-card-title class="cx-align-content-center">
+      {{ "collection-detail.title.scraping-story-form" | translate }}
+    </mat-card-title>
+
+    <mat-card-content>
+      <mat-form-field
+        class="cx-width-25 cx-height-25"
+        appearance="fill"
+        required
+      >
+        <mat-label>
+          {{ "story-scraping.label.metadata-source" | translate }}
+        </mat-label>
+        <mat-select
+          formControlName="metadataSource"
+          [value]="metadataSource?.metadataSourceId"
+        >
+          <mat-option
+            *ngFor="let source of metadataSources"
+            [value]="source.metadataSourceId"
+          >
+            {{ source.name }}
+          </mat-option>
+        </mat-select>
+        <input matInput hidden />
+      </mat-form-field>
+
+      <mat-form-field class="cx-width-25" appearance="fill" required>
+        <input
+          matInput
+          [placeholder]="'story-scraping.placeholder.reference-id' | translate"
+          formControlName="referenceId"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          color="primary"
+          (click)="onScrapeByReferenceId()"
+          [disabled]="!readyToScrapeByReference"
+        >
+          <mat-icon>find_replace</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="cx-width-50" appearance="fill" required>
+        <input
+          matInput
+          [placeholder]="'story-scraping.placeholder.story-name' | translate"
+          formControlName="storyName"
+        />
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</form>

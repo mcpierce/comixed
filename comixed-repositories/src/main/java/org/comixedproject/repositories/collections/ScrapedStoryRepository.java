@@ -16,10 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-package org.comixedproject.repositories.lists;
+package org.comixedproject.repositories.collections;
 
 import java.util.List;
-import org.comixedproject.model.lists.ScrapedStory;
+import org.comixedproject.model.collections.ScrapedStory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -49,4 +49,13 @@ public interface ScrapedStoryRepository extends JpaRepository<ScrapedStory, Long
    */
   @Query("SELECT s FROM ScrapedStory s WHERE s.id = :id")
   ScrapedStory getById(@Param("id") long id);
+
+  /**
+   * Returns the story with the given name.
+   *
+   * @param name the name
+   * @return the story
+   */
+  @Query("SELECT s FROM ScrapedStory s WHERE s.name = :name")
+  ScrapedStory getByName(@Param("name") String name);
 }

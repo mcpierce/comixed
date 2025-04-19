@@ -16,16 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-package org.comixedproject.service.lists;
+package org.comixedproject.service.collections;
 
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.log4j.Log4j2;
 import org.comixedproject.messaging.PublishingException;
 import org.comixedproject.messaging.lists.PublishStoryListUpdateAction;
-import org.comixedproject.model.lists.ScrapedStory;
-import org.comixedproject.repositories.lists.ScrapedStoryRepository;
+import org.comixedproject.model.collections.ScrapedStory;
+import org.comixedproject.repositories.collections.ScrapedStoryRepository;
 import org.comixedproject.service.comicbooks.ComicBookService;
+import org.comixedproject.service.lists.StoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,5 +113,16 @@ public class StoryService {
     final ScrapedStory result = this.scrapedStoryRepository.getById(id);
     if (result == null) throw new StoryException("No such story: id=" + id);
     return result;
+  }
+
+  /**
+   * Returns the story with the given name.
+   *
+   * @param name the story name
+   * @return the story
+   */
+  public ScrapedStory getByName(final String name) {
+    log.debug("Loading story: name={}", name);
+    return this.scrapedStoryRepository.getByName(name);
   }
 }

@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-package org.comixedproject.service.lists;
+package org.comixedproject.service.collections;
 
 import static junit.framework.TestCase.*;
 
@@ -25,17 +25,21 @@ import java.util.List;
 import java.util.Set;
 import org.comixedproject.messaging.PublishingException;
 import org.comixedproject.messaging.lists.PublishStoryListUpdateAction;
-import org.comixedproject.model.lists.ScrapedStory;
-import org.comixedproject.repositories.lists.ScrapedStoryRepository;
+import org.comixedproject.model.collections.ScrapedStory;
+import org.comixedproject.repositories.collections.ScrapedStoryRepository;
 import org.comixedproject.service.comicbooks.ComicBookService;
-import org.junit.Test;
+import org.comixedproject.service.lists.StoryException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-@RunWith(MockitoJUnitRunner.class)
-public class StoryServiceTest {
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
+class StoryServiceTest {
   private static final String TEST_STORY_NAME = "The ScrapedStory Name";
   private static final String TEST_PUBLISHER = "The Publisher";
 

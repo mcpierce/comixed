@@ -39,7 +39,9 @@ import org.comixedproject.metadata.MetadataException;
 import org.comixedproject.metadata.adaptors.MetadataAdaptor;
 import org.comixedproject.metadata.model.IssueDetailsMetadata;
 import org.comixedproject.metadata.model.IssueMetadata;
+import org.comixedproject.metadata.model.StoryMetadata;
 import org.comixedproject.metadata.model.VolumeMetadata;
+import org.comixedproject.model.batch.ScrapeMetadataEvent;
 import org.comixedproject.model.collections.Issue;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
@@ -66,6 +68,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.context.ApplicationEventPublisher;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -94,6 +97,7 @@ class MetadataServiceTest {
   private static final String TEST_METADATA_SOURCE_NAME = "Farkle";
   private static final String TEST_SOURCE_ID = "93782";
   private static final String TEST_WEB_ADDRESS = "http://some.metadatasource.com/reference/12345";
+  private static final String TEST_STORY_NAME = "The Story To Scrape";
 
   @InjectMocks private MetadataService service;
   @Mock private ConfigurationService configurationService;
@@ -119,6 +123,9 @@ class MetadataServiceTest {
   @Mock private MetadataAdaptorProvider metadataAdaptorProvider;
   @Mock private ComicDetail comicDetail;
   @Mock private ComicBook comicBook;
+  @Mock private List<Long> comicBookIdList;
+  @Mock private ApplicationEventPublisher applicationEventPublisher;
+  @Mock private StoryMetadata storyMetadata;
 
   @Captor private ArgumentCaptor<List<String>> cacheEntryList;
   @Captor private ArgumentCaptor<List<Issue>> issueListArgumentCaptor;
@@ -134,6 +141,7 @@ class MetadataServiceTest {
   private List<String> storyList = new ArrayList<>();
   private List<MetadataAdaptorProvider> metadataAdaptorProviderList = new ArrayList<>();
   private List<ComicBook> comicBookList = new ArrayList<>();
+  private List<StoryMetadata> storyMetadataList = new ArrayList<>();
 
   @BeforeEach
   public void setUp() throws MetadataSourceException, MetadataException {
@@ -186,6 +194,8 @@ class MetadataServiceTest {
 
     Mockito.when(processComicDescriptionAction.execute(Mockito.anyString()))
         .thenAnswer(input -> input.getArguments()[0]);
+
+    storyMetadataList.add(storyMetadata);
   }
 
   private String addPadding(final String value) {
@@ -1290,5 +1300,41 @@ class MetadataServiceTest {
     assertSame(metadataAdaptorProvider, result);
 
     Mockito.verify(metadataAdaptorProvider, Mockito.times(1)).supportedReference(TEST_WEB_ADDRESS);
+  }
+
+  @Test
+  void batchScrape() {
+    service.batchScrapeComicBooks(comicBookIdList);
+
+    Mockito.verify(comicBookService, Mockito.times(1))
+        .markComicBooksForBatchScraping(comicBookIdList);
+    Mockito.verify(applicationEventPublisher, Mockito.times(1))
+        .publishEvent(ScrapeMetadataEvent.instance);
+  }
+
+  @Test
+  void loadStories_adaptorException() throws MetadataException {
+    Mockito.when(
+            metadataAdaptor.getStories(
+                Mockito.anyString(), Mockito.anyInt(), Mockito.any(MetadataSource.class)))
+        .thenThrow(MetadataException.class);
+
+    assertThrows(
+        MetadataException.class,
+        () -> service.getStories(TEST_STORY_NAME, TEST_MAX_RECORDS, TEST_METADATA_SOURCE_ID, true));
+  }
+
+  @Test
+  void loadStories() throws MetadataException {
+    Mockito.when(
+            metadataAdaptor.getStories(
+                Mockito.anyString(), Mockito.anyInt(), Mockito.any(MetadataSource.class)))
+        .thenReturn(storyMetadataList);
+
+    final List<StoryMetadata> result =
+        service.getStories(TEST_STORY_NAME, TEST_MAX_RECORDS, TEST_METADATA_SOURCE_ID, true);
+
+    assertNotNull(result);
+    assertSame(storyMetadataList, result);
   }
 }
