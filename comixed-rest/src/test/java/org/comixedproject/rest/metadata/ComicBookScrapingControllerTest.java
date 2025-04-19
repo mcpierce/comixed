@@ -30,6 +30,7 @@ import java.util.List;
 import org.apache.commons.lang.math.RandomUtils;
 import org.comixedproject.metadata.MetadataException;
 import org.comixedproject.metadata.model.IssueMetadata;
+import org.comixedproject.metadata.model.StoryMetadata;
 import org.comixedproject.metadata.model.VolumeMetadata;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.net.metadata.*;
@@ -75,6 +76,7 @@ class ComicBookScrapingControllerTest {
   private static final int TEST_PAGE_NUMBER = 3;
   private static final Boolean TEST_MATCH_PUBLISHER = RandomUtils.nextBoolean();
   private static final String TEST_EMAIL = "user@comixedproject.org";
+  private static final String TEST_STORY_NAME = "The Story Name";
 
   @InjectMocks private ComicBookScrapingController controller;
   @Mock private MetadataService metadataService;
@@ -93,6 +95,7 @@ class ComicBookScrapingControllerTest {
   @Mock private Principal principal;
   @Mock private List<ComicBook> comicBookList;
   @Mock private ScrapeSeriesResponse scrapeSeriesResponse;
+  @Mock private List<StoryMetadata> storyList;
 
   @Captor private ArgumentCaptor<JobParameters> jobParametersArgumentCaptor;
 
@@ -527,5 +530,24 @@ class ComicBookScrapingControllerTest {
     Mockito.verify(comicSelectionService, Mockito.times(1)).encodeSelections(localMultiBookIdList);
     Mockito.verify(session, Mockito.times(1))
         .setAttribute(MULTI_BOOK_SCRAPING_SELECTIONS, TEST_REENCODED_MULTI_BOOKS);
+  }
+
+  @Test
+  void getStories() throws MetadataException {
+    Mockito.when(
+            metadataService.getStories(
+                Mockito.anyString(), Mockito.anyInt(), Mockito.anyLong(), true))
+        .thenReturn(storyList);
+
+    final List<StoryMetadata> result =
+        controller.getStories(
+            new LoadScrapingStoriesRequest(TEST_STORY_NAME, TEST_MAX_RECORDS, true),
+            TEST_METADATA_SOURCE_ID);
+
+    assertNotNull(result);
+    assertSame(storyList, result);
+
+    Mockito.verify(metadataService, Mockito.times(1))
+        .getStories(TEST_STORY_NAME, TEST_MAX_RECORDS, TEST_METADATA_SOURCE_ID, true);
   }
 }

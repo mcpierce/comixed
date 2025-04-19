@@ -156,4 +156,15 @@ public class StoryService implements InitializingBean, StoryStateChangeListener 
     if (result == null) throw new StoryException("No such story: id=" + id);
     return result;
   }
+
+  /**
+   * Returns the story with the given name.
+   *
+   * @param name the story name
+   * @return the story
+   */
+  public Story getByName(final String name) {
+    log.debug("Loading story: name={}", name);
+    return this.storyRepository.getByName(name);
+  }
 }
