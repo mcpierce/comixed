@@ -1,6 +1,6 @@
 /*
  * ComiXed - A digital comic book library management application.
- * Copyright (C) 2022, The ComiXed Project
+ * Copyright (C) 2025, The ComiXed Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,31 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { createFeatureSelector } from '@ngrx/store';
-import {
-  SERIES_SCRAPING_FEATURE_KEY,
-  SeriesScrapingState
-} from '../reducers/series-scraping.reducer';
+package org.comixedproject.model.net.metadata;
 
-export const selectSeriesScrapingState =
-  createFeatureSelector<SeriesScrapingState>(SERIES_SCRAPING_FEATURE_KEY);
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+/**
+ * <code>LoadScrapingStoriesRequest</code> represents the request body for getting a set of story
+ * candidates' metadata.
+ *
+ * @author Darryl L. Pierce
+ */
+@NoArgsConstructor
+@AllArgsConstructor
+public class LoadScrapingStoriesRequest {
+  @JsonProperty("name")
+  @Getter
+  private String name;
+
+  @JsonProperty("maxRecords")
+  @Getter
+  private Integer maxRecords;
+
+  @JsonProperty("skipCache")
+  @Getter
+  private boolean skipCache;
+}

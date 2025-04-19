@@ -43,6 +43,7 @@ import { Store } from '@ngrx/store';
 import { WebSocketService } from '@app/messaging';
 import { selectMessagingState } from '@app/messaging/selectors/messaging.selectors';
 import {
+  LOAD_STORY_CANDIDATES_URL,
   METADATA_UPDATE_PROCESS_UPDATE_TOPIC,
   SCRAPE_SERIES_URL
 } from '@app/comic-metadata/comic-metadata.constants';
@@ -270,6 +271,23 @@ export class ComicBookScrapingService {
         originalVolume: args.originalVolume,
         volumeId: args.volume.id
       } as ScrapeSeriesRequest
+    );
+  }
+
+  loadStoryCandidates(args: {
+    sourceId: number;
+    storyName: string;
+    maxRecords: number;
+    skipCache: boolean;
+  }): Observable<any> {
+    this.logger.debug('Loading story candidates:', args);
+    return this.http.post(
+      interpolate(LOAD_STORY_CANDIDATES_URL, { id: args.sourceId }),
+      {
+        name: args.storyName,
+        maxRecords: args.maxRecords,
+        skipCache: args.skipCache
+      }
     );
   }
 }

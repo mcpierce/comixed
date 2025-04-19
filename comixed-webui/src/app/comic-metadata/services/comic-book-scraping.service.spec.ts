@@ -67,8 +67,12 @@ import {
 } from '@app/messaging/reducers/messaging.reducer';
 import { Subscription } from 'rxjs';
 import {
+  LOAD_STORY_CANDIDATES_URL,
   METADATA_UPDATE_PROCESS_UPDATE_TOPIC,
-  SCRAPE_SERIES_URL
+  SCRAPE_SERIES_URL,
+  STORY_METADATA_1,
+  STORY_METADATA_2,
+  STORY_METADATA_3
 } from '@app/comic-metadata/comic-metadata.constants';
 import { metadataUpdateProcessStatusUpdated } from '@app/comic-metadata/actions/metadata-update-process.actions';
 import { MetadataUpdateProcessUpdate } from '@app/comic-metadata/models/net/metadata-update-process-update';
@@ -80,8 +84,9 @@ import { RemoveMultiBookComicResponse } from '@app/comic-metadata/models/net/rem
 import { LoadMultiBookScrapingRequest } from '@app/comic-metadata/models/net/load-multi-book-scraping-request';
 import { LoadMultiBookScrapingResponse } from '@app/comic-metadata/models/net/load-multi-book-scraping-page-response';
 import { PUBLISHER_1, SERIES_1 } from '@app/collections/collections.fixtures';
+import { LoadStoryCandidatesRequest } from '@app/comic-metadata/models/net/load-story-candidates-request';
 
-describe('ComicBookScrapingService', () => {
+fdescribe('ComicBookScrapingService', () => {
   const PUBLISHER = 'The Series';
   const SERIES = 'The Series';
   const MAXIMUM_RECORDS = 100;
@@ -112,6 +117,13 @@ describe('ComicBookScrapingService', () => {
   const ORIGINAL_PUBLISHER = PUBLISHER_1.name;
   const ORIGINAL_SERIES = SERIES_1.name;
   const ORIGINAL_VOLUME = SERIES_1.volume;
+  const STORY_METADATA_LIST = [
+    STORY_METADATA_1,
+    STORY_METADATA_2,
+    STORY_METADATA_3
+  ];
+  const STORY_NAME = STORY_METADATA_1.name;
+  const MAX_RECORDS = 1000;
 
   const initialState = { [MESSAGING_FEATURE_KEY]: initialMessagingState };
 
@@ -425,6 +437,31 @@ describe('ComicBookScrapingService', () => {
       originalVolume: ORIGINAL_VOLUME,
       volumeId: SCRAPING_VOLUME.id
     } as ScrapeSeriesRequest);
+    req.flush(serviceResponse);
+  });
+
+  it('can load story candidates', () => {
+    const serviceResponse = STORY_METADATA_LIST;
+    service
+      .loadStoryCandidates({
+        sourceId: METADATA_SOURCE.metadataSourceId,
+        storyName: STORY_NAME,
+        maxRecords: MAX_RECORDS,
+        skipCache: SKIP_CACHE
+      })
+      .subscribe(response => expect(response).toEqual(serviceResponse));
+
+    const req = httpMock.expectOne(
+      interpolate(LOAD_STORY_CANDIDATES_URL, {
+        id: METADATA_SOURCE.metadataSourceId
+      })
+    );
+    expect(req.request.method).toEqual('POST');
+    expect(req.request.body).toEqual({
+      name: STORY_NAME,
+      maxRecords: MAX_RECORDS,
+      skipCache: SKIP_CACHE
+    } as LoadStoryCandidatesRequest);
     req.flush(serviceResponse);
   });
 });

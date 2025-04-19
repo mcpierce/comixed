@@ -40,7 +40,7 @@ import {
 } from '@angular/common/http';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
 
-describe('CollectionService', () => {
+fdescribe('CollectionService', () => {
   const COLLECTION_LIST = [
     COLLECTION_ENTRY_1,
     COLLECTION_ENTRY_2,

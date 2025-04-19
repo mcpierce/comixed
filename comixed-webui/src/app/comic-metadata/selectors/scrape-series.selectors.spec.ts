@@ -17,12 +17,12 @@
  */
 
 import {
-  SERIES_SCRAPING_FEATURE_KEY,
+  SCRAPE_SERIES_FEATURE_KEY,
   SeriesScrapingState
-} from '../reducers/series-scraping.reducer';
-import { selectSeriesScrapingState } from './series-scraping.selectors';
+} from '../reducers/scrape-series.reducer';
+import { selectScrapeSeriesState } from './scrape-series.selectors';
 
-describe('SeriesScraping Selectors', () => {
+describe('ScrapeSeries Selectors', () => {
   let state: SeriesScrapingState;
 
   beforeEach(() => {
@@ -31,8 +31,8 @@ describe('SeriesScraping Selectors', () => {
 
   it('should select the feature state', () => {
     expect(
-      selectSeriesScrapingState({
-        [SERIES_SCRAPING_FEATURE_KEY]: state
+      selectScrapeSeriesState({
+        [SCRAPE_SERIES_FEATURE_KEY]: state
       })
     ).toEqual(state);
   });

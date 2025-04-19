@@ -1,6 +1,6 @@
 /*
  * ComiXed - A digital comic book library management application.
- * Copyright (C) 2019, The ComiXed Project
+ * Copyright (C) 2025, The ComiXed Project
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-package org.comixedproject.service.lists;
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  SCRAPE_STORY_FEATURE_KEY,
+  ScrapeStoryState
+} from '../reducers/scrape-story.reducer';
 
-import org.comixedproject.model.collections.ScrapedStory;
+export const selectScrapeStoryState = createFeatureSelector<ScrapeStoryState>(
+  SCRAPE_STORY_FEATURE_KEY
+);
 
-/**
- * <code>StoryException</code> is thrown when an exception occurs while working with a {@link
- * ScrapedStory}.
- *
- * @author Darryl L. Pierce
- */
-public class StoryException extends Exception {
-  /**
-   * Creates an instance with the given message.
-   *
-   * @param message the message
-   */
-  public StoryException(final String message) {
-    super(message);
-  }
-}
+export const selectScrapedStoryCandidates = createSelector(
+  selectScrapeStoryState,
+  state => state.candidates
+);

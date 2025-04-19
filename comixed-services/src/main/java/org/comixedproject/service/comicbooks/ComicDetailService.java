@@ -398,14 +398,37 @@ public class ComicDetailService {
       final String sortBy,
       final String sortDirection) {
     if (StringUtils.hasLength(filterText)) {
-      return this.comicDetailRepository.loadCollectionEntriesWithFiltering(
-          tagType,
-          "%" + filterText + "%",
-          PageRequest.of(pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+      switch (tagType) {
+        case STORY -> {
+          return this.comicDetailRepository.loadCollectionEntriesWithFiltering(
+              tagType,
+              "%" + filterText + "%",
+              PageRequest.of(
+                  pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+        }
+        default -> {
+          return this.comicDetailRepository.loadCollectionEntriesWithFiltering(
+              tagType,
+              "%" + filterText + "%",
+              PageRequest.of(
+                  pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+        }
+      }
     } else {
-      return this.comicDetailRepository.loadCollectionEntries(
-          tagType,
-          PageRequest.of(pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+      switch (tagType) {
+        case STORY -> {
+          return this.comicDetailRepository.loadCollectionEntries(
+              tagType,
+              PageRequest.of(
+                  pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+        }
+        default -> {
+          return this.comicDetailRepository.loadCollectionEntries(
+              tagType,
+              PageRequest.of(
+                  pageIndex, pageSize, this.doCreateCollectionSort(sortBy, sortDirection)));
+        }
+      }
     }
   }
 
