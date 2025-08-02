@@ -37,5 +37,5 @@ jobs:
             -Dgpg.passphrase=${{ secrets.GPG_PASSWORD }} \
             clean deploy -DskipTests -Prelease
         env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
