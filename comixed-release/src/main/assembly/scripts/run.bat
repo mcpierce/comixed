@@ -22,6 +22,7 @@ CD /d %~dp0
 FOR %%f IN (comixed-app*.jar) DO SET COMIXED_JAR_FILE=%%f
 SET LOGFILE="%COMIXEDLOG%"
 SET CFGDIR="%USERPROFILE%\.comixed"
+SET JAVACMD="java.exe"
 
 :process_command_line
 IF "%~1" == "" GOTO end_process_command_line
@@ -33,12 +34,13 @@ IF "%PARAM%" == "-D" SET FULLDEBUG="ON"
 IF "%PARAM%" == "-M" SET METADATADEBUG="ON"
 IF "%PARAM%" == "-C" SET DBCONSOLE="ON"
 IF "%PARAM%" == "-S" SET ENABLE_SSL="ON"
+IF "%PARAM%" == "-L" SET JAVACMD="javaw.exe"
 IF "%PARAM%" == "-c" GOTO set_cfgdir
 IF "%PARAM%" == "-j" GOTO set_jdbc_url
 IF "%PARAM%" == "-u" GOTO set_jdbc_user
 IF "%PARAM%" == "-p" GOTO set_jdbc_pwrd
 IF "%PARAM%" == "-i" GOTO set_image_cache_dir
-IF "%PARAM%" == "-L" GOTO set_logging_file
+IF "%PARAM%" == "-s" GOTO set_run_as_service
 IF "%PARAM%" == "-H" GOTO set_heap_size
 IF "%PARAM%" == "-X" GOTO set_debug_option
 SHIFT
@@ -179,7 +181,7 @@ SET LOADER_PATH=-Dloader.path=%EXTDIR%
 SET JVMOPTIONS=-cp %COMIXED_JAR_FILE% %JVMOPTIONS%
 SET COMIXED_JAR_FILE=-Dloader.main=org.comixedproject.ComiXedApp org.springframework.boot.loader.launch.PropertiesLauncher
 
-java %JVMOPTIONS% %LOADER_PATH% %COMIXED_JAR_FILE% %JAROPTIONS%
+%JAVACMD% %JVMOPTIONS% %LOADER_PATH% %COMIXED_JAR_FILE% %JAROPTIONS%
 
 :exit_script
 ENDLOCAL

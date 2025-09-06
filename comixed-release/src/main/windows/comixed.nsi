@@ -11,18 +11,16 @@ RequestExecutionLevel admin
 
 Section
     CreateDirectory "$SMPROGRAMS\ComiXed"
-    CreateShortCut "$SMPROGRAMS\ComiXed\ComiXed Server.lnk" "$INSTDIR\bin\run.bat"
+    CreateShortCut "$SMPROGRAMS\ComiXed\ComiXed Service.lnk" "$INSTDIR\bin\run.bat"
 SectionEnd
 
 Section ""
 
 SetOutPath $INSTDIR\bin
 File ..\assembly\scripts\run.bat
-File ..\assembly\scripts\dbbackup.bat
-File ..\assembly\scripts\dbrestore.bat
-File ..\assembly\scripts\dbtool.bat
 File ..\..\..\..\comixed-app\target\comixed-app-3.1-SNAPSHOT.jar
 File ..\..\..\target\classes\org\comixedproject\modules\windows_agent_installer\comixed-service.exe
+File .\comixed-app.xml
 File .\comixed-service.xml
 
 SetOutPath $INSTDIR\lib
@@ -35,6 +33,8 @@ File ..\..\..\..\LICENSE
 File ..\..\..\..\QUICKSTART.md
 File ..\..\..\..\README.md
 File ..\..\..\..\UPGRADING.md
+
+ExecWait "$INSTDIR\bin\comixed-service.exe install"
 
 WriteUninstaller $INSTDIR\Uninstall.exe
 

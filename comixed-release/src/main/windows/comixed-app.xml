@@ -3,6 +3,7 @@
     <name>ComiXed</name>
     <description>The ComiXed digital comic book management system v3.1-SNAPSHOT.</description>
     <executable>"%BASE%\run.bat"</executable>
+    <arguments>-s</arguments>
     <log mode="roll"></log>
     <shutdown>graceful</shutdown>
 </service>
