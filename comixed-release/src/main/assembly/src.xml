@@ -19,7 +19,6 @@
       <unpack>false</unpack>
       <includes>
         <include>org.comixedproject:comixed-app:jar:</include>
-        <include>org.comixedproject:comixed-dbtool:jar:</include>
       </includes>
     </dependencySet>
     <dependencySet>
@@ -48,6 +47,7 @@
       <directory>${project.basedir}/src/main/assembly/scripts</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>
+        <include>*.exe</include>
         <include>*.sh</include>
         <include>*.bat</include>
       </includes>

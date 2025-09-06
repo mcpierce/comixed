@@ -1,8 +1,6 @@
-# Overview
+# Installation
 
 This document is to help you go from 0 to running the ComiXed application on your system.
-
-# Installation
 
 ## Prerequisites
 
@@ -63,6 +61,29 @@ in the directory from which you wish to run it. Several directories are created:
  * **$ROOT/config** which contains the example external configuration file,
  * **$ROOT/docs** which contains any documentation, as well as the project's license, and
  * **$ROOT/lib** which will hold any plugins, external libraries, and extensions. 
+
+
+# A Note For Windows Users
+
+The Windows installer creates a file;
+
+    %LOCALAPPDATA%\ComiXed\example-application.properties
+
+which needs to be renamed to:
+
+    %LOCALAPPDATA%\ComiXed\application.properties
+
+This is done to prevent an existing system's settings from being overwritten
+during an upgrade.
+
+There are properties in that file that are specific to Windows, specifically:
+
+ * **comixed.images.cache.location** and
+ * **logging.file.name**
+
+where it is **strongly** advised to uncomment the Windows entries for these
+properties and use them instead of the defaults.
+
 
 
 # Configuring The Application
