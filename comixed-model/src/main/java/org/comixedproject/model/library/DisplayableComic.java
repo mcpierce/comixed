@@ -39,7 +39,7 @@ import org.comixedproject.views.View;
 public class DisplayableComic {
   @Id
   @Column(name = "comic_book_id")
-  @JsonView({View.ComicListView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   private Long comicBookId;
 
@@ -59,21 +59,21 @@ public class DisplayableComic {
   private String filename;
 
   @Column(name = "archive_type", columnDefinition = "VARCHAR(4)")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private ArchiveType archiveType;
 
   @Column(name = "comic_state", columnDefinition = "VARCHAR(64)")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Enumerated(EnumType.STRING)
   @Getter
   @Setter
   private ComicState comicState;
 
   @Column(name = "is_unscraped")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private Boolean unscraped;
@@ -86,7 +86,7 @@ public class DisplayableComic {
   private ComicType comicType;
 
   @Column(name = "publisher")
-  @JsonView({View.ComicListView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private String publisher;
@@ -98,24 +98,24 @@ public class DisplayableComic {
   private String imprint;
 
   @Column(name = "series")
-  @JsonView({View.ComicListView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private String series;
 
   @Column(name = "volume")
-  @JsonView({View.ComicListView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private String volume;
 
   @Column(name = "issue_number")
-  @JsonView({View.ComicListView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   private String issueNumber;
 
   @Column(name = "sortable_issue_number")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   private String sortableIssueNumber;
 
@@ -138,13 +138,13 @@ public class DisplayableComic {
   private String description;
 
   @Column(name = "page_count")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private Integer pageCount;
 
   @Column(name = "cover_date")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private Date coverDate;
@@ -162,12 +162,12 @@ public class DisplayableComic {
   private Integer yearPublished;
 
   @Column(name = "store_date")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   private Date storeDate;
 
   @Column(name = "added_date")
-  @JsonView({View.ComicDetailsView.class})
+  @JsonView({View.ComicListView.class, View.ReadingLists.class})
   @Getter
   @Setter
   private Date addedDate;

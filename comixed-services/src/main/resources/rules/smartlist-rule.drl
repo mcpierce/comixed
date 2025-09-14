@@ -1,0 +1,9 @@
+global org.comixedproject.model.lists.SmartList smartList;
+dialect "mvel";
+
+rule "Publisher is Marvel - Rule 1"
+  when
+    comic:org.comixedproject.model.library.DisplayableComic(publisher == "Marvel")
+  then
+    smartList.getEntries().add(comic);
+end
