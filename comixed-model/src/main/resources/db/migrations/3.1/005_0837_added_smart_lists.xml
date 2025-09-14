@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <changeSet id="005_0837_added_smart_lists-1" author="mcpierce">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="smart_lists"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="smart_lists">
+            <column name="smart_list_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="owner_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="name_key" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="smart_lists" baseColumnNames="owner_id"
+                                 constraintName="smart_list_owner_fk"
+                                 referencedTableName="comixed_users"
+                                 referencedColumnNames="comixed_user_id"/>
+
+        <createIndex tableName="smart_lists" indexName="smart_list_owner_idx">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="005_0837_added_smart_lists-2" author="mcpierce">
+        <preConditions>
+            <not>
+                <tableExists tableName="smart_list_entries"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="smart_list_entries">
+            <column name="smart_list_entry_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="smart_list_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="field_name" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="negated" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rule_type" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="target_expression" type="varchar(128)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="smart_list_entries" baseColumnNames="smart_list_id"
+                                 constraintName="smart_list_entry_smart_list_fk"
+                                 referencedTableName="smart_lists"
+                                 referencedColumnNames="smart_list_id"/>
+
+        <createIndex tableName="smart_list_entries" indexName="smart_list_entry_smart_list_idx">
+            <column name="smart_list_id"/>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>
