@@ -200,7 +200,7 @@ public class ComicDetail implements PublicationDetail {
 
   @JsonProperty("sortableIssueNumber")
   @JsonView({View.ComicListView.class})
-  @Formula("(issue_number)")
+  @Formula("(SUBSTRING(CONCAT('0000000000', issue_number), 10 - LENGTH(issue_number), 10))")
   @Getter
   private String sortableIssueNumber;
 

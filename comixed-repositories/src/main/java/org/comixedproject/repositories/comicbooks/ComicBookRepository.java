@@ -71,7 +71,7 @@ public interface ComicBookRepository extends JpaRepository<ComicBook, Long> {
   ComicBook getById(@Param("id") long id);
 
   @Query(
-      "SELECT c.comicBookId FROM ComicBook c WHERE c.comicDetail.series = :series AND c.comicDetail.volume = :volume AND c.comicDetail.issueNumber <> :issueNumber AND c.comicDetail.coverDate <= :coverDate ORDER BY c.comicDetail.coverDate, c.comicDetail.issueNumber DESC")
+      "SELECT c.comicBookId FROM ComicBook c WHERE c.comicDetail.series = :series AND c.comicDetail.volume = :volume AND c.comicDetail.sortableIssueNumber < SUBSTRING(CONCAT('0000000000', :issueNumber), 10 - LENGTH(:issueNumber), 10) AND c.comicDetail.coverDate <= :coverDate ORDER BY c.comicDetail.coverDate DESC, c.comicDetail.sortableIssueNumber DESC")
   Long findPreviousComicBookIdInSeries(
       @Param("series") final String series,
       @Param("volume") final String volume,
@@ -80,7 +80,7 @@ public interface ComicBookRepository extends JpaRepository<ComicBook, Long> {
       final Limit limit);
 
   @Query(
-      "SELECT c.comicBookId FROM ComicBook c WHERE c.comicDetail.series = :series AND c.comicDetail.volume = :volume AND c.comicDetail.issueNumber <> :issueNumber AND c.comicDetail.coverDate >= :coverDate ORDER BY c.comicDetail.coverDate, c.comicDetail.issueNumber ASC")
+      "SELECT c.comicBookId FROM ComicBook c WHERE c.comicDetail.series = :series AND c.comicDetail.volume = :volume AND c.comicDetail.sortableIssueNumber > SUBSTRING(CONCAT('0000000000', :issueNumber), 10 - LENGTH(:issueNumber), 10) AND c.comicDetail.coverDate >= :coverDate ORDER BY c.comicDetail.coverDate DESC, c.comicDetail.sortableIssueNumber ASC")
   Long findNextComicBookIdInSeries(
       @Param("series") String series,
       @Param("volume") String volume,

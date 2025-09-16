@@ -82,8 +82,8 @@ public class ComicBookRepositoryTest {
   private static final String TEST_HASH_WITH_NO_COMICS = "FEDCBA9876543210FEDCBA9876543210";
   private static final String TEST_HASH_WITH_COMICS = "0123456789ABCDEF0123456789ABCDEF";
   private static final String TEST_COMICBOOK_FILENAME = "src/test/resources/comicbook.cbz";
-  private static final long TEST_NEXT_ISSUE_ID = 1001L;
-  private static final long TEST_PREVIOUS_ISSUE_ID = 1006L;
+  private static final long TEST_NEXT_ISSUE_ID = 1008L;
+  private static final long TEST_PREVIOUS_ISSUE_ID = 1005L;
   private static final long TEST_ORGANIZING_COMIC = 1005L;
 
   @Autowired private ComicBookRepository repository;
@@ -124,7 +124,7 @@ public class ComicBookRepositoryTest {
 
     assertNotNull(result);
     assertFalse(result.isEmpty());
-    assertEquals(1, result.size());
+    assertEquals(3, result.size());
   }
 
   @Test
@@ -169,7 +169,7 @@ public class ComicBookRepositoryTest {
   }
 
   @Test
-  public void testFindPreviousCoicBookIdInSeriesNone() {
+  public void testFindPreviousComicBookIdInSeriesNone() {
     final Long result =
         this.repository.findPreviousComicBookIdInSeries(
             TEST_SERIES,
