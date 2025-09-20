@@ -18,19 +18,20 @@
 
 package org.comixedproject.batch.comicbooks.processors;
 
-import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertSame;
 import static org.comixedproject.batch.comicbooks.UpdateComicBooksConfiguration.*;
 
 import org.apache.commons.lang.math.RandomUtils;
+import org.comixedproject.batch.LendingLibraryAction;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
 import org.comixedproject.model.comicbooks.ComicType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -48,17 +49,23 @@ class UpdateComicBooksProcessorTest {
   private static final String TEST_IMPRINT = "The imprint";
   private static final String TEST_COMIC_TYPE =
       ComicType.values()[RandomUtils.nextInt(ComicType.values().length)].name();
+  private static final long TEST_COMIC_BOOK_ID = 717L;
 
   @InjectMocks private UpdateComicBooksProcessor processor;
+  @Mock private LendingLibraryManager lendingLibraryManager;
   @Mock private StepExecution stepExecution;
   @Mock private JobExecution jobExecution;
   @Mock private JobParameters jobParameters;
   @Mock private ComicBook comicBook;
+  @Mock private ComicBook processedComicBook;
   @Mock private ComicDetail comicDetail;
+
+  @Captor private ArgumentCaptor<LendingLibraryAction> lendingLibraryActionArgumentCaptor;
 
   @BeforeEach
   public void setUp() {
     Mockito.when(comicBook.getComicDetail()).thenReturn(comicDetail);
+    Mockito.when(comicBook.getComicBookId()).thenReturn(TEST_COMIC_BOOK_ID);
 
     Mockito.when(stepExecution.getJobExecution()).thenReturn(jobExecution);
     Mockito.when(jobExecution.getJobParameters()).thenReturn(jobParameters);
@@ -76,8 +83,29 @@ class UpdateComicBooksProcessorTest {
   }
 
   @Test
-  void process() throws Exception {
-    processor.process(comicBook);
+  void process() {
+    Mockito.when(
+            lendingLibraryManager.executeAction(
+                Mockito.any(ComicBook.class),
+                Mockito.anyLong(),
+                lendingLibraryActionArgumentCaptor.capture()))
+        .thenReturn(processedComicBook);
+
+    final ComicBook result = processor.process(comicBook);
+
+    assertNotNull(result);
+    assertSame(processedComicBook, result);
+
+    final LendingLibraryAction action = lendingLibraryActionArgumentCaptor.getValue();
+    assertSame(comicBook, action.execute(comicBook));
+
+    Mockito.verify(lendingLibraryManager, Mockito.times(1))
+        .executeAction(comicBook, TEST_COMIC_BOOK_ID, action);
+  }
+
+  @Test
+  void doProcessing() throws Exception {
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.times(1)).setPublisher(TEST_PUBLISHER);
     Mockito.verify(comicDetail, Mockito.times(1)).setSeries(TEST_SERIES);
@@ -87,55 +115,55 @@ class UpdateComicBooksProcessorTest {
   }
 
   @Test
-  void process_noPublisher() throws Exception {
+  void doProcessing_noPublisher() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_PUBLISHER)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setPublisher(Mockito.anyString());
   }
 
   @Test
-  void process_noSeries() throws Exception {
+  void doProcessing_noSeries() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_SERIES)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setSeries(Mockito.anyString());
   }
 
   @Test
-  void process_noVolume() throws Exception {
+  void doProcessing_noVolume() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_VOLUME)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setVolume(Mockito.anyString());
   }
 
   @Test
-  void process_noIssueNumber() throws Exception {
+  void doProcessing_noIssueNumber() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_ISSUE_NUMBER)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setIssueNumber(Mockito.anyString());
   }
 
   @Test
-  void process_noImprint() throws Exception {
+  void doProcessing_noImprint() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_IMPRINT)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setImprint(Mockito.anyString());
   }
 
   @Test
-  void process_noComicType() throws Exception {
+  void doProcessing_noComicType() throws Exception {
     Mockito.when(jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_COMIC_TYPE)).thenReturn(null);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(comicDetail, Mockito.never()).setComicType(Mockito.any(ComicType.class));
   }

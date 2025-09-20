@@ -23,6 +23,7 @@ import static org.comixedproject.service.admin.ConfigurationService.CFG_LIBRARY_
 import lombok.extern.log4j.Log4j2;
 import org.comixedproject.adaptors.AdaptorException;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.service.admin.ConfigurationService;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -41,9 +42,19 @@ import org.springframework.stereotype.Component;
 public class RecreateComicFileProcessor implements ItemProcessor<ComicBook, ComicBook> {
   @Autowired private ComicBookAdaptor comicBookAdaptor;
   @Autowired private ConfigurationService configurationService;
+  @Autowired private LendingLibraryManager lendingLibraryManager;
 
   @Override
-  public ComicBook process(final ComicBook comicBook) throws Exception {
+  public ComicBook process(final ComicBook comicBook) {
+    return this.lendingLibraryManager.executeAction(
+        comicBook,
+        comicBook.getComicBookId(),
+        input -> {
+          return this.doProcessing(input);
+        });
+  }
+
+  protected ComicBook doProcessing(final ComicBook comicBook) {
     log.debug("Getting target archive adaptor: id={}", comicBook.getComicBookId());
     if (comicBook.getComicDetail().getFile().exists()
         && comicBook.getComicDetail().getFile().isFile()) {

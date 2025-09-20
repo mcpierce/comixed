@@ -21,6 +21,7 @@ package org.comixedproject.batch.comicbooks.processors;
 import lombok.extern.log4j.Log4j2;
 import org.comixedproject.adaptors.AdaptorException;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.archives.ArchiveType;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.service.admin.ConfigurationService;
@@ -40,9 +41,19 @@ import org.springframework.stereotype.Component;
 public class UpdateMetadataProcessor implements ItemProcessor<ComicBook, ComicBook> {
   @Autowired private ComicBookAdaptor comicBookAdaptor;
   @Autowired private ConfigurationService configurationService;
+  @Autowired private LendingLibraryManager lendingLibraryManager;
 
   @Override
   public ComicBook process(final ComicBook comicBook) {
+    return this.lendingLibraryManager.executeAction(
+        comicBook,
+        comicBook.getComicBookId(),
+        input -> {
+          return this.doProcessing(input);
+        });
+  }
+
+  protected ComicBook doProcessing(final ComicBook comicBook) {
     if (this.configurationService.isFeatureEnabled(
         ConfigurationService.CREATE_EXTERNAL_METADATA_FILE)) {
       log.debug("Creating external metadata file for comic: id={}", comicBook.getComicBookId());

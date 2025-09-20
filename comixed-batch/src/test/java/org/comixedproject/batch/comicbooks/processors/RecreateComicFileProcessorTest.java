@@ -24,6 +24,8 @@ import static junit.framework.TestCase.assertSame;
 import java.io.File;
 import org.comixedproject.adaptors.AdaptorException;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
+import org.comixedproject.batch.LendingLibraryAction;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.archives.ArchiveType;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
@@ -31,9 +33,7 @@ import org.comixedproject.service.admin.ConfigurationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -43,19 +43,25 @@ import org.mockito.quality.Strictness;
 class RecreateComicFileProcessorTest {
   private static final ArchiveType TEST_TARGET_ARCHIVE = ArchiveType.CBZ;
   private static final String TEST_PAGE_RENAMING_RULE = "The page renaming rule";
+  private static final long TEST_COMIC_BOOK_ID = 717L;
 
   @InjectMocks private RecreateComicFileProcessor processor;
+  @Mock private LendingLibraryManager lendingLibraryManager;
   @Mock private ConfigurationService configurationService;
   @Mock private ComicBookAdaptor comicBookAdaptor;
   @Mock private File comicFile;
   @Mock private ComicDetail comicDetail;
   @Mock private ComicBook comicBook;
+  @Mock private ComicBook processedComicBook;
+
+  @Captor private ArgumentCaptor<LendingLibraryAction> lendingLibraryActionArgumentCaptor;
 
   @BeforeEach
   public void setUp() {
     Mockito.when(comicFile.exists()).thenReturn(true);
     Mockito.when(comicFile.isFile()).thenReturn(true);
     Mockito.when(comicDetail.getFile()).thenReturn(comicFile);
+    Mockito.when(comicBook.getComicBookId()).thenReturn(TEST_COMIC_BOOK_ID);
     Mockito.when(comicBook.getComicDetail()).thenReturn(comicDetail);
     Mockito.when(comicBook.getTargetArchiveType()).thenReturn(TEST_TARGET_ARCHIVE);
     Mockito.when(comicBook.isDeletePages()).thenReturn(false);
@@ -66,10 +72,31 @@ class RecreateComicFileProcessorTest {
   }
 
   @Test
-  void process_deleteMarkedPages() throws Exception {
-    Mockito.when(comicBook.isDeletePages()).thenReturn(true);
+  void process() {
+    Mockito.when(
+            lendingLibraryManager.executeAction(
+                Mockito.any(ComicBook.class),
+                Mockito.anyLong(),
+                lendingLibraryActionArgumentCaptor.capture()))
+        .thenReturn(processedComicBook);
 
     final ComicBook result = processor.process(comicBook);
+
+    assertNotNull(result);
+    assertSame(processedComicBook, result);
+
+    final LendingLibraryAction action = lendingLibraryActionArgumentCaptor.getValue();
+    assertSame(comicBook, action.execute(comicBook));
+
+    Mockito.verify(lendingLibraryManager, Mockito.times(1))
+        .executeAction(comicBook, TEST_COMIC_BOOK_ID, action);
+  }
+
+  @Test
+  void doProcessing_deleteMarkedPages() throws Exception {
+    Mockito.when(comicBook.isDeletePages()).thenReturn(true);
+
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -79,7 +106,7 @@ class RecreateComicFileProcessorTest {
   }
 
   @Test
-  void process_adaptorExceptionOnSave() throws Exception {
+  void doProcessing_adaptorExceptionOnSave() throws Exception {
     Mockito.doThrow(AdaptorException.class)
         .when(comicBookAdaptor)
         .save(
@@ -88,7 +115,7 @@ class RecreateComicFileProcessorTest {
             Mockito.anyBoolean(),
             Mockito.anyString());
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -99,10 +126,10 @@ class RecreateComicFileProcessorTest {
   }
 
   @Test
-  void process_sourceNotFound() throws Exception {
+  void doProcessing_sourceNotFound() throws Exception {
     Mockito.when(comicFile.exists()).thenReturn(false);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -113,10 +140,10 @@ class RecreateComicFileProcessorTest {
   }
 
   @Test
-  void process_sourceNotFile() throws Exception {
+  void doProcessing_sourceNotFile() throws Exception {
     Mockito.when(comicFile.isFile()).thenReturn(false);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -127,8 +154,8 @@ class RecreateComicFileProcessorTest {
   }
 
   @Test
-  void process() throws Exception {
-    final ComicBook result = processor.process(comicBook);
+  void doProcessing() throws Exception {
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);

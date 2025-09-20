@@ -26,6 +26,8 @@ import static org.comixedproject.service.admin.ConfigurationService.CREATE_EXTER
 
 import org.comixedproject.adaptors.AdaptorException;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
+import org.comixedproject.batch.LendingLibraryAction;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.archives.ArchiveType;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
@@ -33,9 +35,7 @@ import org.comixedproject.service.admin.ConfigurationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -44,21 +44,48 @@ import org.mockito.quality.Strictness;
 @MockitoSettings(strictness = Strictness.LENIENT)
 class UpdateMetadataProcessorTest {
   private static final ArchiveType TEST_ARCHIVE_TYPE = ArchiveType.CB7;
+  private static final long TEST_COMIC_BOOK_ID = 717L;
 
   @InjectMocks private UpdateMetadataProcessor processor;
+  @Mock private LendingLibraryManager lendingLibraryManager;
   @Mock private ComicBookAdaptor comicBookAdaptor;
   @Mock private ConfigurationService configurationService;
   @Mock private ComicBook comicBook;
+  @Mock private ComicBook processedComicBook;
   @Mock private ComicDetail comicDetail;
+
+  @Captor private ArgumentCaptor<LendingLibraryAction> lendingLibraryActionArgumentCaptor;
 
   @BeforeEach
   public void setUp() {
     Mockito.when(comicBook.getComicDetail()).thenReturn(comicDetail);
+    Mockito.when(comicBook.getComicBookId()).thenReturn(TEST_COMIC_BOOK_ID);
     Mockito.when(comicDetail.getArchiveType()).thenReturn(TEST_ARCHIVE_TYPE);
   }
 
   @Test
-  void process_updateException() throws Exception {
+  void process() {
+    Mockito.when(
+            lendingLibraryManager.executeAction(
+                Mockito.any(ComicBook.class),
+                Mockito.anyLong(),
+                lendingLibraryActionArgumentCaptor.capture()))
+        .thenReturn(processedComicBook);
+
+    final ComicBook result = processor.process(comicBook);
+
+    assertNotNull(result);
+    assertSame(processedComicBook, result);
+
+    final LendingLibraryAction action = lendingLibraryActionArgumentCaptor.getValue();
+    assertSame(comicBook, action.execute(comicBook));
+
+    Mockito.verify(lendingLibraryManager, Mockito.times(1))
+        .executeAction(comicBook, TEST_COMIC_BOOK_ID, action);
+  }
+
+  @Test
+  void doProcessing_updateException() throws Exception {
     Mockito.doThrow(AdaptorException.class)
         .when(comicBookAdaptor)
         .save(
@@ -67,7 +94,7 @@ class UpdateMetadataProcessorTest {
             Mockito.anyBoolean(),
             Mockito.anyString());
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -77,14 +104,14 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process_createExternalFileThrowsException() throws Exception {
+  void doProcessing_createExternalFileThrowsException() throws Exception {
     Mockito.when(configurationService.isFeatureEnabled(CREATE_EXTERNAL_METADATA_FILE))
         .thenReturn(true);
     Mockito.doThrow(AdaptorException.class)
         .when(comicBookAdaptor)
         .saveMetadataFile(Mockito.any(ComicBook.class));
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -95,11 +122,11 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process_createExternalFile() throws Exception {
+  void doProcessing_createExternalFile() throws Exception {
     Mockito.when(configurationService.isFeatureEnabled(CREATE_EXTERNAL_METADATA_FILE))
         .thenReturn(true);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -110,10 +137,10 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process_forRarFile() throws Exception {
+  void doProcessing_forRarFile() throws Exception {
     Mockito.when(comicDetail.getArchiveType()).thenReturn(ArchiveType.CBR);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -127,11 +154,11 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process_noComicInfoFileEnabled() throws Exception {
+  void doProcessing_noComicInfoFileEnabled() throws Exception {
     Mockito.when(configurationService.isFeatureEnabled(CFG_LIBRARY_NO_COMICINFO_ENTRY))
         .thenReturn(true);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -145,11 +172,11 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process_noRecreateComicFileAlowed() throws Exception {
+  void doProcessing_noRecreateComicFileAlowed() throws Exception {
     Mockito.when(configurationService.isFeatureEnabled(CFG_LIBRARY_NO_RECREATE_COMICS))
         .thenReturn(true);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -163,11 +190,11 @@ class UpdateMetadataProcessorTest {
   }
 
   @Test
-  void process() throws Exception {
+  void doProcessing() throws Exception {
     Mockito.when(configurationService.isFeatureEnabled(CREATE_EXTERNAL_METADATA_FILE))
         .thenReturn(true);
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);

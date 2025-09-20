@@ -26,6 +26,7 @@ import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
 import org.comixedproject.adaptors.content.ContentAdaptor;
 import org.comixedproject.adaptors.content.ContentAdaptorRegistry;
 import org.comixedproject.adaptors.content.ContentAdaptorRules;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.metadata.MetadataAdaptorProvider;
 import org.comixedproject.metadata.adaptors.MetadataAdaptor;
 import org.comixedproject.model.comicbooks.ComicBook;
@@ -52,9 +53,19 @@ public class LoadFileContentsProcessor implements ItemProcessor<ComicBook, Comic
   @Autowired private ContentAdaptorRegistry contentAdaptorRegistry;
   @Autowired private MetadataService metadataService;
   @Autowired private MetadataSourceService metadataSourceService;
+  @Autowired private LendingLibraryManager lendingLibraryManager;
 
   @Override
   public ComicBook process(final ComicBook comicBook) {
+    return this.lendingLibraryManager.executeAction(
+        comicBook,
+        comicBook.getComicBookId(),
+        input -> {
+          return this.doProcessing(input);
+        });
+  }
+
+  protected ComicBook doProcessing(final ComicBook comicBook) {
     if (comicBook.isFileContentsLoaded()) {
       log.debug("Comic book contents already loaded: id={}", comicBook.getComicBookId());
       return comicBook;

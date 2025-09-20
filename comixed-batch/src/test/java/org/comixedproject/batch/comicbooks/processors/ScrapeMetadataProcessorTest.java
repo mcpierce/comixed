@@ -18,9 +18,13 @@
 
 package org.comixedproject.batch.comicbooks.processors;
 
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertSame;
 import static org.comixedproject.batch.comicbooks.ScrapeMetadataConfiguration.SCRAPE_METADATA_JOB_ERROR_THRESHOLD;
 import static org.junit.Assert.*;
 
+import org.comixedproject.batch.LendingLibraryAction;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.metadata.MetadataException;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicMetadataSource;
@@ -30,9 +34,7 @@ import org.comixedproject.service.metadata.MetadataService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -52,6 +54,7 @@ class ScrapeMetadataProcessorTest {
   private static final long TEST_ERROR_THRESHOLD = TEST_ERROR_COUNT * 2;
 
   @InjectMocks private ScrapeMetadataProcessor processor;
+  @Mock private LendingLibraryManager lendingLibraryManager;
   @Mock private MetadataService metadataService;
   @Mock private ComicBookService comicBookService;
   @Mock private MetadataSource metadataSource;
@@ -62,6 +65,9 @@ class ScrapeMetadataProcessorTest {
   @Mock private JobParameters jobParameters;
   @Mock private StepExecution stepExecution;
   @Mock private ComicBook savedComicBook;
+  @Mock private ComicBook processedComicBook;
+
+  @Captor private ArgumentCaptor<LendingLibraryAction> lendingLibraryActionArgumentCaptor;
 
   @BeforeEach
   public void setUp() {
@@ -79,8 +85,29 @@ class ScrapeMetadataProcessorTest {
   }
 
   @Test
-  void process() throws MetadataException {
+  void process() {
+    Mockito.when(
+            lendingLibraryManager.executeAction(
+                Mockito.any(ComicBook.class),
+                Mockito.anyLong(),
+                lendingLibraryActionArgumentCaptor.capture()))
+        .thenReturn(processedComicBook);
+
     final ComicBook result = processor.process(comicBook);
+
+    assertNotNull(result);
+    assertSame(processedComicBook, result);
+
+    final LendingLibraryAction action = lendingLibraryActionArgumentCaptor.getValue();
+    assertSame(comicBook, action.execute(comicBook));
+
+    Mockito.verify(lendingLibraryManager, Mockito.times(1))
+        .executeAction(comicBook, TEST_COMIC_BOOK_ID, action);
+  }
+
+  @Test
+  void doProcessing() throws MetadataException {
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -90,11 +117,11 @@ class ScrapeMetadataProcessorTest {
   }
 
   @Test
-  void process_errorThresholdExceeded() throws MetadataException {
+  void doProcessing_errorThresholdExceeded() throws MetadataException {
     Mockito.when(stepExecution.getSkipCount()).thenReturn(TEST_ERROR_COUNT + 1);
     processor.errorThreshold = TEST_ERROR_COUNT;
 
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);
@@ -105,12 +132,12 @@ class ScrapeMetadataProcessorTest {
   }
 
   @Test
-  void process_errorOccurs() throws MetadataException {
+  void doProcessing_errorOccurs() throws MetadataException {
     Mockito.when(
             metadataService.scrapeComic(
                 Mockito.anyLong(), Mockito.anyLong(), Mockito.anyString(), Mockito.anyBoolean()))
         .thenThrow(MetadataException.class);
-    final ComicBook result = processor.process(comicBook);
+    final ComicBook result = processor.doProcessing(comicBook);
 
     assertNotNull(result);
     assertSame(comicBook, result);

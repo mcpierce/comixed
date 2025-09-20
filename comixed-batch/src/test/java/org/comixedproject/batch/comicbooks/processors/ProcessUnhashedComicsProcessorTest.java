@@ -18,7 +18,8 @@
 
 package org.comixedproject.batch.comicbooks.processors;
 
-import static org.junit.Assert.assertNotEquals;
+import static junit.framework.TestCase.assertSame;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,15 +29,15 @@ import org.apache.commons.io.FileUtils;
 import org.comixedproject.adaptors.AdaptorException;
 import org.comixedproject.adaptors.GenericUtilitiesAdaptor;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
+import org.comixedproject.batch.LendingLibraryAction;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicDetail;
 import org.comixedproject.model.comicpages.ComicPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -46,17 +47,22 @@ import org.mockito.quality.Strictness;
 class ProcessUnhashedComicsProcessorTest {
   private static final String TEST_IMAGE_PATH = "src/test/resources/example.jpg";
   private static final String TEST_BASE_FILENAME = "comic-book.cbz";
+  private static final long TEST_COMIC_BOOK_ID = 717L;
 
   private byte[] imageContent;
   private static final Integer TEST_PAGE_NUMBER = 17;
   private static final String TEST_PAGE_HASH = "OICU812";
 
   @InjectMocks private ProcessUnhashedComicsProcessor processor;
+  @Mock private LendingLibraryManager lendingLibraryManager;
   @Mock private ComicBookAdaptor comicBookAdaptor;
   @Mock private GenericUtilitiesAdaptor genericUtilitiesAdaptor;
   @Mock private ComicPage page;
   @Mock private ComicDetail comicDetail;
   @Mock private ComicBook comicBook;
+  @Mock private ComicBook processedComicBook;
+
+  @Captor private ArgumentCaptor<LendingLibraryAction> lendingLibraryActionArgumentCaptor;
 
   private List<ComicPage> pageList = new ArrayList<>();
 
@@ -70,6 +76,7 @@ class ProcessUnhashedComicsProcessorTest {
     Mockito.when(comicBook.getPages()).thenReturn(pageList);
     Mockito.when(comicDetail.getBaseFilename()).thenReturn(TEST_BASE_FILENAME);
     Mockito.when(comicBook.getComicDetail()).thenReturn(comicDetail);
+    Mockito.when(comicBook.getComicBookId()).thenReturn(TEST_COMIC_BOOK_ID);
     Mockito.when(page.getComicBook()).thenReturn(comicBook);
     Mockito.when(page.getPageNumber()).thenReturn(TEST_PAGE_NUMBER);
     pageList.add(null);
@@ -77,19 +84,40 @@ class ProcessUnhashedComicsProcessorTest {
   }
 
   @Test
-  void process_createHashException() throws Exception {
+  void process() throws Exception {
+    Mockito.when(
+            lendingLibraryManager.executeAction(
+                Mockito.any(ComicBook.class),
+                Mockito.anyLong(),
+                lendingLibraryActionArgumentCaptor.capture()))
+        .thenReturn(processedComicBook);
+
+    final ComicBook result = processor.process(comicBook);
+
+    assertNotNull(result);
+    assertSame(processedComicBook, result);
+
+    final LendingLibraryAction action = lendingLibraryActionArgumentCaptor.getValue();
+    assertSame(comicBook, action.execute(comicBook));
+
+    Mockito.verify(lendingLibraryManager, Mockito.times(1))
+        .executeAction(comicBook, TEST_COMIC_BOOK_ID, action);
+  }
+
+  @Test
+  void doProcessing_createHashException() throws Exception {
     Mockito.when(comicBookAdaptor.loadPageContent(Mockito.any(ComicBook.class), Mockito.anyInt()))
         .thenThrow(AdaptorException.class);
 
-    processor.process(comicBook);
+    processor.doProcessing(comicBook);
 
     Mockito.verify(genericUtilitiesAdaptor, Mockito.never()).createHash(Mockito.any(byte[].class));
     Mockito.verify(page, Mockito.never()).setHash(TEST_PAGE_HASH);
   }
 
   @Test
-  void process() {
-    processor.process(comicBook);
+  void doProcessing() {
+    processor.doProcessing(comicBook);
 
     assertNotEquals(-1, page.getWidth().intValue());
     assertNotEquals(-1, page.getHeight().intValue());

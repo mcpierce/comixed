@@ -28,6 +28,7 @@ import lombok.extern.log4j.Log4j2;
 import org.comixedproject.adaptors.comicbooks.ComicBookAdaptor;
 import org.comixedproject.adaptors.comicbooks.ComicFileAdaptor;
 import org.comixedproject.adaptors.file.FileAdaptor;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.library.OrganizingComic;
 import org.comixedproject.service.admin.ConfigurationService;
 import org.springframework.batch.core.ExitStatus;
@@ -54,6 +55,7 @@ public class MoveComicFilesProcessor
   @Autowired private FileAdaptor fileAdaptor;
   @Autowired private ComicFileAdaptor comicFileAdaptor;
   @Autowired private ComicBookAdaptor comicBookAdaptor;
+  @Autowired private LendingLibraryManager lendingLibraryManager;
 
   JobParameters jobParameters;
 
@@ -70,9 +72,19 @@ public class MoveComicFilesProcessor
       return comic;
     }
 
+    return this.lendingLibraryManager.executeAction(
+        comic,
+        comic.getComicBookId(),
+        input -> {
+          return this.doProcessing(input);
+        });
+  }
+
+  protected OrganizingComic doProcessing(final OrganizingComic comic) {
     log.debug("Getting target directory: id={}", comic.getComicBookId());
     final File targetDirectory =
         new File(this.jobParameters.getString(ORGANIZE_LIBRARY_JOB_TARGET_DIRECTORY));
+
     log.trace("Getting renaming rule");
     final String renamingRule = this.jobParameters.getString(ORGANIZE_LIBRARY_JOB_RENAMING_RULE);
 

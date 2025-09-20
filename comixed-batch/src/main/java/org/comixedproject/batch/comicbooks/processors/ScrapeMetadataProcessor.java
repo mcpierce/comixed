@@ -21,6 +21,7 @@ package org.comixedproject.batch.comicbooks.processors;
 import static org.comixedproject.batch.comicbooks.ScrapeMetadataConfiguration.SCRAPE_METADATA_JOB_ERROR_THRESHOLD;
 
 import lombok.extern.log4j.Log4j2;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicMetadataSource;
 import org.comixedproject.service.comicbooks.ComicBookService;
@@ -48,6 +49,7 @@ public class ScrapeMetadataProcessor
     implements ItemProcessor<ComicBook, ComicBook>, StepExecutionListener {
   @Autowired private MetadataService metadataService;
   @Autowired private ComicBookService comicBookService;
+  @Autowired private LendingLibraryManager lendingLibraryManager;
 
   StepExecution stepExecution = null;
   long errorThreshold = 0L;
@@ -76,6 +78,15 @@ public class ScrapeMetadataProcessor
 
   @Override
   public ComicBook process(final ComicBook comicBook) {
+    return this.lendingLibraryManager.executeAction(
+        comicBook,
+        comicBook.getComicBookId(),
+        input -> {
+          return this.doProcessing(input);
+        });
+  }
+
+  protected ComicBook doProcessing(final ComicBook comicBook) {
     if (this.isInFailedState()) {
       log.debug(
           "Abort scraping: error threshold exceeded ({} > {})",

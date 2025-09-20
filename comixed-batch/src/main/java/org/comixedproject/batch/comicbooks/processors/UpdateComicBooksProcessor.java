@@ -21,6 +21,7 @@ package org.comixedproject.batch.comicbooks.processors;
 import static org.comixedproject.batch.comicbooks.UpdateComicBooksConfiguration.*;
 
 import lombok.extern.log4j.Log4j2;
+import org.comixedproject.batch.LendingLibraryManager;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.comixedproject.model.comicbooks.ComicType;
 import org.springframework.batch.core.ExitStatus;
@@ -29,6 +30,7 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -42,10 +44,26 @@ import org.springframework.util.StringUtils;
 @Log4j2
 public class UpdateComicBooksProcessor
     implements ItemProcessor<ComicBook, ComicBook>, StepExecutionListener {
+  @Autowired private LendingLibraryManager lendingLibraryManager;
+
   private JobParameters jobParameters;
 
   @Override
-  public ComicBook process(final ComicBook comicBook) throws Exception {
+  public ComicBook process(final ComicBook comicBook) {
+    return this.lendingLibraryManager.executeAction(
+        comicBook,
+        comicBook.getComicBookId(),
+        input -> {
+          try {
+            return this.doProcessing(input);
+          } catch (Exception error) {
+            log.error("Failed to update comic book metadata", error);
+            return input;
+          }
+        });
+  }
+
+  protected ComicBook doProcessing(final ComicBook comicBook) throws Exception {
     log.trace("Loading job parameters");
     final String publisher = this.jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_PUBLISHER);
     final String series = this.jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_SERIES);
