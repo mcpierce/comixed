@@ -50,6 +50,11 @@ public class UpdateComicBooksProcessor
 
   @Override
   public ComicBook process(final ComicBook comicBook) throws Exception {
+    if (comicBook.isFileContentsLoaded() == false || comicBook.isPurging()) {
+      log.debug(
+          "Comic book not ready for metadata update, skipping: id={}", comicBook.getComicBookId());
+      return null;
+    }
     log.trace("Loading job parameters");
     final String publisher = this.jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_PUBLISHER);
     final String series = this.jobParameters.getString(UPDATE_COMIC_BOOKS_JOB_SERIES);
