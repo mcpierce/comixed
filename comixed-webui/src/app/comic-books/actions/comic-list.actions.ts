@@ -22,6 +22,8 @@ import { ComicType } from '@app/comic-books/models/comic-type';
 import { ComicState } from '@app/comic-books/models/comic-state';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
+import { DisplayableComicCacheEntry } from '@app/comic-books/models/displayable-comic-cache-entry';
+import { DisplayableComicCacheKey } from '@app/comic-books/models/displayable-comic-cache-key';
 
 export const resetComicList = createAction(
   '[Comic List] Resets the list of comics'
@@ -120,4 +122,9 @@ export const comicUpdated = createAction(
 export const comicRemoved = createAction(
   '[Comic List] Received an removed comic detail',
   props<{ comic: DisplayableComic }>()
+);
+
+export const addCacheEntry = createAction(
+  '[Comic List] Added cache entry',
+  props<{ key: DisplayableComicCacheKey; entry: DisplayableComicCacheEntry }>()
 );

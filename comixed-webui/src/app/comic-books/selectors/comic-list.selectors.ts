@@ -31,6 +31,11 @@ export const selectComicList = createSelector(
   state => state.comics
 );
 
+export const selectComicListCachedEntries = createSelector(
+  selectComicListState,
+  state => state.cachedEntries
+);
+
 export const selectComicCoverYears = createSelector(
   selectComicListState,
   state => state.coverYears

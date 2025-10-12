@@ -28,15 +28,18 @@ import {
   ComicListState
 } from '@app/comic-books/reducers/comic-list.reducer';
 import {
+  selectComicCoverMonths,
+  selectComicCoverYears,
   selectComicFilteredCount,
   selectComicList,
+  selectComicListCachedEntries,
   selectComicListState,
-  selectComicTotalCount,
-  selectComicCoverMonths,
-  selectComicCoverYears
+  selectComicTotalCount
 } from '@app/comic-books/selectors/comic-list.selectors';
+import { DisplayableComicCacheEntry } from '@app/comic-books/models/displayable-comic-cache-entry';
+import { DisplayableComicCacheKey } from '@app/comic-books/models/displayable-comic-cache-key';
 
-describe('ComicList Selectors', () => {
+fdescribe('ComicList Selectors', () => {
   const COMIC_LIST = [
     DISPLAYABLE_COMIC_1,
     DISPLAYABLE_COMIC_2,
@@ -58,7 +61,11 @@ describe('ComicList Selectors', () => {
       coverYears: COVER_YEARS,
       coverMonths: COVER_MONTHS,
       totalCount: TOTAL_COUNT,
-      filteredCount: FILTERED_COUNT
+      filteredCount: FILTERED_COUNT,
+      cachedEntries: new Map<
+        DisplayableComicCacheKey,
+        DisplayableComicCacheEntry
+      >()
     };
   });
 
@@ -76,6 +83,14 @@ describe('ComicList Selectors', () => {
         [COMIC_LIST_FEATURE_KEY]: state
       })
     ).toEqual(state.comics);
+  });
+
+  it('should select the list of comic details cached entries', () => {
+    expect(
+      selectComicListCachedEntries({
+        [COMIC_LIST_FEATURE_KEY]: state
+      })
+    ).toBe(state.cachedEntries);
   });
 
   it('should select the list of cover years', () => {

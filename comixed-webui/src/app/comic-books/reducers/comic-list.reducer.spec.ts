@@ -29,6 +29,7 @@ import {
 } from '@app/comic-books/comic-books.fixtures';
 import { READING_LIST_3 } from '@app/lists/lists.fixtures';
 import {
+  addCacheEntry,
   comicRemoved,
   comicUpdated,
   loadComicsByFilter,
@@ -42,8 +43,11 @@ import {
   resetComicList
 } from '@app/comic-books/actions/comic-list.actions';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
+import { DisplayableComicCacheKey } from '@app/comic-books/models/displayable-comic-cache-key';
+import { DisplayableComicCacheEntry } from '@app/comic-books/models/displayable-comic-cache-entry';
+import { DisplayableComicCacheType } from '@app/comic-books/models/displayable-comic-cache-type';
 
-describe('ComicList Reducer', () => {
+fdescribe('ComicList Reducer', () => {
   const PAGE_SIZE = 25;
   const PAGE_INDEX = Math.abs(Math.random() * 1000);
   const COVER_YEAR = Math.random() * 100 + 1900;
@@ -75,11 +79,31 @@ describe('ComicList Reducer', () => {
   const TOTAL_COUNT = COMIC_LIST.length * 2;
   const FILTERED_COUNT = Math.floor(TOTAL_COUNT * 0.75);
   const READING_LIST_ID = READING_LIST_3.readingListId;
+  const CACHE_KEY = {
+    cacheType: DisplayableComicCacheType.READ
+  } as DisplayableComicCacheKey;
+  const CACHE_ENTRY = {
+    comics: COMIC_LIST,
+    coverYears: COVER_YEARS,
+    coverMonths: COVER_MONTHS,
+    totalCount: TOTAL_COUNT,
+    filteredCount: FILTERED_COUNT
+  } as DisplayableComicCacheEntry;
+
+  let cachedEntries = new Map<
+    DisplayableComicCacheKey,
+    DisplayableComicCacheEntry
+  >();
 
   let state: ComicListState;
 
   beforeEach(() => {
     state = { ...initialState };
+    cachedEntries = new Map<
+      DisplayableComicCacheKey,
+      DisplayableComicCacheEntry
+    >();
+    cachedEntries.set(CACHE_KEY, CACHE_ENTRY);
   });
 
   describe('the initial state', () => {
@@ -93,6 +117,12 @@ describe('ComicList Reducer', () => {
 
     it('has no comics', () => {
       expect(state.comics).toEqual([]);
+    });
+
+    it('has no cached entries', () => {
+      expect(state.cachedEntries).toEqual(
+        new Map<DisplayableComicCacheKey, DisplayableComicCacheEntry>()
+      );
     });
 
     it('has no cover years', () => {
@@ -121,7 +151,8 @@ describe('ComicList Reducer', () => {
           coverYears: COVER_YEARS,
           coverMonths: COVER_MONTHS,
           totalCount: TOTAL_COUNT,
-          filteredCount: FILTERED_COUNT
+          filteredCount: FILTERED_COUNT,
+          cachedEntries: cachedEntries
         },
         resetComicList()
       );
@@ -129,6 +160,12 @@ describe('ComicList Reducer', () => {
 
     it('clears the list of comics', () => {
       expect(state.comics).toEqual([]);
+    });
+
+    it('clears the cached entries', () => {
+      expect(state.cachedEntries).toEqual(
+        new Map<DisplayableComicCacheKey, DisplayableComicCacheEntry>()
+      );
     });
 
     it('clears the list of cover years', () => {
@@ -406,6 +443,25 @@ describe('ComicList Reducer', () => {
       it('does not change the comic list', () => {
         expect(state.comics).toEqual(DISPLAYED_LIST);
       });
+    });
+  });
+
+  describe('caching an entry', () => {
+    beforeEach(() => {
+      state = reducer(
+        {
+          ...state,
+          cachedEntries: new Map<
+            DisplayableComicCacheKey,
+            DisplayableComicCacheEntry
+          >()
+        },
+        addCacheEntry({ key: CACHE_KEY, entry: CACHE_ENTRY })
+      );
+    });
+
+    it('stores the cached list', () => {
+      expect(state.cachedEntries.get(CACHE_KEY)).toEqual(CACHE_ENTRY);
     });
   });
 });

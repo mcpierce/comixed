@@ -20,6 +20,7 @@ import { createFeature, createReducer, on } from '@ngrx/store';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 import { deepClone } from '@angular-ru/cdk/object';
 import {
+  addCacheEntry,
   comicRemoved,
   comicUpdated,
   loadComicsByFilter,
@@ -32,12 +33,15 @@ import {
   loadUnreadComics,
   resetComicList
 } from '@app/comic-books/actions/comic-list.actions';
+import { DisplayableComicCacheKey } from '@app/comic-books/models/displayable-comic-cache-key';
+import { DisplayableComicCacheEntry } from '@app/comic-books/models/displayable-comic-cache-entry';
 
 export const COMIC_LIST_FEATURE_KEY = 'comic_list_state';
 
 export interface ComicListState {
   busy: boolean;
   comics: DisplayableComic[];
+  cachedEntries: Map<DisplayableComicCacheKey, DisplayableComicCacheEntry>;
   coverYears: number[];
   coverMonths: number[];
   totalCount: number;
@@ -47,6 +51,10 @@ export interface ComicListState {
 export const initialState: ComicListState = {
   busy: false,
   comics: [],
+  cachedEntries: new Map<
+    DisplayableComicCacheKey,
+    DisplayableComicCacheEntry
+  >(),
   coverYears: [],
   coverMonths: [],
   totalCount: 0,
@@ -58,6 +66,10 @@ export const reducer = createReducer(
   on(resetComicList, state => ({
     ...state,
     comics: [],
+    cachedEntries: new Map<
+      DisplayableComicCacheKey,
+      DisplayableComicCacheEntry
+    >(),
     coverYears: [],
     coverMonths: [],
     totalCount: 0,
@@ -97,6 +109,11 @@ export const reducer = createReducer(
       entry => entry.comicBookId !== action.comic.comicBookId
     );
     return { ...state, comics };
+  }),
+  on(addCacheEntry, (state, action) => {
+    let updatedCache = state.cachedEntries;
+    updatedCache.set(action.key, action.entry);
+    return { ...state, cachedEntries: updatedCache };
   })
 );
 
