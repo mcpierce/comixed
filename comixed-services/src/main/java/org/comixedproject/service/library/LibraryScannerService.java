@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
+import org.comixedproject.adaptors.comicbooks.ComicFileAdaptor;
 import org.comixedproject.service.admin.ConfigurationChangedListener;
 import org.comixedproject.service.admin.ConfigurationService;
 import org.comixedproject.service.comicbooks.ComicBookService;
@@ -52,6 +53,7 @@ public class LibraryScannerService implements InitializingBean, ConfigurationCha
   @Autowired private ComicBookService comicBookService;
   @Autowired private ComicDetailService comicDetailService;
   @Autowired private ComicFileService comicFileService;
+  @Autowired private ComicFileAdaptor comicFileAdaptor;
 
   private static final Object SEMAPHORE = new Object();
 
@@ -179,12 +181,14 @@ public class LibraryScannerService implements InitializingBean, ConfigurationCha
   }
 
   private void doFileFound(final String filename) {
-    if (this.comicDetailService.filenameFound(filename)) {
-      log.debug("Missing file found: {}", filename);
-      this.comicBookService.markComicAsFound(filename);
-    } else {
-      log.debug("Comic book discovered: {}", filename);
-      this.comicFileService.discoverComicFile(filename);
+    if (this.comicFileAdaptor.isComicFile(new File(filename))) {
+      if (this.comicDetailService.filenameFound(filename)) {
+        log.debug("Missing file found: {}", filename);
+        this.comicBookService.markComicAsFound(filename);
+      } else {
+        log.debug("Comic book discovered: {}", filename);
+        this.comicFileService.discoverComicFile(filename);
+      }
     }
   }
 

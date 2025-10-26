@@ -53,6 +53,7 @@ public enum ComicEvent {
   metadataCleared,
   // a file in the library was deleted from disk
   markAsMissing,
+  // a file in the library was returned to disk
   markAsFound,
   markedForRemoval,
   unmarkedForRemoval,
