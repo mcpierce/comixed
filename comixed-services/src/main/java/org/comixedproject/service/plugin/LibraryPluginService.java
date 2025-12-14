@@ -25,12 +25,10 @@ import lombok.extern.log4j.Log4j2;
 import org.comixedproject.model.plugin.LibraryPlugin;
 import org.comixedproject.model.plugin.LibraryPluginProperty;
 import org.comixedproject.model.user.ComiXedUser;
-import org.comixedproject.plugins.PluginRuntime;
+import org.comixedproject.plugins.PluginLanguage;
 import org.comixedproject.plugins.PluginRuntimeException;
-import org.comixedproject.plugins.PluginRuntimeRegistry;
+import org.comixedproject.plugins.PluginRuntimeLocator;
 import org.comixedproject.repositories.plugin.LibraryPluginRepository;
-import org.comixedproject.service.comicbooks.ComicBookService;
-import org.comixedproject.service.lists.ReadingListService;
 import org.comixedproject.service.user.ComiXedUserException;
 import org.comixedproject.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,22 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Log4j2
 public class LibraryPluginService {
-  /** The log property name. */
-  public static final String PROPERTY_NAME_READING_LIST_SERVICE = "readingListService";
-
-  /** The reading list service property name. */
-  public static final String PROPERTY_NAME_LOG = "log";
-
-  /** The comic book ervice property name. */
-  public static final String PROPERTY_NAME_COMIC_BOOK_SERVICE = "comicBookService";
-
   @Autowired private LibraryPluginRepository libraryPluginRepository;
   @Autowired private UserService userService;
-  @Autowired private PluginRuntimeRegistry pluginRuntimeRegistry;
-
-  // the following are provided to the plugin runtime and are not used by this service
-  @Autowired private ComicBookService comicBookService;
-  @Autowired private ReadingListService readingListService;
+  @Autowired private PluginRuntimeLocator pluginRuntimeLocator;
 
   /**
    * Returns the list of all configured plugins.
@@ -94,22 +79,15 @@ public class LibraryPluginService {
       throws LibraryPluginException {
     try {
       log.debug("Loading libraryPlugin language runtime: {}", pluginLanguage);
-      final PluginRuntime pluginRuntime =
-          this.pluginRuntimeRegistry.getPluginRuntime(pluginLanguage);
+      final PluginLanguage pluginRuntime =
+          this.pluginRuntimeLocator.getPluginRuntime(pluginLanguage);
       log.trace("Getting libraryPlugin name");
       final String name = pluginRuntime.getName(pluginFilename);
       log.trace("Getting libraryPlugin version");
       final String version = pluginRuntime.getVersion(pluginFilename);
-      log.trace("Getting libraryPlugin properties");
-      final List<LibraryPluginProperty> properties = pluginRuntime.getProperties(pluginFilename);
       log.debug("Creating libraryPlugin: {} v{}", name, version);
       final LibraryPlugin libraryPlugin =
           new LibraryPlugin(name, name, pluginLanguage, version, pluginFilename);
-      properties.forEach(
-          property -> {
-            property.setPlugin(libraryPlugin);
-            libraryPlugin.getProperties().add(property);
-          });
       log.debug("Saving libraryPlugin");
       return this.libraryPluginRepository.save(libraryPlugin);
     } catch (Exception error) {
@@ -187,16 +165,10 @@ public class LibraryPluginService {
       log.trace("Loading plugin: id={}", pluginId);
       final LibraryPlugin plugin = this.doLoadPlugin(pluginId);
       log.trace("Loading plugin runtime: {}", plugin.getLanguage());
-      final PluginRuntime pluginRuntime =
-          this.pluginRuntimeRegistry.getPluginRuntime(plugin.getLanguage());
-      pluginRuntime.addProperty(PROPERTY_NAME_LOG, log);
-      log.trace("Adding services to runtime");
-      pluginRuntime.addProperty(PROPERTY_NAME_COMIC_BOOK_SERVICE, this.comicBookService);
-      pluginRuntime.addProperty(PROPERTY_NAME_READING_LIST_SERVICE, this.readingListService);
-      log.trace("Adding comic book ids to runtime");
-      pluginRuntime.addProperty("comicBookIds", comicBookIds);
+      final PluginLanguage pluginLanguage =
+          this.pluginRuntimeLocator.getPluginRuntime(plugin.getLanguage());
       log.debug("Running plugin");
-      pluginRuntime.execute(plugin);
+      pluginLanguage.execute(plugin);
     } catch (PluginRuntimeException error) {
       throw new LibraryPluginException("Failed to run plugin", error);
     }

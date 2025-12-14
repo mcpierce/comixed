@@ -18,16 +18,14 @@
 
 package org.comixedproject.plugins;
 
-import java.util.List;
 import org.comixedproject.model.plugin.LibraryPlugin;
-import org.comixedproject.model.plugin.LibraryPluginProperty;
 
 /**
- * <code>PluginRuntime</code> defines type for providing a runtime environment for plugins.
+ * <code>PluginLanguage</code> defines type for providing a runtime environment for plugins.
  *
  * @author Darryl L. Pierce
  */
-public interface PluginRuntime {
+public interface PluginLanguage {
   /**
    * Returns the plugin's name.
    *
@@ -45,26 +43,10 @@ public interface PluginRuntime {
   String getVersion(String filename);
 
   /**
-   * Loads the list of properties from the plugin.
-   *
-   * @param filename the plugin filename
-   * @return the property list
-   */
-  List<LibraryPluginProperty> getProperties(String filename);
-
-  /**
    * Executes the given libraryPlugin.
    *
    * @param libraryPlugin the libraryPlugin
    * @return <code>true</code> if the libraryPlugin runs without error
    */
   Boolean execute(LibraryPlugin libraryPlugin);
-
-  /**
-   * Defines a property for the plugin runtime.
-   *
-   * @param propertyName the property name
-   * @param propertyValue the property value
-   */
-  void addProperty(String propertyName, Object propertyValue);
 }

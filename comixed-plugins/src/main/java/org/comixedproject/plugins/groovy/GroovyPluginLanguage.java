@@ -22,18 +22,15 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.comixedproject.model.plugin.LibraryPlugin;
-import org.comixedproject.model.plugin.LibraryPluginProperty;
-import org.comixedproject.plugins.AbstractPluginRuntime;
+import org.comixedproject.plugins.AbstractPluginLanguage;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * <code>GroovyPluginRuntime</code> provides a runtime environment that loads and executes a Groovy
+ * <code>GroovyPluginLanguage</code> provides a runtime environment that loads and executes a Groovy
  * plugin.
  *
  * @author Darryl L. Pierce
@@ -41,7 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Log4j2
-public class GroovyPluginRuntime extends AbstractPluginRuntime {
+public class GroovyPluginLanguage extends AbstractPluginLanguage {
   @Override
   public String getName(final String filename) {
     final GroovyShell shell = doCreatePluginShell();
@@ -69,28 +66,11 @@ public class GroovyPluginRuntime extends AbstractPluginRuntime {
   }
 
   @Override
-  public List<LibraryPluginProperty> getProperties(final String filename) {
-    final GroovyShell shell = doCreatePluginShell();
-    try {
-      log.trace("Loading plugin properties: {}", filename);
-      final Script script = shell.parse(new File(filename));
-      return (List<LibraryPluginProperty>)
-          script.invokeMethod("plugin_properties", new Object[] {});
-    } catch (Exception error) {
-      log.error("Failed to load plugin properties", error);
-      return new ArrayList<>();
-    }
-  }
-
-  @Override
   public Boolean execute(final LibraryPlugin libraryPlugin) {
     final var shell = doCreatePluginShell();
     try {
       log.trace(
           "Executing libraryPlugin: {} v{}", libraryPlugin.getName(), libraryPlugin.getVersion());
-      this.getProperties()
-          .entrySet()
-          .forEach(entry -> shell.setProperty(entry.getKey(), entry.getValue()));
       shell.evaluate(new File(libraryPlugin.getFilename()));
       log.trace("LibraryPlugin completed without error");
       return true;

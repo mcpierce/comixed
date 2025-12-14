@@ -19,7 +19,7 @@
 package org.comixedproject.plugins;
 
 /**
- * <code>PluginRuntimeProvider</code> defines a provider for instances of {@link PluginRuntime}.
+ * <code>PluginRuntimeProvider</code> defines a provider for instances of {@link PluginLanguage}.
  *
  * @author Darryl L. Pierce
  */
@@ -29,7 +29,7 @@ public interface PluginRuntimeProvider {
    *
    * @return the adaptor
    */
-  PluginRuntime create();
+  PluginLanguage create();
 
   /**
    * Returns the name of the provider.

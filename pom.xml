@@ -54,14 +54,12 @@
       **/model/**,
       **/test/**,
       **/comixedproject/http/**,
-      **/state/comicbooks/Comic*,
-      **/state/lists/ReadingList*,
-      **/state/lists/Story*,
-      **/*Configuration,
-      **/*Event,
-      **/*Exception,
-      **/*StateHandler,
-      **/ComiXed*App
+      **/state/**/*StateHandler.class,
+      **/*Configuration.class,
+      **/*Locator.class,
+      **/*Event.class,
+      **/*Exception.class,
+      **/ComiXedApp.*
     </sonar.exclusions>
     <sonar.test.inclusions>**/test/**</sonar.test.inclusions>
   </properties>

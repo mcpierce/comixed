@@ -19,7 +19,7 @@
 package org.comixedproject.plugins.groovy;
 
 import lombok.extern.log4j.Log4j2;
-import org.comixedproject.plugins.PluginRuntime;
+import org.comixedproject.plugins.PluginLanguage;
 import org.comixedproject.plugins.PluginRuntimeProvider;
 
 /**
@@ -30,9 +30,9 @@ import org.comixedproject.plugins.PluginRuntimeProvider;
 @Log4j2
 public class GroovyPluginRuntimeProvider implements PluginRuntimeProvider {
   @Override
-  public PluginRuntime create() {
+  public PluginLanguage create() {
     log.trace("Creating an instance of the Groovy plugin runtime");
-    return new GroovyPluginRuntime();
+    return new GroovyPluginLanguage();
   }
 
   @Override

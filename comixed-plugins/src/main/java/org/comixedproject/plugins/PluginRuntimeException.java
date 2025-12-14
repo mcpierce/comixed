@@ -20,7 +20,7 @@ package org.comixedproject.plugins;
 
 /**
  * <code>PluginRuntimeException</code> is thrown when an error occurs when working with an instance
- * of {@link PluginRuntime}.
+ * of {@link PluginLanguage}.
  *
  * @author Darryl L. Pierce
  */

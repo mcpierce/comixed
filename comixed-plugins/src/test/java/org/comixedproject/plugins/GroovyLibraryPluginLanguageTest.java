@@ -20,10 +20,8 @@ package org.comixedproject.plugins;
 
 import static junit.framework.TestCase.*;
 
-import java.util.List;
 import org.comixedproject.model.plugin.LibraryPlugin;
-import org.comixedproject.model.plugin.LibraryPluginProperty;
-import org.comixedproject.plugins.groovy.GroovyPluginRuntime;
+import org.comixedproject.plugins.groovy.GroovyPluginLanguage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +30,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class GroovyLibraryPluginRuntimeTest {
+class GroovyLibraryPluginLanguageTest {
   private static final String TEST_GOOD_PLUGIN = "src/test/resources/good.cxplugin";
   private static final String TEST_BROKEN_PLUGIN = "src/test/resources/broken.cxplugin";
   private static final String TEST_PLUGIN_NAME = "Good Plugin";
@@ -42,7 +40,7 @@ class GroovyLibraryPluginRuntimeTest {
   private static final String TEST_PROPERTY_NAME_2 = "test_property_2";
   private static final Integer TEST_PROPERTY_2_LENGTH = 64;
 
-  @InjectMocks private GroovyPluginRuntime runner;
+  @InjectMocks private GroovyPluginLanguage runner;
   @Mock private LibraryPlugin libraryPlugin;
 
   @Test
@@ -118,50 +116,5 @@ class GroovyLibraryPluginRuntimeTest {
 
     assertNotNull(result);
     assertEquals("", result);
-  }
-
-  @Test
-  void testLoadProperties() {
-    final List<LibraryPluginProperty> result = runner.getProperties(TEST_GOOD_PLUGIN);
-
-    assertNotNull(result);
-    assertFalse(result.isEmpty());
-    assertTrue(
-        result.stream()
-            .map(LibraryPluginProperty::getName)
-            .toList()
-            .contains(TEST_PROPERTY_NAME_1));
-    assertTrue(
-        result.stream()
-            .map(LibraryPluginProperty::getLength)
-            .toList()
-            .contains(TEST_PROPERTY_1_LENGTH));
-    assertTrue(
-        result.stream()
-            .map(LibraryPluginProperty::getName)
-            .toList()
-            .contains(TEST_PROPERTY_NAME_2));
-    assertTrue(
-        result.stream()
-            .map(LibraryPluginProperty::getLength)
-            .toList()
-            .contains(TEST_PROPERTY_2_LENGTH));
-  }
-
-  @Test
-  void testLoadPropertiesBadScript() {
-    final List<LibraryPluginProperty> result = runner.getProperties(TEST_BROKEN_PLUGIN);
-
-    assertNotNull(result);
-    assertTrue(result.isEmpty());
-  }
-
-  @Test
-  void testLoadPropertiesMissingPlugin() {
-    final List<LibraryPluginProperty> result =
-        runner.getProperties(TEST_BROKEN_PLUGIN.substring(1));
-
-    assertNotNull(result);
-    assertTrue(result.isEmpty());
   }
 }

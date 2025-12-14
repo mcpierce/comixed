@@ -29,9 +29,9 @@ import org.apache.commons.lang.math.RandomUtils;
 import org.comixedproject.model.plugin.LibraryPlugin;
 import org.comixedproject.model.plugin.LibraryPluginProperty;
 import org.comixedproject.model.user.ComiXedUser;
-import org.comixedproject.plugins.PluginRuntime;
+import org.comixedproject.plugins.PluginLanguage;
 import org.comixedproject.plugins.PluginRuntimeException;
-import org.comixedproject.plugins.PluginRuntimeRegistry;
+import org.comixedproject.plugins.PluginRuntimeLocator;
 import org.comixedproject.repositories.plugin.LibraryPluginRepository;
 import org.comixedproject.service.comicbooks.ComicBookService;
 import org.comixedproject.service.lists.ReadingListService;
@@ -63,14 +63,14 @@ class LibraryLibraryPluginServiceTest {
   @InjectMocks private LibraryPluginService service;
   @Mock private LibraryPluginRepository libraryPluginRepository;
   @Mock private UserService userService;
-  @Mock private PluginRuntimeRegistry pluginRuntimeRegistry;
+  @Mock private PluginRuntimeLocator pluginRuntimeLocator;
   @Mock private ComicBookService comicBookService;
   @Mock private ReadingListService readingListService;
   @Mock private ComiXedUser user;
   @Mock private LibraryPlugin libraryPlugin;
   @Mock private LibraryPlugin savedLibraryPlugin;
   @Mock private LibraryPlugin adminOnlyPlugin;
-  @Mock private PluginRuntime pluginRuntime;
+  @Mock private PluginLanguage pluginLanguage;
   @Mock private LibraryPluginProperty libraryPluginProperty;
 
   @Captor private ArgumentCaptor<LibraryPlugin> saveArgumentCaptor;
@@ -94,14 +94,13 @@ class LibraryLibraryPluginServiceTest {
     Mockito.when(libraryPluginRepository.save(saveArgumentCaptor.capture()))
         .thenReturn(savedLibraryPlugin);
 
-    Mockito.when(pluginRuntimeRegistry.getPluginRuntime(Mockito.anyString()))
-        .thenReturn(pluginRuntime);
+    Mockito.when(pluginRuntimeLocator.getPluginRuntime(Mockito.anyString()))
+        .thenReturn(pluginLanguage);
 
-    Mockito.when(pluginRuntime.getName(Mockito.anyString())).thenReturn(TEST_PLUGIN_NAME);
-    Mockito.when(pluginRuntime.getVersion(Mockito.anyString())).thenReturn(TEST_PLUGIN_VERSION);
+    Mockito.when(pluginLanguage.getName(Mockito.anyString())).thenReturn(TEST_PLUGIN_NAME);
+    Mockito.when(pluginLanguage.getVersion(Mockito.anyString())).thenReturn(TEST_PLUGIN_VERSION);
     Mockito.when(libraryPluginProperty.getName()).thenReturn(TEST_PROPERTY_NAME);
     pluginProperties.add(libraryPluginProperty);
-    Mockito.when(pluginRuntime.getProperties(Mockito.anyString())).thenReturn(pluginProperties);
 
     libraryPluginPropertyList.add(libraryPluginProperty);
     Mockito.when(libraryPlugin.getProperties()).thenReturn(libraryPluginPropertyList);
@@ -154,7 +153,7 @@ class LibraryLibraryPluginServiceTest {
 
   @Test
   void createPluginNoSuchLanguage() throws PluginRuntimeException {
-    Mockito.when(pluginRuntimeRegistry.getPluginRuntime(Mockito.anyString()))
+    Mockito.when(pluginRuntimeLocator.getPluginRuntime(Mockito.anyString()))
         .thenThrow(PluginRuntimeException.class);
 
     assertThrows(
@@ -245,7 +244,7 @@ class LibraryLibraryPluginServiceTest {
 
   @Test
   void runLibraryPlugin_couldNotLoad() throws PluginRuntimeException {
-    Mockito.when(pluginRuntimeRegistry.getPluginRuntime(Mockito.anyString()))
+    Mockito.when(pluginRuntimeLocator.getPluginRuntime(Mockito.anyString()))
         .thenThrow(PluginRuntimeException.class);
 
     assertThrows(
@@ -258,12 +257,6 @@ class LibraryLibraryPluginServiceTest {
     service.runLibraryPlugin(TEST_PLUGIN_ID, comicBookIdList);
 
     Mockito.verify(libraryPluginRepository, Mockito.times(1)).getById(TEST_PLUGIN_ID);
-    Mockito.verify(pluginRuntimeRegistry, Mockito.times(1)).getPluginRuntime(TEST_LANGUAGE);
-    Mockito.verify(pluginRuntime, Mockito.times(1))
-        .addProperty(Mockito.eq(PROPERTY_NAME_LOG), Mockito.any());
-    Mockito.verify(pluginRuntime, Mockito.times(1))
-        .addProperty(PROPERTY_NAME_COMIC_BOOK_SERVICE, comicBookService);
-    Mockito.verify(pluginRuntime, Mockito.times(1))
-        .addProperty(PROPERTY_NAME_READING_LIST_SERVICE, readingListService);
+    Mockito.verify(pluginRuntimeLocator, Mockito.times(1)).getPluginRuntime(TEST_LANGUAGE);
   }
 }

@@ -25,20 +25,20 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 /**
- * <code>PluginRuntimeRegistry</code> enables dynamically loading instances of {@link PluginRuntime}
- * at runtime.
+ * <code>PluginRuntimeLocator</code> discovers and loads instances of {@link PluginLanguage} at
+ * runtime.
  *
  * @author Darryl L. Pierce
  */
 @Component
 @Log4j2
-public class PluginRuntimeRegistry {
+public class PluginRuntimeLocator {
   /**
    * Returns the list of all available adaptors.
    *
    * @return the adaptor list
    */
-  public List<PluginRuntimeProvider> getPluginRuntimeList() {
+  public List<PluginRuntimeProvider> findPluginRuntimes() {
     final ServiceLoader<PluginRuntimeProvider> loaders =
         ServiceLoader.load(PluginRuntimeProvider.class);
     return loaders.stream().map(ServiceLoader.Provider::get).toList();
@@ -51,10 +51,10 @@ public class PluginRuntimeRegistry {
    * @return the runtime
    * @throws PluginRuntimeException if the adaptor does not exist
    */
-  public PluginRuntime getPluginRuntime(final String name) throws PluginRuntimeException {
+  public PluginLanguage getPluginRuntime(final String name) throws PluginRuntimeException {
     log.debug("Loading plugin runtime: {}", name);
     final Optional<PluginRuntimeProvider> found =
-        this.getPluginRuntimeList().stream()
+        this.findPluginRuntimes().stream()
             .filter(adaptor -> adaptor.getName().equals(name))
             .findFirst();
     if (found.isEmpty()) {
