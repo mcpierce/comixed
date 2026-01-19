@@ -26,12 +26,14 @@ import jakarta.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.*;
 import org.comixedproject.model.comicbooks.*;
+import org.comixedproject.model.library.DisplayableComic;
 import org.comixedproject.model.net.DownloadDocument;
 import org.comixedproject.model.net.comicbooks.*;
 import org.comixedproject.model.user.ComiXedUser;
 import org.comixedproject.service.comicbooks.*;
 import org.comixedproject.service.comicpages.ComicPageException;
 import org.comixedproject.service.comicpages.PageCacheService;
+import org.comixedproject.service.library.DisplayableComicService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,9 +64,11 @@ class ComicBookControllerTest {
 
   @InjectMocks private ComicBookController controller;
   @Mock private ComicBookService comicBookService;
+  @Mock private DisplayableComicService displayableComicService;
   @Mock private PageCacheService pageCacheService;
   @Mock private ComicSelectionService comicSelectionService;
   @Mock private ComicBook comicBook;
+  @Mock private DisplayableComic displayableComicBook;
   @Mock private List<PageOrderEntry> pageOrderEntrylist;
   @Mock private HttpSession httpSession;
   @Mock private Principal principal;
@@ -90,26 +94,30 @@ class ComicBookControllerTest {
   }
 
   @Test
-  void getComicForNonexistentComic() throws ComicBookException {
-    Mockito.when(comicBookService.getComic(Mockito.anyLong())).thenReturn(null);
+  void getComicForNonexistentComic() throws ComicBookException, ComicDetailException {
+    Mockito.when(displayableComicService.getForComicBookId(Mockito.anyLong())).thenReturn(null);
 
-    ComicBook result = controller.getComic(TEST_COMIC_ID);
+    ComicBookData result = controller.getComic(TEST_COMIC_ID);
 
-    assertNull(result);
+    assertNotNull(result);
+    assertNull(result.getDetails());
+    assertNull(result.getPages());
+    assertNull(result.getMetadata());
 
-    Mockito.verify(comicBookService, Mockito.times(1)).getComic(TEST_COMIC_ID);
+    Mockito.verify(displayableComicService, Mockito.times(1)).getForComicBookId(TEST_COMIC_ID);
   }
 
   @Test
-  void getComic() throws ComicBookException {
-    Mockito.when(comicBookService.getComic(Mockito.anyLong())).thenReturn(comicBook);
+  void getComic() throws ComicBookException, ComicDetailException {
+    Mockito.when(displayableComicService.getForComicBookId(Mockito.anyLong()))
+        .thenReturn(displayableComicBook);
 
-    ComicBook result = controller.getComic(TEST_COMIC_ID);
+    ComicBookData result = controller.getComic(TEST_COMIC_ID);
 
     assertNotNull(result);
-    assertSame(comicBook, result);
+    assertSame(displayableComicBook, result.getDetails());
 
-    Mockito.verify(comicBookService, Mockito.times(1)).getComic(TEST_COMIC_ID);
+    Mockito.verify(displayableComicService, Mockito.times(1)).getForComicBookId(TEST_COMIC_ID);
   }
 
   @Test

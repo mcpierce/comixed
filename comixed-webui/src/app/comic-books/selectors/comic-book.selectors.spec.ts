@@ -21,7 +21,17 @@ import {
   ComicBookState
 } from '../reducers/comic-book.reducer';
 import { selectComicBook, selectComicBookState } from './comic-book.selectors';
-import { COMIC_BOOK_3 } from '@app/comic-books/comic-books.fixtures';
+import {
+  COMIC_BOOK_3,
+  COMIC_METADATA_SOURCE_1,
+  DISPLAYABLE_COMIC_1
+} from '@app/comic-books/comic-books.fixtures';
+import {
+  PAGE_1,
+  PAGE_2,
+  PAGE_3,
+  PAGE_4
+} from '@app/comic-pages/comic-pages.fixtures';
 
 describe('ComicBook Selectors', () => {
   let state: ComicBookState;
@@ -30,6 +40,9 @@ describe('ComicBook Selectors', () => {
     state = {
       loading: Math.random() > 0.5,
       comicBook: COMIC_BOOK_3,
+      details: DISPLAYABLE_COMIC_1,
+      metadata: COMIC_METADATA_SOURCE_1,
+      pages: [PAGE_1, PAGE_2, PAGE_3, PAGE_4],
       saving: Math.random() > 0.5,
       saved: Math.random() > 0.5
     };

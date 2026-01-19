@@ -30,6 +30,8 @@ import { ComicDetail } from '@app/comic-books/models/comic-detail';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
 import { ComicType } from '@app/comic-books/models/comic-type';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
+import { ComicMetadataSource } from '@app/comic-books/models/comic-metadata-source';
+import { METADATA_SOURCE_1 } from '@app/comic-metadata/comic-metadata.fixtures';
 
 export const IMPRINT_1: Imprint = {
   imprintId: 1,
@@ -339,6 +341,12 @@ export const COMIC_DETAIL_5: ComicDetail = {
   lastModifiedDate: new Date().getTime()
 };
 
+export const COMIC_METADATA_SOURCE_1: ComicMetadataSource = {
+  metadataSource: METADATA_SOURCE_1,
+  referenceId: '71765',
+  lastScrapedDate: new Date().getTime()
+};
+
 export const COMIC_BOOK_1: ComicBook = {
   comicBookId: 1,
   detail: COMIC_DETAIL_1,
@@ -348,7 +356,7 @@ export const COMIC_BOOK_1: ComicBook = {
   lastModifiedDate: 0,
   nextIssueId: null,
   previousIssueId: null,
-  metadata: null
+  metadata: COMIC_METADATA_SOURCE_1
 };
 
 export const COMIC_BOOK_2: ComicBook = {

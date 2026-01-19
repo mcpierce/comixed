@@ -21,6 +21,8 @@ import { ComicBook } from '@app/comic-books/models/comic-book';
 import { ComicPage } from '@app/comic-books/models/comic-page';
 import { PageOrderEntry } from '@app/comic-books/models/net/page-order-entry';
 import { ComicType } from '@app/comic-books/models/comic-type';
+import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
+import { ComicMetadataSource } from '@app/comic-books/models/comic-metadata-source';
 
 export const loadComicBook = createAction(
   '[Comic Book] Loads a single comic',
@@ -29,7 +31,12 @@ export const loadComicBook = createAction(
 
 export const comicBookLoaded = createAction(
   '[Comic Book] A single comic was loaded',
-  props<{ comicBook: ComicBook }>()
+  props<{
+    comicBook: ComicBook;
+    details: DisplayableComic;
+    metadata: ComicMetadataSource;
+    pages: ComicPage[];
+  }>()
 );
 
 export const loadComicBookFailed = createAction(

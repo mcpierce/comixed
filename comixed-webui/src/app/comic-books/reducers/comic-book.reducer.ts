@@ -35,12 +35,18 @@ import {
   updatePageDeletionFailed
 } from '../actions/comic-book.actions';
 import { ComicBook } from '@app/comic-books/models/comic-book';
+import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
+import { ComicMetadataSource } from '@app/comic-books/models/comic-metadata-source';
+import { ComicPage } from '@app/comic-books/models/comic-page';
 
 export const COMIC_BOOK_FEATURE_KEY = 'comic_book_state';
 
 export interface ComicBookState {
   loading: boolean;
   comicBook: ComicBook;
+  details: DisplayableComic;
+  metadata: ComicMetadataSource;
+  pages: ComicPage[];
   saving: boolean;
   saved: boolean;
 }
@@ -48,6 +54,9 @@ export interface ComicBookState {
 export const initialState: ComicBookState = {
   loading: false,
   comicBook: null,
+  details: null,
+  metadata: null,
+  pages: [],
   saving: false,
   saved: false
 };

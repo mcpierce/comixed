@@ -19,7 +19,9 @@
 import { ComicBookState, initialState, reducer } from './comic-book.reducer';
 import {
   COMIC_BOOK_2,
-  COMIC_BOOK_4
+  COMIC_BOOK_4,
+  COMIC_METADATA_SOURCE_1,
+  DISPLAYABLE_COMIC_1
 } from '@app/comic-books/comic-books.fixtures';
 import {
   comicBookLoaded,
@@ -38,10 +40,13 @@ import {
   updatePageDeletion,
   updatePageDeletionFailed
 } from '@app/comic-books/actions/comic-book.actions';
-import { PAGE_1 } from '@app/comic-pages/comic-pages.fixtures';
+import { PAGE_1, PAGE_2, PAGE_3, PAGE_4 } from '@app/comic-pages/comic-pages.fixtures';
 
-describe('ComicBook Reducer', () => {
+fdescribe('ComicBook Reducer', () => {
   const COMIC = COMIC_BOOK_2;
+  const DETAILS = DISPLAYABLE_COMIC_1;
+    const METADATA =: COMIC_METADATA_SOURCE_1;
+    const PAGES =  [PAGE_1, PAGE_2, PAGE_3, PAGE_4];
   const PAGE = PAGE_1;
   const DELETED = Math.random() > 0.5;
 
@@ -64,6 +69,18 @@ describe('ComicBook Reducer', () => {
       expect(state.comicBook).toBeNull();
     });
 
+    it('has no details', () => {
+      expect(state.details).toBeNull();
+    });
+
+    it('has no metadata', () => {
+      expect(state.metadata).toBeNull();
+    });
+
+    it('has no pages', () => {
+      expect(state.pages).toEqual([]);
+    });
+
     it('clears the saving flag', () => {
       expect(state.saving).toBeFalse();
     });
@@ -76,13 +93,25 @@ describe('ComicBook Reducer', () => {
   describe('loading a single comic', () => {
     beforeEach(() => {
       state = reducer(
-        { ...state, comicBook: COMIC, loading: false },
+        { ...state, comicBook: COMIC, details: DETAILS, metadata: METADATA, pages: PAGES,loading: false },
         loadComicBook({ id: COMIC.comicBookId })
       );
     });
 
     it('clears the current comic book', () => {
       expect(state.comicBook).toBeNull();
+    });
+
+    it('clears the details', () => {
+      expect(state.details).toBeNull();
+    });
+
+    it('clears the metadata', () => {
+      expect(state.metadata).toBeNull();
+    });
+
+    it('claers the pages', () => {
+      expect(state.pages).toEqual([]);
     });
 
     it('sets the loading flag', () => {
@@ -93,7 +122,7 @@ describe('ComicBook Reducer', () => {
       beforeEach(() => {
         state = reducer(
           { ...state, loading: true, comicBook: null },
-          comicBookLoaded({ comicBook: COMIC })
+          comicBookLoaded({ comicBook: COMIC, details: DETAILS, metadata: METADATA, pages: PAGES })
         );
       });
 
@@ -103,6 +132,18 @@ describe('ComicBook Reducer', () => {
 
       it('sets the comic', () => {
         expect(state.comicBook).toEqual(COMIC);
+      });
+
+      it('sets the details', () => {
+        expect(state.details).toEqual(DETAILS);
+      });
+
+      it('sets the metadata', () => {
+        expect(state.metadata).toEqual(METADATA);
+      });
+
+      it('sets the pages', () => {
+        expect(state.pages).toEqual(PAGES);
       });
     });
 
@@ -122,11 +163,11 @@ describe('ComicBook Reducer', () => {
       state = reducer(
         { ...state, saving: false, saved: true },
         updateComicBook({
-          comicBookId: COMIC.comicBookId,
-          publisher: COMIC.detail.publisher,
-          series: COMIC.detail.series,
-          volume: COMIC.detail.volume,
-          issueNumber: COMIC.detail.issueNumber
+          comicBookId: DETAILS.comicBookId,
+          publisher: DETAILS.publisher,
+          series: DETAILS.series,
+          volume: DETAILS.volume,
+          issueNumber: DETAILS.issueNumber
         })
       );
     });
