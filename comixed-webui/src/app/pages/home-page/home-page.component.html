@@ -1,7 +1,7 @@
 @if (!libraryState) {
   <div class="cx-width-100">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     <h2>{{ "home.title.loading-comics" | translate }}</h2>
+    <p-progress-bar mode="indeterminate" [style]="{ height: '6px' }" />
   </div>
 }
 

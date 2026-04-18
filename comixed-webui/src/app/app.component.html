@@ -1,3 +1,22 @@
+<p-toolbar>
+  <ng-template #start>
+    <p-menubar [model]="menuItems"></p-menubar>
+  </ng-template>
+
+  <ng-template #center>
+    <strong>ComiXed</strong>
+  </ng-template>
+
+  <ng-template #end>
+    <p-button [label]="user.email" text />
+  </ng-template>
+</p-toolbar>
+
+<router-outlet></router-outlet>
+
+<!-- div class="cx-width-100">&copy; 2017-2026, The ComiXedProject</div -->
+
+<!--
 <cx-navigation-bar
   class="cx-width-100"
   [user]="user"
@@ -51,3 +70,4 @@
 </mat-sidenav-container>
 
 <cx-footer [user]="user"></cx-footer>
+-->

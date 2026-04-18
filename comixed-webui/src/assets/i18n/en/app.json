@@ -1,5 +1,46 @@
 {
   "app": {
+    "menu": {
+      "label": {
+        "build-details": "About",
+        "collections": {
+          "characters": "Characters",
+          "locations": "Locations",
+          "publishers": "Publishers",
+          "root": "Collections",
+          "series": "Series",
+          "stories": "Stories",
+          "teams": "Teams"
+        },
+        "library": {
+          "blocked-hashes": "Blocked Hashes",
+          "comics": "Comics",
+          "comics-all": "All Comics",
+          "comics-changed": "Changed Comics",
+          "comics-deleted": "Deleted Comics",
+          "comics-duplicate": "Duplicate Comics",
+          "comics-missing": "Missing Comics",
+          "comics-read": "Read Comics",
+          "comics-selected": "Selected Comics",
+          "comics-unprocessed": "Unprocessed Comics",
+          "import-comics": "Import Comics",
+          "lists": "Reading Lists",
+          "multi-comic-scraping": "Multi-Comic Scraping",
+          "pages": "Pages",
+          "pages-deleted": "Deleted Pages",
+          "pages-duplicate": "Duplicate Pages",
+          "processing-comics": "Processing Comics",
+          "root": "Library",
+          "update-metadata-process": "Update Metadata Process"
+        },
+        "settings": {
+          "batch-processes": "Batch Processes",
+          "configuration": "Configuration",
+          "root": "Settings",
+          "user-accounts": "User Accounts"
+        }
+      }
+    },
     "general-effect-failure": "A general error has occurred.",
     "logged-in": "Logged in: {email}",
     "system-status": {

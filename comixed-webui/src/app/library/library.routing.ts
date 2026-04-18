@@ -74,7 +74,7 @@ const routes: Routes = [
     data: { missing: true }
   },
   {
-    path: 'library/duplicates/comics',
+    path: 'library/comics/duplicates',
     component: DuplicateComicsListPageComponent,
     canActivate: [AdminGuard]
   },
@@ -84,7 +84,7 @@ const routes: Routes = [
     canActivate: [AdminGuard]
   },
   {
-    path: 'library/duplicates/pages',
+    path: 'library/pages/duplicates',
     component: DuplicatePageListPageComponent,
     canActivate: [AdminGuard]
   },

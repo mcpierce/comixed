@@ -50,31 +50,18 @@ import { selectMessagingState } from '@app/messaging/selectors/messaging.selecto
 import { WebSocketService } from '@app/messaging';
 import { AlertService } from '@app/core/services/alert.service';
 import { filter } from 'rxjs/operators';
-import { NavigationBarComponent } from './components/navigation-bar/navigation-bar.component';
-import {
-  MatSidenavContainer,
-  MatSidenav,
-  MatSidenavContent
-} from '@angular/material/sidenav';
-import { SideNavigationComponent } from './components/side-navigation/side-navigation.component';
-import { EditAccountBarComponent } from './user/components/edit-account-bar/edit-account-bar.component';
 import { RouterOutlet } from '@angular/router';
-import { FooterComponent } from './components/footer/footer.component';
+import { MenuItem } from 'primeng/api';
+import { isAdmin } from '@app/user/user.functions';
+import { Menubar } from 'primeng/menubar';
+import { Toolbar } from 'primeng/toolbar';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'cx-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [
-    NavigationBarComponent,
-    MatSidenavContainer,
-    MatSidenav,
-    SideNavigationComponent,
-    EditAccountBarComponent,
-    MatSidenavContent,
-    RouterOutlet,
-    FooterComponent
-  ]
+  imports: [RouterOutlet, Menubar, Toolbar, Button]
 })
 export class AppComponent implements OnInit {
   @HostBinding('class') currentTheme: 'lite-theme' | 'dark-theme' =
@@ -94,6 +81,7 @@ export class AppComponent implements OnInit {
   store = inject(Store);
   webSocketService = inject(WebSocketService);
   alertService = inject(AlertService);
+  menuItems: MenuItem[] = [];
 
   constructor() {
     this.logger.level = LoggerLevel.INFO;
@@ -102,6 +90,7 @@ export class AppComponent implements OnInit {
     this.store.select(selectUser).subscribe(user => {
       this.logger.debug('User updated:', user);
       this.user = user;
+      this.doBuildMenu();
 
       const darkMode =
         getUserPreference(
@@ -204,6 +193,10 @@ export class AppComponent implements OnInit {
       });
   }
 
+  get isAdmin(): boolean {
+    return isAdmin(this.user);
+  }
+
   get busyIconURL(): string {
     switch (this.busyIcon) {
       case BusyIcon.LOADING:
@@ -226,5 +219,203 @@ export class AppComponent implements OnInit {
     this.libraryStateSubscription = this.store
       .select(selectLibraryState)
       .subscribe(state => (this.libraryState = state));
+  }
+
+  private doBuildMenu() {
+    this.menuItems = [
+      {
+        label: this.translateService.instant('app.menu.label.library.root'),
+        icon: 'pi pi-book',
+        items: [
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.comics'
+            ),
+            items: [
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-all'
+                ),
+                routerLink: '/library/all'
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-selected'
+                ),
+                routerLink: '/library/selected'
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-unprocessed'
+                ),
+                routerLink: '/library/unprocessed',
+                visible: this.isAdmin
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-read'
+                ),
+                routerLink: '/library/unread'
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-changed'
+                ),
+                routerLink: '/library/changed',
+                visible: this.isAdmin
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-deleted'
+                ),
+                routerLink: '/library/deleted',
+                visible: this.isAdmin
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-missing'
+                ),
+                routerLink: '/library/missing',
+                visible: this.isAdmin
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.comics-duplicate'
+                ),
+                routerLink: '/library/comics/duplicates',
+                visible: this.isAdmin
+              }
+            ]
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.pages'
+            ),
+            items: [
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.pages-duplicate'
+                ),
+                routerLink: '/library/pages/duplicates'
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.pages-deleted'
+                ),
+                routerLink: '/library/pages/deleted'
+              },
+              {
+                label: this.translateService.instant(
+                  'app.menu.label.library.blocked-hashes'
+                ),
+                routerLink: '/library/pages/blocked'
+              }
+            ],
+            visible: this.isAdmin
+          },
+          { separator: true, visible: this.isAdmin },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.lists'
+            ),
+            routerLink: '/lists/reading/all'
+          },
+          { separator: true, visible: this.isAdmin },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.import-comics'
+            ),
+            visible: this.isAdmin
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.processing-comics'
+            ),
+            visible: this.isAdmin
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.multi-comic-scraping'
+            ),
+            visible: this.isAdmin
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.library.update-metadata-process'
+            ),
+            visible: this.isAdmin
+          }
+        ]
+      },
+      {
+        label: this.translateService.instant('app.menu.label.collections.root'),
+        items: [
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.publishers'
+            ),
+            routerLink: '/library/collections/publishers'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.series'
+            ),
+            routerLink: '/library/collections/series'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.characters'
+            ),
+            routerLink: '/library/collections/characters'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.teams'
+            ),
+            routerLink: '/library/collections/teams'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.locations'
+            ),
+            routerLink: '/library/collections/locations'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.collections.stories'
+            ),
+            routerLink: '/library/collections/stories'
+          }
+        ]
+      },
+      {
+        label: this.translateService.instant('app.menu.label.settings.root'),
+        visible: this.isAdmin,
+        items: [
+          {
+            label: this.translateService.instant(
+              'app.menu.label.settings.configuration'
+            ),
+            routerLink: '/admin/configuration'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.settings.user-accounts'
+            ),
+            routerLink: '/admin/accounts'
+          },
+          {
+            label: this.translateService.instant(
+              'app.menu.label.settings.batch-processes'
+            ),
+            routerLink: '/admin/processes'
+          }
+        ]
+      },
+      {
+        label: this.translateService.instant('app.menu.label.build-details'),
+        routerLink: '/build'
+      }
+    ];
   }
 }
