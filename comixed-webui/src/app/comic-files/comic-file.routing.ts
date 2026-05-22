@@ -16,16 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { ImportComicsPageComponent } from './pages/import-comics-page/import-comics-page.component';
 import { AdminGuard } from '../user';
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ProcessingStatusPageComponent } from '@app/comic-files/pages/processing-status-page/processing-status-page.component';
+import { ComicImportComponent } from '@app/comic-files/pages/comic-import/comic-import.component';
 
 const routes: Routes = [
   {
     path: 'library/import',
-    component: ImportComicsPageComponent,
+    component: ComicImportComponent,
     canActivate: [AdminGuard]
   },
   {

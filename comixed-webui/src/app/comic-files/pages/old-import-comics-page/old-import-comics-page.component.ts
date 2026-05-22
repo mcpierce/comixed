@@ -99,8 +99,8 @@ import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'cx-import-comics',
-  templateUrl: './import-comics-page.component.html',
-  styleUrls: ['./import-comics-page.component.scss'],
+  templateUrl: './old-import-comics-page.component.html',
+  styleUrls: ['./old-import-comics-page.component.scss'],
   imports: [
     MatFabButton,
     MatTooltip,
@@ -139,7 +139,7 @@ import { MatInput } from '@angular/material/input';
     MatInput
   ]
 })
-export class ImportComicsPageComponent
+export class OldImportComicsPageComponent
   implements OnInit, OnDestroy, AfterViewInit
 {
   @ViewChild(MatPaginator) paginator: MatPaginator;

@@ -1,0 +1,32 @@
+<form [formGroup]="importForm">
+  <mat-form-field class="cx-width-25">
+    <mat-select formControlName="maxRecords">
+      @for (option of recordOptions; track option) {
+        <mat-option [value]="option.value">
+          {{ option.label | translate }}
+        </mat-option>
+      }
+    </mat-select>
+    <input matInput readonly hidden />
+  </mat-form-field>
+  <mat-form-field class="cx-width-75" required>
+    <input
+      id="import-directory"
+      formControlName="directory"
+      matInput
+      [placeholder]="'comic-files.placeholder.import-directory' | translate"
+      required
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      type="button"
+      [disabled]="!importForm.valid"
+      (click)="onLoadComicFiles()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+</form>
+
+<pre>{{ comicFileGroups | json }}</pre>

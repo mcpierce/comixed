@@ -18,7 +18,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImportComicsPageComponent } from './pages/import-comics-page/import-comics-page.component';
+import { OldImportComicsPageComponent } from '@app/comic-files/pages/old-import-comics-page/old-import-comics-page.component';
 import { ComicFileCoverUrlPipe } from './pipes/comic-file-cover-url.pipe';
 import { ComicFileRouting } from './comic-file.routing';
 import { StoreModule } from '@ngrx/store';
@@ -83,7 +83,7 @@ import { ProcessingStatusPageComponent } from './pages/processing-status-page/pr
     FlexLayoutModule,
     MatMenuModule,
     MatPaginatorModule,
-    ImportComicsPageComponent,
+    OldImportComicsPageComponent,
     ComicFileCoverUrlPipe,
     ComicFileLoaderComponent,
     ProcessingStatusPageComponent

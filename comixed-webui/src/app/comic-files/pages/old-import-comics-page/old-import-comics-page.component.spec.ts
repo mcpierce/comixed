@@ -17,7 +17,7 @@
  */
 
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ImportComicsPageComponent } from './import-comics-page.component';
+import { OldImportComicsPageComponent } from './old-import-comics-page.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -82,7 +82,7 @@ import { BLOCKED_PAGES_ENABLED } from '@app/admin/admin.constants';
 import { importComicFiles } from '@app/comic-files/actions/import-comic-files.actions';
 import { ComicFileGroup } from '@app/comic-files/models/comic-file-group';
 
-describe('ImportComicsPageComponent', () => {
+describe('OldImportComicsPageComponent', () => {
   const USER = USER_READER;
   const FILES = [
     { ...COMIC_FILE_1, selected: true },
@@ -115,8 +115,8 @@ describe('ImportComicsPageComponent', () => {
     [FEATURE_ENABLED_FEATURE_KEY]: { ...initialFeatureEnabledState }
   };
 
-  let component: ImportComicsPageComponent;
-  let fixture: ComponentFixture<ImportComicsPageComponent>;
+  let component: OldImportComicsPageComponent;
+  let fixture: ComponentFixture<OldImportComicsPageComponent>;
   let store: MockStore<any>;
   let spyOnStoreDispatch: jasmine.Spy;
   let confirmationService: ConfirmationService;
@@ -147,7 +147,7 @@ describe('ImportComicsPageComponent', () => {
         MatMenuModule,
         MatPaginatorModule,
         MatSortModule,
-        ImportComicsPageComponent,
+        OldImportComicsPageComponent,
         ComicFileLoaderComponent,
         ComicFileCoverUrlPipe
       ],
@@ -158,7 +158,7 @@ describe('ImportComicsPageComponent', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ImportComicsPageComponent);
+    fixture = TestBed.createComponent(OldImportComicsPageComponent);
     component = fixture.componentInstance;
     store = TestBed.inject(MockStore);
     spyOnStoreDispatch = spyOn(store, 'dispatch');

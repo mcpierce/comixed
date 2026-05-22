@@ -46,6 +46,7 @@
     },
     "page-title": "Import Comics: {count, plural, =1{One} other{#}} Shown, {selected, plural, =1{One Comic} other{# Comics}} Selected",
     "placeholder": {
+      "import-directory": "The root directory to search...",
       "root-directory": "Root Directory To Search..."
     },
     "processing-comics": {
