@@ -36,7 +36,7 @@ import { libraryFeature } from '@app/library/reducers/library.reducer';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { LibraryPageComponent } from './pages/library-page/library-page.component';
+import { OldLibraryPageComponent } from '@app/library/pages/old-library-page/old-library-page.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -125,7 +125,7 @@ import { DuplicateComicsEffects } from '@app/library/effects/duplicate-comics.ef
     MatMenuModule,
     MatProgressBarModule,
     MatDividerModule,
-    LibraryPageComponent,
+    OldLibraryPageComponent,
     SelectedComicsComponent,
     ComicDetailsDialogComponent,
     ArchiveTypePipe,

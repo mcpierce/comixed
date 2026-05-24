@@ -19,11 +19,12 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AdminGuard, ReaderGuard } from '@app/user';
-import { LibraryPageComponent } from '@app/library/pages/library-page/library-page.component';
+import { OldLibraryPageComponent } from '@app/library/pages/old-library-page/old-library-page.component';
 import { DuplicatePageListPageComponent } from '@app/library/pages/duplicate-page-list-page/duplicate-page-list-page.component';
 import { DuplicatePageDetailPageComponent } from '@app/library/pages/duplicate-page-detail-page/duplicate-page-detail-page.component';
 import { DuplicateComicsListPageComponent } from '@app/library/pages/duplicate-comics-list-page/duplicate-comics-list-page.component';
 import { DuplicateComicsDetailPageComponent } from '@app/library/pages/duplicate-comics-detail-page/duplicate-comics-detail-page.component';
+import { LibraryPageComponent } from '@app/library/pages/library-page/library-page.component';
 
 const routes: Routes = [
   {
@@ -33,43 +34,43 @@ const routes: Routes = [
   },
   {
     path: 'library/selected',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [ReaderGuard],
     data: { selected: true }
   },
   {
     path: 'library/unprocessed',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [AdminGuard],
     data: { unprocessed: true }
   },
   {
     path: 'library/unread',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [ReaderGuard],
     data: { unread: true }
   },
   {
     path: 'library/unscraped',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [AdminGuard],
     data: { unscraped: true }
   },
   {
     path: 'library/changed',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [AdminGuard],
     data: { changed: true }
   },
   {
     path: 'library/deleted',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [AdminGuard],
     data: { deleted: true }
   },
   {
     path: 'library/missing',
-    component: LibraryPageComponent,
+    component: OldLibraryPageComponent,
     canActivate: [AdminGuard],
     data: { missing: true }
   },

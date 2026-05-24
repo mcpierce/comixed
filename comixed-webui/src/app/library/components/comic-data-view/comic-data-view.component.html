@@ -1,0 +1,8 @@
+@if (gridView) {
+  <cx-comic-grid-view></cx-comic-grid-view>
+}
+@if (!gridView) {
+  <cx-comic-list-view></cx-comic-list-view>
+}
+
+<pre>{{ comics | json }}</pre>
