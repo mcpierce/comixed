@@ -16,7 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, LOCALE_ID, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  LOCALE_ID,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import {
@@ -33,6 +40,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -73,9 +81,11 @@ import { TitleService } from '@app/core/services/title.service';
     MatTable,
     TranslatePipe,
     CommonModule,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatNoDataRow
   ],
   templateUrl: './duplicate-comics-list-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './duplicate-comics-list-page.component.scss'
 })
 export class DuplicateComicsListPageComponent implements OnInit, OnDestroy {

@@ -42,7 +42,8 @@ import { LoggerModule } from '@angular-ru/cdk/logger';
 import { LoadSeriesDetailRequest } from '@app/collections/models/net/load-series-detail-request';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { LoadSeriesListRequest } from '@app/collections/models/net/load-series-list-request';
 
@@ -65,7 +66,7 @@ describe('SeriesService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

@@ -21,7 +21,7 @@ import { MetadataProcessToolbarComponent } from './metadata-process-toolbar.comp
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   Confirmation,
   ConfirmationService
@@ -56,7 +56,7 @@ describe('MetadataProcessToolbarComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatTooltipModule,
         MatToolbarModule,

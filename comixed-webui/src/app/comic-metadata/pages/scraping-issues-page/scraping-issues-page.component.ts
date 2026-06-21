@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -91,6 +97,7 @@ import { filter } from 'rxjs/operators';
   selector: 'cx-scraping-issues-page',
   templateUrl: './scraping-issues-page.component.html',
   styleUrls: ['./scraping-issues-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCard,
     MatCardTitle,

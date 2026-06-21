@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ComicScrapingComponent } from './comic-scraping.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DISPLAYABLE_COMIC_4 } from '@app/comic-books/comic-books.fixtures';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -91,7 +91,7 @@ describe('ComicScrapingComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         FormsModule,
         ReactiveFormsModule,
         MatDialogModule,

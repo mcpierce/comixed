@@ -23,7 +23,7 @@ import { ConvertComicBooksEffects } from './convert-comic-books.effects';
 import { LibraryService } from '@app/library/services/library.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DISPLAYABLE_COMIC_1 } from '@app/comic-books/comic-books.fixtures';
 import { ArchiveType } from '@app/comic-books/models/archive-type.enum';
@@ -51,7 +51,7 @@ describe('ConvertComicBooksEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

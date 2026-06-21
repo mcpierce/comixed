@@ -26,7 +26,7 @@ import {
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {
   BLOCKED_HASH_1,
@@ -76,7 +76,7 @@ describe('BlockedHashDetailPageComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatCardModule,
         MatFormFieldModule,

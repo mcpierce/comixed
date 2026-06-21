@@ -37,7 +37,7 @@ export interface ManagerUsersState {
   busy: boolean;
   saved: boolean;
   entries: User[];
-  current: User;
+  current: User | null;
 }
 
 export const initialState: ManagerUsersState = {

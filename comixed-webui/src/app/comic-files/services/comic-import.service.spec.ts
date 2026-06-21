@@ -30,7 +30,8 @@ import { ImportComicFilesRequest } from '@app/library/models/net/import-comic-fi
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import {
   COMIC_FILE_1,
@@ -78,7 +79,7 @@ describe('ComicImportService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

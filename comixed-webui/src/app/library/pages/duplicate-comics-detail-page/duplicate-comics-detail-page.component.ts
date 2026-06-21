@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,6 +46,7 @@ import { setBusyState } from '@app/core/actions/busy.actions';
   selector: 'cx-duplicate-comics-detail-page',
   imports: [ComicListViewComponent, TranslatePipe, ReactiveFormsModule],
   templateUrl: './duplicate-comics-detail-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './duplicate-comics-detail-page.component.scss'
 })
 export class DuplicateComicsDetailPageComponent implements OnInit, OnDestroy {

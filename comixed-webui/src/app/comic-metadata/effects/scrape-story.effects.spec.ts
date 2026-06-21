@@ -29,7 +29,7 @@ import {
 } from '@app/comic-metadata/comic-metadata.constants';
 import { METADATA_SOURCE_1 } from '@app/comic-metadata/comic-metadata.fixtures';
 import { AlertService } from '@app/core/services/alert.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import {
   loadStoryCandidates,
@@ -61,7 +61,7 @@ describe('ScrapeStoryEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot(), TranslateModule.forRoot()],
+      imports: [LoggerModule.forRoot(), provideTranslateService()],
       providers: [
         ScrapeStoryEffects,
         provideMockActions(() => actions$),

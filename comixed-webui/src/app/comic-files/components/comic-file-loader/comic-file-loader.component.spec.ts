@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ComicFileLoaderComponent } from './comic-file-loader.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,7 +48,7 @@ describe('ComicFileLoaderComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatCardModule,
         MatInputModule,
         MatButtonModule,

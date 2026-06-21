@@ -27,7 +27,8 @@ import { LoggerModule } from '@angular-ru/cdk/logger';
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { interpolate } from '@app/core';
 import {
@@ -112,7 +113,7 @@ describe('ComicBookSelectionService', () => {
             subscribe: jasmine.createSpy('WebSocketService.subscribe()')
           }
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

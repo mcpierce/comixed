@@ -22,7 +22,8 @@ import {
   inject,
   Input,
   OnDestroy,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { VolumeMetadata } from '@app/comic-metadata/models/volume-metadata';
 import {
@@ -93,6 +94,7 @@ export const NO_MATCH_TEXT = 'scraping.text.no-match';
   selector: 'cx-scraping-volume-selection',
   templateUrl: './comic-scraping-volume-selection.html',
   styleUrls: ['./comic-scraping-volume-selection.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     MatFormField,

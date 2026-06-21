@@ -162,7 +162,7 @@ describe('LibraryPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '**', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSidenavModule,
         MatToolbarModule,
         MatIconModule,

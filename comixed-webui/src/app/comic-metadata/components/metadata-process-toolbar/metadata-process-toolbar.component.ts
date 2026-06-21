@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, Input, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { ConfirmationService } from '@tragically-slick/confirmation';
@@ -37,6 +43,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'cx-metadata-process-toolbar',
   templateUrl: './metadata-process-toolbar.component.html',
   styleUrls: ['./metadata-process-toolbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatToolbar, MatIconButton, MatTooltip, MatIcon, TranslateModule]
 })
 export class MetadataProcessToolbarComponent implements OnDestroy {

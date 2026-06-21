@@ -31,7 +31,7 @@ import { hot } from 'jasmine-marbles';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 describe('FeatureEnabledEffects', () => {
@@ -47,7 +47,7 @@ describe('FeatureEnabledEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

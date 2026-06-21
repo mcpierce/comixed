@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { ComicDetail } from '@app/comic-books/models/comic-detail';
@@ -28,6 +28,7 @@ import { ComicListViewComponent } from '../../../comic-books/components/comic-li
   selector: 'cx-comics-with-duplicate-page',
   templateUrl: './comic-detail-list-dialog.component.html',
   styleUrls: ['./comic-detail-list-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ComicListViewComponent]
 })
 export class ComicDetailListDialogComponent {

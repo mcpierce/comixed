@@ -47,7 +47,7 @@ describe('DuplicateComicsListPageComponent', () => {
       imports: [
         RouterModule.forRoot([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         DuplicateComicsListPageComponent
       ],
       providers: [provideMockStore({ initialState }), TitleService]

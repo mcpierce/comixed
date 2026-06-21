@@ -28,7 +28,7 @@ import {
   SCRAPE_STORY_FEATURE_KEY
 } from '@app/comic-metadata/reducers/scrape-story.reducer';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -73,7 +73,7 @@ describe('StoryScrapingComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatToolbarModule,
         MatIconModule,
         MatFormFieldModule,

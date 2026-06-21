@@ -21,7 +21,7 @@ import { CreatePluginDialogComponent } from './create-plugin-dialog.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MatDialogModule } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   initialState as initialPluginLanguageState,
   PLUGIN_LANGUAGE_FEATURE_KEY
@@ -53,7 +53,7 @@ describe('CreatePluginDialogComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatCardModule,
         MatFormFieldModule,

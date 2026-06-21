@@ -16,7 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MessagingSubscription, WebSocketService } from '@app/messaging';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -80,6 +85,7 @@ import { ComicListViewComponent } from '../../../comic-books/components/comic-li
   selector: 'cx-user-reading-list-page',
   templateUrl: './reading-list-detail-page.component.html',
   styleUrls: ['./reading-list-detail-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     RouterLink,

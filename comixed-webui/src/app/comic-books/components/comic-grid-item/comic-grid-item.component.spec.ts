@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ComicGridItemComponent } from './comic-grid-item.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { DISPLAYABLE_COMIC_4 } from '@app/comic-books/comic-books.fixtures';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
@@ -44,7 +44,7 @@ describe('ComicGridItemComponent', () => {
       imports: [
         ComicGridItemComponent,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatCardModule,
         MatButtonModule
       ],

@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -66,6 +67,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'cx-publisher-list-page',
   templateUrl: './publisher-list-page.component.html',
   styleUrls: ['./publisher-list-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FilterTextFormComponent,
     MatPaginator,

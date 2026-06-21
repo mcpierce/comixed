@@ -21,7 +21,7 @@ import { LibraryPluginSetupComponent } from './library-plugin-setup.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { LIBRARY_PLUGIN_4 } from '@app/library-plugins/library-plugins.fixtures';
 import { PluginTitlePipe } from '@app/library-plugins/pipes/plugin-title.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -57,7 +57,7 @@ describe('LibraryPluginSetupComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatSnackBarModule,
         MatFormFieldModule,

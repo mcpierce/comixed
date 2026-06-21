@@ -41,7 +41,8 @@ import { SaveConfigurationOptionsRequest } from '@app/admin/models/net/save-conf
 import { FeatureEnabledResponse } from '@app/admin/models/net/feature-enabled-response';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('ConfigurationService', () => {
@@ -62,7 +63,7 @@ describe('ConfigurationService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

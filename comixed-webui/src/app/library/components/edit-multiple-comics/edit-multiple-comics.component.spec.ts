@@ -34,7 +34,7 @@ import {
   IMPRINT_2,
   IMPRINT_3
 } from '@app/comic-books/comic-books.fixtures';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   IMPRINT_LIST_FEATURE_KEY,
   initialState as initialImprintListState
@@ -72,7 +72,7 @@ describe('EditMultipleComicsComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatFormFieldModule,
         MatButtonModule,
         MatSelectModule,

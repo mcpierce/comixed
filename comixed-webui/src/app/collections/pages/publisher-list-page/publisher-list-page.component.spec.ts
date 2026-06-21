@@ -64,7 +64,7 @@ describe('PublisherListPageComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatToolbarModule,
         MatFormFieldModule,
         MatPaginatorModule,

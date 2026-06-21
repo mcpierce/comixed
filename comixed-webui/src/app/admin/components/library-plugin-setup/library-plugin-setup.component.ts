@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { LibraryPlugin } from '@app/library-plugins/models/library-plugin';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
@@ -51,6 +51,7 @@ import { LibraryPluginProperty } from '@app/library-plugins/models/library-plugi
   selector: 'cx-library-plugin-setup',
   templateUrl: './library-plugin-setup.component.html',
   styleUrls: ['./library-plugin-setup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatCard,

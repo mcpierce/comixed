@@ -24,7 +24,7 @@ import {
 } from '@app/admin/reducers/server-runtime.reducer';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {
   loadServerHealth,
@@ -52,7 +52,7 @@ describe('ServerRuntimeComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatIconModule,
         MatToolbarModule,

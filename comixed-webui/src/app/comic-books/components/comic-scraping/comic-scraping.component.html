@@ -116,7 +116,7 @@
         {{ "comic-book.label.metadata-source" | translate }}
       </mat-label>
       <mat-select
-        [value]="metadataSource?.metadataSourceId"
+        [value]="$safeNavigationMigration(metadataSource?.metadataSourceId)"
         (selectionChange)="onMetadataSourceChosen($event.value)"
         required
       >
@@ -236,7 +236,8 @@
         id="last-modifier-date-input"
         [value]="
           !!comic.metadata
-            ? (comic.metadata?.lastModifiedDate | date: 'medium')
+            ? ($safeNavigationMigration(comic.metadata?.lastModifiedDate)
+              | date: 'medium')
             : ('text.never' | translate)
         "
         matInput

@@ -22,7 +22,7 @@ import { CoreModule } from '../core/core.module';
 import { LibraryRouting } from '@app/library/library.routing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { StoreModule } from '@ngrx/store';
@@ -70,19 +70,16 @@ import { PurgeLibraryEffects } from '@app/library/effects/purge-library.effects'
 import { EditMultipleComicsComponent } from './components/edit-multiple-comics/edit-multiple-comics.component';
 import { LibraryEffects } from '@app/library/effects/library.effects';
 import { ComicBookListComponent } from './components/comic-book-list/comic-book-list.component';
-import { FlexLayoutModule } from '@angular-ru/cdk/flex-layout';
 import { duplicateComicsFeature } from '@app/library/reducers/duplicate-comics.reducer';
 import { DuplicateComicsEffects } from '@app/library/effects/duplicate-comics.effects';
 
 @NgModule({
-  providers: [],
   imports: [
     CommonModule,
     CoreModule,
     ComicBooksModule,
     LibraryRouting,
     ReactiveFormsModule,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(libraryFeature),
     StoreModule.forFeature(duplicateComicsFeature),
     StoreModule.forFeature(duplicatePageListFeature),
@@ -107,7 +104,6 @@ import { DuplicateComicsEffects } from '@app/library/effects/duplicate-comics.ef
     MatSelectModule,
     MatButtonModule,
     MatTableModule,
-    FlexLayoutModule,
     MatCheckboxModule,
     MatSortModule,
     MatCardModule,
@@ -135,6 +131,7 @@ import { DuplicateComicsEffects } from '@app/library/effects/duplicate-comics.ef
     EditMultipleComicsComponent,
     ComicBookListComponent
   ],
-  exports: [CommonModule, CoreModule, ArchiveTypePipe]
+  exports: [CommonModule, CoreModule, ArchiveTypePipe],
+  providers: [provideTranslateService()]
 })
 export class LibraryModule {}

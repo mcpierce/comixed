@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, HostBinding, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LoggerLevel, LoggerService } from '@angular-ru/cdk/logger';
 import { selectUser } from '@app/user/selectors/user.selectors';
@@ -65,6 +71,7 @@ import { FooterComponent } from './components/footer/footer.component';
   selector: 'cx-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NavigationBarComponent,
     MatSidenavContainer,

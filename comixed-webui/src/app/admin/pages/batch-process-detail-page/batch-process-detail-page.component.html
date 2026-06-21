@@ -1,7 +1,11 @@
 <h2>
   {{
     "batch-processes.batch-process-detail.page-title"
-      | translate: { jobId: detail?.jobId, jobName: detail?.jobName }
+      | translate
+        : {
+            jobId: $safeNavigationMigration(detail?.jobId),
+            jobName: $safeNavigationMigration(detail?.jobName)
+          }
   }}
 </h2>
 
@@ -14,7 +18,10 @@
       </tr>
     </thead>
     <tbody>
-      @for (entry of detail?.parameters | keyvalue; track entry) {
+      @for (
+        entry of $safeNavigationMigration(detail?.parameters) | keyvalue;
+        track entry
+      ) {
         <tr>
           <td>{{ entry.key }}</td>
           <td>{{ entry.value }}</td>
@@ -31,7 +38,12 @@
         <li>
           {{
             "batch-processes.text.running-now"
-              | translate: { started: detail?.startTime | date: "medium" }
+              | translate
+                : {
+                    started:
+                      $safeNavigationMigration(detail?.startTime)
+                      | date: "medium"
+                  }
           }}
         </li>
       }
@@ -39,7 +51,7 @@
         <li>
           {{
             "batch-processes.text.status"
-              | translate: { status: detail?.status }
+              | translate: { status: $safeNavigationMigration(detail?.status) }
           }}
         </li>
       }
@@ -47,7 +59,8 @@
         <li>
           {{
             "batch-processes.text.exit-code"
-              | translate: { status: detail?.exitStatus }
+              | translate
+                : { status: $safeNavigationMigration(detail?.exitStatus) }
           }}
         </li>
       }
@@ -55,7 +68,12 @@
       <li>
         {{
           "batch-processes.text.created"
-            | translate: { created: detail?.createTime | date: "medium" }
+            | translate
+              : {
+                  created:
+                    $safeNavigationMigration(detail?.createTime)
+                    | date: "medium"
+                }
         }}
       </li>
       @if (!detail?.running) {
@@ -64,8 +82,11 @@
             "batch-processes.text.duration"
               | translate
                 : {
-                    started: detail?.startTime | date: "medium",
-                    ended: detail?.endTime | date: "medium"
+                    started:
+                      $safeNavigationMigration(detail?.startTime)
+                      | date: "medium",
+                    ended:
+                      $safeNavigationMigration(detail?.endTime) | date: "medium"
                   }
           }}
         </li>
@@ -73,7 +94,12 @@
       <li>
         {{
           "batch-processes.text.last-updated"
-            | translate: { updated: detail?.lastUpdateTime | date: "medium" }
+            | translate
+              : {
+                  updated:
+                    $safeNavigationMigration(detail?.lastUpdateTime)
+                    | date: "medium"
+                }
         }}
       </li>
     </ul>

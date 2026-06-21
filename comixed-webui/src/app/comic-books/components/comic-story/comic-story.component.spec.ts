@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ComicStoryComponent } from './comic-story.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   COMIC_TAG_1,
   COMIC_TAG_2,
@@ -58,7 +58,7 @@ describe('ComicStoryComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatExpansionModule,
         MatCardModule,
         MatChipsModule,

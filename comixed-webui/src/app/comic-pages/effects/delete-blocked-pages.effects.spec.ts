@@ -24,7 +24,7 @@ import { DeleteBlockedPagesEffects } from './delete-blocked-pages.effects';
 import { BlockedHashService } from '@app/comic-pages/services/blocked-hash.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   BLOCKED_HASH_1,
@@ -51,7 +51,7 @@ describe('DeleteBlockedPagesEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

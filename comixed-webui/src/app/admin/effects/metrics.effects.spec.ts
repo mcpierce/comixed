@@ -22,7 +22,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { MetricsEffects } from './metrics.effects';
 import { MetricsService } from '@app/admin/services/metrics.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { METRIC_DETAIL, METRIC_LIST } from '@app/admin/admin.fixtures';
@@ -47,7 +47,7 @@ describe('MetricsEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

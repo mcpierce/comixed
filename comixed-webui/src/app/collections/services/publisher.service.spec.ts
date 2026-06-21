@@ -43,7 +43,8 @@ import { LoadPublisherListResponse } from '@app/collections/models/net/load-publ
 import { LoadPublisherDetailRequest } from '@app/collections/models/net/load-publisher-detail-request';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('PublisherService', () => {
@@ -63,7 +64,7 @@ describe('PublisherService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

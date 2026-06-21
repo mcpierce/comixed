@@ -88,7 +88,7 @@ describe('DuplicatePageDetailPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '**', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatToolbarModule,
         MatIconModule,
         MatTableModule,

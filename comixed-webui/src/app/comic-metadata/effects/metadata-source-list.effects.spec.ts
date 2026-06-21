@@ -34,7 +34,7 @@ import { hot } from 'jasmine-marbles';
 import { AlertService } from '@app/core/services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { setChosenMetadataSource } from '@app/comic-metadata/actions/single-book-scraping.actions';
 
@@ -52,7 +52,7 @@ describe('MetadataSourceListEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

@@ -23,7 +23,7 @@ import { CollectionDetailComponent } from './pages/collection-detail/collection-
 import { CollectionsRouting } from './collections.routing';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { LibraryModule } from '@app/library/library.module';
 import { ComicBooksModule } from '@app/comic-books/comic-books.module';
 import { SeriesListPageComponent } from './pages/series-list-page/series-list-page.component';
@@ -59,7 +59,6 @@ import { StoryDetailPageComponent } from '@app/collections/pages/story-detail-pa
   imports: [
     CommonModule,
     CollectionsRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(publisherFeature),
     StoreModule.forFeature(seriesFeature),
     StoreModule.forFeature(collectionListFeature),
@@ -97,6 +96,7 @@ import { StoryDetailPageComponent } from '@app/collections/pages/story-detail-pa
     StoryScrapingComponent,
     SeriesDetailNamePipe
   ],
-  exports: [CommonModule]
+  exports: [CommonModule],
+  providers: [provideTranslateService()]
 })
 export class CollectionsModule {}

@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VolumeMetadataTableComponent } from './volume-metadata-table.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   SCRAPING_VOLUME_1,
   SCRAPING_VOLUME_2,
@@ -48,7 +48,7 @@ describe('VolumeMetadataTableComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatFormFieldModule,
         MatToolbarModule,
         MatTableModule,

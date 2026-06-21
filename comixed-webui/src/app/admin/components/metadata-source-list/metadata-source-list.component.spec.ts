@@ -25,7 +25,7 @@ import {
   METADATA_SOURCE_LIST_FEATURE_KEY
 } from '@app/comic-metadata/reducers/metadata-source-list.reducer';
 import { METADATA_SOURCE_1 } from '@app/comic-metadata/comic-metadata.fixtures';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   Confirmation,
   ConfirmationService
@@ -75,7 +75,7 @@ describe('MetadataSourceListComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatIconModule,
         MatButtonModule,

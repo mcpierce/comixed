@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ComicDetailEditComponent } from './comic-detail-edit.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { ComicCoverUrlPipe } from '@app/comic-books/pipes/comic-cover-url.pipe';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   DISPLAYABLE_COMIC_1,
   IMPRINT_1,
@@ -74,7 +74,7 @@ describe('ComicDetailEditComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         RouterTestingModule.withRoutes([
           {
             path: '*',

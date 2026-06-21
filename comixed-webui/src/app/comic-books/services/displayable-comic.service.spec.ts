@@ -74,7 +74,8 @@ import {
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
 
@@ -141,7 +142,7 @@ describe('DisplayableComicService', () => {
             )
           }
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

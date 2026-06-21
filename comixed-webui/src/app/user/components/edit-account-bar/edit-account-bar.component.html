@@ -4,8 +4,8 @@
   class="cx-float-left cx-margin-left-5"
   ngxGravatar
   size="50"
-  [alt]="user?.email"
-  [email]="user?.email"
+  [alt]="$safeNavigationMigration(user?.email)"
+  [email]="$safeNavigationMigration(user?.email)"
   [round]="true"
 />
 <div>
@@ -13,13 +13,22 @@
   <h3>
     {{
       "user.edit-current-user.label.member-since"
-        | translate: { date: user?.firstLoginDate | date: "mediumDate" }
+        | translate
+          : {
+              date:
+                $safeNavigationMigration(user?.firstLoginDate)
+                | date: "mediumDate"
+            }
     }}
   </h3>
   <h3>
     {{
       "user.edit-current-user.label.last-logged-in"
-        | translate: { date: user?.lastLoginDate | date: "medium" }
+        | translate
+          : {
+              date:
+                $safeNavigationMigration(user?.lastLoginDate) | date: "medium"
+            }
     }}
   </h3>
 </div>

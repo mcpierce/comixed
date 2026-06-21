@@ -29,7 +29,7 @@ import {
 } from '@app/user/reducers/user.reducer';
 import { MatCardModule } from '@angular/material/card';
 import { USER_READER } from '@app/user/user.fixtures';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { ComicDetailCoverUrlPipe } from '@app/comic-books/pipes/comic-detail-cover-url.pipe';
 
 describe('ComicDetailsDialogComponent', () => {
@@ -45,7 +45,7 @@ describe('ComicDetailsDialogComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatCardModule,
         ComicDetailsDialogComponent,

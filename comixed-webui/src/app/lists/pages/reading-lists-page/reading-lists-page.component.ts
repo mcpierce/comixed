@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   MatTableDataSource,
@@ -71,6 +72,7 @@ import { AsyncPipe, DecimalPipe, DatePipe } from '@angular/common';
   selector: 'cx-reading-lists-page',
   templateUrl: './reading-lists-page.component.html',
   styleUrls: ['./reading-lists-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     RouterLink,

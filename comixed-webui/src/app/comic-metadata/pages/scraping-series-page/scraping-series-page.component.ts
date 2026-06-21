@@ -21,7 +21,8 @@ import {
   HostListener,
   inject,
   OnDestroy,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormGroup,
@@ -85,6 +86,7 @@ import { VolumeMetadataTitlePipe } from '../../../comic-books/pipes/volume-metad
   selector: 'cx-scraping-series-page',
   templateUrl: './scraping-series-page.component.html',
   styleUrls: ['./scraping-series-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     MatIconButton,

@@ -32,7 +32,7 @@ import {
   BUSY_FEATURE_KEY,
   initialState as initialBusyState
 } from '@app/core/reducers/busy.reducer';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { USER_READER } from '@app/user/user.fixtures';
 import { NavigationBarComponent } from '@app/components/navigation-bar/navigation-bar.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -132,7 +132,7 @@ describe('AppComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '**', redirectTo: '' }]),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         LoggerModule.forRoot(),
         MatToolbarModule,
         MatDialogModule,

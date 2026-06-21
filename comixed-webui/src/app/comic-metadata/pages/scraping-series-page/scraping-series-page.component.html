@@ -85,7 +85,7 @@
       </mat-label>
       <mat-select
         formControlName="metadataSource"
-        [value]="metadataSource?.metadataSourceId"
+        [value]="$safeNavigationMigration(metadataSource?.metadataSourceId)"
         (selectionChange)="onMetadataSourceSelected($event.value)"
       >
         @for (source of metadataSourceList; track source) {

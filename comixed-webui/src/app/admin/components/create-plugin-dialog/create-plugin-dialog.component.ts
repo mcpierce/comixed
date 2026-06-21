@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { loadPluginLanguages } from '@app/library-plugins/actions/plugin-language.actions';
@@ -33,7 +39,7 @@ import {
   selectPluginLanguageState
 } from '@app/library-plugins/selectors/plugin-language.selectors';
 import { PluginLanguageState } from '@app/library-plugins/reducers/plugin-language.reducer';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   MatCard,
   MatCardActions,
@@ -52,6 +58,7 @@ import { MatDialogClose } from '@angular/material/dialog';
   selector: 'cx-create-plugin-dialog',
   templateUrl: './create-plugin-dialog.component.html',
   styleUrls: ['./create-plugin-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatCard,

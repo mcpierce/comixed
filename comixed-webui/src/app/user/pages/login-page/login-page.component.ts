@@ -18,6 +18,7 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   inject,
   OnDestroy,
@@ -26,17 +27,16 @@ import {
 import { LoggerService } from '@angular-ru/cdk/logger';
 import {
   AbstractControl,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
-  Validators,
-  ReactiveFormsModule
+  Validators
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UserModuleState } from '@app/user';
 import { Subscription } from 'rxjs';
 import { selectUserState } from '@app/user/selectors/user.selectors';
 import { loginUser } from '@app/user/actions/user.actions';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { TitleService } from '@app/core/services/title.service';
 import { setBusyState } from '@app/core/actions/busy.actions';
@@ -46,8 +46,8 @@ import {
 } from '@app/user/user.constants';
 import { selectInitialUserAccountState } from '@app/user/selectors/initial-user-account.selectors';
 import { loadInitialUserAccount } from '@app/user/actions/initial-user-account.actions';
-import { MatCard, MatCardTitle, MatCardContent } from '@angular/material/card';
-import { MatFormField, MatError, MatLabel } from '@angular/material/form-field';
+import { MatCard, MatCardContent, MatCardTitle } from '@angular/material/card';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -56,6 +56,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'cx-login',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatCard,
@@ -67,7 +68,7 @@ import { MatIcon } from '@angular/material/icon';
     MatButton,
     MatLabel,
     MatIcon,
-    TranslateModule
+    TranslatePipe
   ]
 })
 export class LoginPageComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -76,7 +77,6 @@ export class LoginPageComponent implements OnInit, OnDestroy, AfterViewInit {
   userSubscription: Subscription;
   langChangeSubscription: Subscription;
   busy = false;
-  private;
 
   logger = inject(LoggerService);
   formBuilder = inject(UntypedFormBuilder);

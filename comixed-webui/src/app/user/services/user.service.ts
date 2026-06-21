@@ -56,7 +56,7 @@ import { selectUser } from '@app/user/selectors/user.selectors';
   providedIn: 'root'
 })
 export class UserService {
-  userUpdateSubscriptions: Subscription;
+  userUpdateSubscriptions: Subscription | null = null;
   email: string | null = null;
 
   logger = inject(LoggerService);
@@ -70,7 +70,7 @@ export class UserService {
         this.subscribeToUserUpdates();
       }
       this.store.select(selectUser).subscribe(user => {
-        this.email = user?.email;
+        this.email = user?.email || null;
         this.subscribeToUserUpdates();
       });
       if (!state.started && !!this.userUpdateSubscriptions) {
@@ -129,7 +129,10 @@ export class UserService {
    * @param args.name the preference name
    * @param args.value the preference value
    */
-  saveUserPreference(args: { name: string; value: string }): Observable<any> {
+  saveUserPreference(args: {
+    name: string;
+    value: string | null;
+  }): Observable<any> {
     if (!!args.value && args.value.length > 0) {
       this.logger.debug('Saving user preference:', args);
       return this.http.post(

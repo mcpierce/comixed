@@ -15,7 +15,10 @@
         color="accent"
         [matTooltip]="'comic-book.tooltip.go-to-previous-comic' | translate"
         [disabled]="!comicBook?.previousIssueId"
-        [routerLink]="['/comics', comic?.previousIssueId]"
+        [routerLink]="[
+          '/comics',
+          $safeNavigationMigration(comic?.previousIssueId)
+        ]"
       >
         <mat-icon>arrow_back</mat-icon>
       </button>
@@ -26,7 +29,7 @@
         color="accent"
         [disabled]="!comicBook?.nextIssueId"
         [matTooltip]="'comic-book.tooltip.go-to-next-comic' | translate"
-        [routerLink]="['/comics', comic?.nextIssueId]"
+        [routerLink]="['/comics', $safeNavigationMigration(comic?.nextIssueId)]"
       >
         <mat-icon>arrow_forward</mat-icon>
       </button>
@@ -251,7 +254,9 @@
               <cx-comic-scraping
                 class="cx-width-100"
                 [comic]="comic"
-                [previousMetadataSource]="comic.metadata?.metadataSource"
+                [previousMetadataSource]="
+                  $safeNavigationMigration(comic.metadata?.metadataSource)
+                "
                 [skipCache]="skipCache"
                 [matchPublisher]="matchPublisher"
                 [maximumRecords]="maximumRecords"

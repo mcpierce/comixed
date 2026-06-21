@@ -76,7 +76,7 @@ describe('BatchProcessListPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTooltipModule,
         MatPaginatorModule,
         MatTableModule,

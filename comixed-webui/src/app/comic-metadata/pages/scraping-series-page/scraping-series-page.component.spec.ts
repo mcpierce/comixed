@@ -113,7 +113,7 @@ describe('ScrapingSeriesPageComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatFormFieldModule,
         MatIconModule,

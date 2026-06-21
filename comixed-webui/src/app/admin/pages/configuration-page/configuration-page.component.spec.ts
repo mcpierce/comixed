@@ -125,7 +125,7 @@ describe('ConfigurationPageComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,

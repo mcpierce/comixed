@@ -23,7 +23,7 @@ import { SaveConfigurationOptionsEffects } from './save-configuration-options.ef
 import { ConfigurationService } from '@app/admin/services/configuration.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   CONFIGURATION_OPTION_1,
@@ -60,7 +60,7 @@ describe('SaveConfigurationOptionsEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

@@ -34,7 +34,8 @@ import {
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('HashSelectionService', () => {
@@ -48,7 +49,7 @@ describe('HashSelectionService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

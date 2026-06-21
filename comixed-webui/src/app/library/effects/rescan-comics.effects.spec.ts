@@ -22,7 +22,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { RescanComicsEffects } from './rescan-comics.effects';
 import { LibraryService } from '@app/library/services/library.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from '@app/core/services/alert.service';
 import { COMIC_DETAIL_1 } from '@app/comic-books/comic-books.fixtures';
@@ -47,7 +47,7 @@ describe('RescanComicsEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

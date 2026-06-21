@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BatchProcessDetailPageComponent } from './batch-process-detail-page.component';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatListModule } from '@angular/material/list';
 import {
   BATCH_PROCESSES_FEATURE_KEY,
@@ -60,7 +60,7 @@ describe('BatchProcessDetailDialogComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatListModule,
         MatDialogModule,
         BatchProcessDetailPageComponent

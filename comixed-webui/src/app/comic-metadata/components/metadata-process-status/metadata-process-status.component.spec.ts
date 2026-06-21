@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MetadataProcessStatusComponent } from './metadata-process-status.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MetadataUpdateProcessState } from '@app/comic-metadata/reducers/metadata-update-process.reducer';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -36,7 +36,7 @@ describe('MetadataProcessStatusComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatProgressBarModule,
         MetadataProcessStatusComponent
       ]

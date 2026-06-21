@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -41,6 +47,7 @@ import { DecimalPipe } from '@angular/common';
   selector: 'cx-server-runtime',
   templateUrl: './server-runtime.component.html',
   styleUrls: ['./server-runtime.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

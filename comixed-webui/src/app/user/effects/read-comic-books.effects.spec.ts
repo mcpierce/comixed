@@ -40,7 +40,7 @@ import {
 } from '@app/user/user.fixtures';
 import { COMIC_DETAIL_4 } from '@app/comic-books/comic-books.fixtures';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 
 describe('ReadComicBooksEffects', () => {
   const READ = Math.random() > 0.5;
@@ -62,7 +62,7 @@ describe('ReadComicBooksEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot(), TranslateModule.forRoot()],
+      imports: [LoggerModule.forRoot(), provideTranslateService()],
       providers: [
         ReadComicBooksEffects,
         provideMockActions(() => actions$),

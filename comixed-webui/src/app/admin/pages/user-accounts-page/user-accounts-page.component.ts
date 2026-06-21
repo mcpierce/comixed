@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -91,6 +92,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   selector: 'cx-user-accounts-page',
   templateUrl: './user-accounts-page.component.html',
   styleUrl: './user-accounts-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

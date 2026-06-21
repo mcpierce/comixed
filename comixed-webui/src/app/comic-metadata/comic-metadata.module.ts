@@ -22,7 +22,7 @@ import { StoreModule } from '@ngrx/store';
 import { metadataSourceListFeature } from '@app/comic-metadata/reducers/metadata-source-list.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { MetadataSourceListEffects } from '@app/comic-metadata/effects/metadata-source-list.effects';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { metadataSourceFeature } from '@app/comic-metadata/reducers/metadata-source.reducer';
 import { MetadataSourceEffects } from '@app/comic-metadata/effects/metadata-source.effects';
 import { MetadataProcessPageComponent } from './pages/metadata-process-page/metadata-process-page.component';
@@ -60,7 +60,6 @@ import { ScrapeStoryEffects } from '@app/comic-metadata/effects/scrape-story.eff
   imports: [
     CommonModule,
     ComicMetadataRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(singleBookScrapingFeature),
     StoreModule.forFeature(metadataSourceListFeature),
     StoreModule.forFeature(metadataSourceFeature),
@@ -98,6 +97,7 @@ import { ScrapeStoryEffects } from '@app/comic-metadata/effects/scrape-story.eff
     MetadataProcessStatusComponent,
     ScrapingSeriesPageComponent
   ],
-  exports: [CommonModule]
+  exports: [CommonModule],
+  providers: [provideTranslateService()]
 })
 export class ComicMetadataModule {}

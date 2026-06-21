@@ -24,7 +24,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { CoreModule } from '@app/core/core.module';
 import { MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,7 +60,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { ServerMetricDetailsComponent } from './components/server-metric-details/server-metric-details.component';
 import { MetricMeasurementPipe } from './pipes/metric-measurement.pipe';
 import { MatListModule } from '@angular/material/list';
-import { FlexLayoutModule } from '@angular-ru/cdk/flex-layout';
 import { batchProcessFeature } from '@app/admin/reducers/batch-processes.reducer';
 import { BatchProcessesEffects } from '@app/admin/effects/batch-processes.effects';
 import { BatchProcessListPageComponent } from './pages/batch-process-list-page/batch-process-list-page.component';
@@ -78,7 +77,6 @@ import { UserAccountsPageComponent } from '@app/admin/pages/user-accounts-page/u
     CommonModule,
     CoreModule,
     AdminRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(configurationOptionListFeature),
     StoreModule.forFeature(saveConfigurationOptionsFeature),
     StoreModule.forFeature(filenameScrapingRulesFeature),
@@ -108,7 +106,6 @@ import { UserAccountsPageComponent } from '@app/admin/pages/user-accounts-page/u
     MatExpansionModule,
     MatTooltipModule,
     DragDropModule,
-    FlexLayoutModule,
     MatDividerModule,
     ComicBooksModule,
     MatCheckboxModule,
@@ -131,6 +128,7 @@ import { UserAccountsPageComponent } from '@app/admin/pages/user-accounts-page/u
     BatchProcessDetailPageComponent,
     UserAccountsPageComponent
   ],
-  exports: [CommonModule, CoreModule]
+  exports: [CommonModule, CoreModule],
+  providers: [provideTranslateService()]
 })
 export class AdminModule {}

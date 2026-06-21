@@ -40,7 +40,8 @@ import {
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('FilenameScrapingRulesService', () => {
@@ -59,7 +60,7 @@ describe('FilenameScrapingRulesService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

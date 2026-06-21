@@ -16,15 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MetricDetail } from '@app/admin/models/metric-detail';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MetricMeasurementPipe } from '../../pipes/metric-measurement.pipe';
 
 @Component({
   selector: 'cx-metric-details',
   templateUrl: './server-metric-details.component.html',
   styleUrls: ['./server-metric-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslateModule, MetricMeasurementPipe]
 })
 export class ServerMetricDetailsComponent {

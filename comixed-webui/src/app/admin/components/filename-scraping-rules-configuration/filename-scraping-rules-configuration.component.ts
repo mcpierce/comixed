@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -67,6 +73,7 @@ import { MatInput } from '@angular/material/input';
   selector: 'cx-scraping-rules-configuration',
   templateUrl: './filename-scraping-rules-configuration.component.html',
   styleUrls: ['./filename-scraping-rules-configuration.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

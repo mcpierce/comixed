@@ -152,7 +152,7 @@ describe('ComicBookPageComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         RouterTestingModule,
         MatCardModule,
         MatToolbarModule,

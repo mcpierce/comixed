@@ -16,11 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { TitleService } from '@app/core/services/title.service';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { selectInitialUserAccountState } from '@app/user/selectors/initial-user-account.selectors';
@@ -32,8 +38,8 @@ import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  Validators,
-  ReactiveFormsModule
+  ReactiveFormsModule,
+  Validators
 } from '@angular/forms';
 import {
   MAX_PASSWORD_LENGTH,
@@ -42,7 +48,7 @@ import {
 import { passwordVerifyValidator } from '@app/user/user.functions';
 import { ConfirmationService } from '@tragically-slick/confirmation';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { MatFormField, MatError, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -51,6 +57,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'cx-create-admin-page',
   templateUrl: './create-admin-page.component.html',
   styleUrls: ['./create-admin-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatCard,
@@ -61,7 +68,7 @@ import { MatIcon } from '@angular/material/icon';
     MatButton,
     MatLabel,
     MatIcon,
-    TranslateModule
+    TranslatePipe
   ]
 })
 export class CreateAdminPageComponent implements OnInit, OnDestroy {

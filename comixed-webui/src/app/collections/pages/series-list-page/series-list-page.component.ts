@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {
   MatTableDataSource,
   MatTable,
@@ -63,6 +69,7 @@ import { AsyncPipe } from '@angular/common';
   selector: 'cx-series-list-page',
   templateUrl: './series-list-page.component.html',
   styleUrls: ['./series-list-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     FilterTextFormComponent,
     MatPaginator,

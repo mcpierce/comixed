@@ -44,7 +44,9 @@
             </mat-label>
             <mat-select
               formControlName="metadataSource"
-              [value]="metadataSource?.metadataSourceId"
+              [value]="
+                $safeNavigationMigration(metadataSource?.metadataSourceId)
+              "
             >
               @for (source of metadataSources; track source) {
                 <mat-option [value]="source.metadataSourceId">

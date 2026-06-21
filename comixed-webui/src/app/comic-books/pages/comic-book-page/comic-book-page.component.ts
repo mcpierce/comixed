@@ -21,7 +21,8 @@ import {
   Component,
   inject,
   OnDestroy,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -103,6 +104,7 @@ import { filter } from 'rxjs/operators';
   selector: 'cx-comic-book-page',
   templateUrl: './comic-book-page.component.html',
   styleUrls: ['./comic-book-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

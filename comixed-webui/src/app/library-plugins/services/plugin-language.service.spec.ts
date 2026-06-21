@@ -28,7 +28,8 @@ import { interpolate } from '@app/core';
 import { LOAD_LANGUAGE_RUNTIME_LIST_URL } from '@app/library-plugins/library-plugins.constants';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('PluginLanguageService', () => {
@@ -39,7 +40,7 @@ describe('PluginLanguageService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

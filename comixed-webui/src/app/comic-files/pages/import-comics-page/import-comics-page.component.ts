@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { ComicFile } from '@app/comic-files/models/comic-file';
@@ -101,6 +102,7 @@ import { MatInput } from '@angular/material/input';
   selector: 'cx-import-comics',
   templateUrl: './import-comics-page.component.html',
   styleUrls: ['./import-comics-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

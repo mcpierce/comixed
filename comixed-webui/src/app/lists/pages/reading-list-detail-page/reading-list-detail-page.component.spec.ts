@@ -159,7 +159,7 @@ describe('ReadingListDetailPageComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatToolbarModule,
         MatIconModule,

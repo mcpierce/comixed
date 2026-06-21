@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 import { Subscription } from 'rxjs';
 import { ReadingList } from '@app/lists/models/reading-list';
@@ -54,6 +60,7 @@ import { StoryScrapingComponent } from '../../components/story-scraping/story-sc
   selector: 'cx-story-detail',
   templateUrl: './story-detail-page.component.html',
   styleUrl: './story-detail-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

@@ -34,7 +34,7 @@ import {
 } from '@app/comic-metadata/comic-metadata.fixtures';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PUBLISHER_1, SERIES_1 } from '@app/collections/collections.fixtures';
 import { ScrapeSeriesResponse } from '@app/comic-metadata/models/net/scrape-series-response';
@@ -59,7 +59,7 @@ describe('SeriesScrapingEffects', () => {
       imports: [
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

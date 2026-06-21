@@ -90,7 +90,7 @@ describe('DeletedPageListPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatToolbarModule,
         MatPaginatorModule,

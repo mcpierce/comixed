@@ -86,7 +86,7 @@
 
 <cx-comic-list-view
   [comics]="comics"
-  [totalComics]="readingList?.entryIds?.length"
+  [totalComics]="$safeNavigationMigration(readingList?.entryIds?.length)"
   [selectedIds]="selectedIds"
   [comicBooksRead]="comicBooksRead"
   [showAction]="false"

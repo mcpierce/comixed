@@ -20,7 +20,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { BlockedHashListPageComponent } from './pages/blocked-hash-list-page/blocked-hash-list-page.component';
 import { ComicPagesRouting } from './comic-pages.routing';
 import { MatTableModule } from '@angular/material/table';
@@ -59,7 +59,6 @@ import { HashSelectionEffects } from '@app/comic-pages/effects/hash-selection.ef
   imports: [
     CommonModule,
     ComicPagesRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(hashSelectionFeature),
     StoreModule.forFeature(blockedHashesFeature),
     StoreModule.forFeature(
@@ -92,6 +91,7 @@ import { HashSelectionEffects } from '@app/comic-pages/effects/hash-selection.ef
     DeletedPageListPageComponent,
     BlockedHashThumbnailUrlPipe
   ],
-  exports: [CommonModule]
+  exports: [CommonModule],
+  providers: [provideTranslateService()]
 })
 export class ComicPagesModule {}

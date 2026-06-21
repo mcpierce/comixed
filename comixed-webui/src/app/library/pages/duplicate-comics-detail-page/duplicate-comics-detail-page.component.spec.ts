@@ -25,7 +25,7 @@ import {
   initialState as initialDuplicateComicsState
 } from '@app/library/reducers/duplicate-comics.reducer';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   COMIC_LIST_FEATURE_KEY,
   initialState as initialComicListState
@@ -56,7 +56,7 @@ describe('DuplicateComicsDetailPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         DuplicateComicsDetailPageComponent,
         RouterModule.forRoot([])
       ],

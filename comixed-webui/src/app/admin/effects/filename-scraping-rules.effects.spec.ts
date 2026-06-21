@@ -24,7 +24,7 @@ import { FilenameScrapingRulesEffects } from './filename-scraping-rules.effects'
 import { FilenameScrapingRulesService } from '@app/admin/services/filename-scraping-rules.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
   downloadFilenameScrapingRules,
@@ -69,7 +69,7 @@ describe('FilenameScrapingRulesEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

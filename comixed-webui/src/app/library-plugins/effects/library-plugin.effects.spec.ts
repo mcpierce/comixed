@@ -22,7 +22,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { LibraryPluginEffects } from './library-plugin.effects';
 import { LibraryPluginService } from '@app/library-plugins/services/library-plugin.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
@@ -58,7 +58,7 @@ describe('LibraryPluginEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

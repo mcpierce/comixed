@@ -37,7 +37,8 @@ import { LoadDuplicatePageListRequest } from '@app/library/models/net/load-dupli
 import { LoadDuplicatePageListResponse } from '@app/library/models/net/load-duplicate-page-list-response';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('DuplicatePageService', () => {
@@ -56,7 +57,7 @@ describe('DuplicatePageService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -76,6 +77,7 @@ import { BlockedHashThumbnailUrlPipe } from '../../pipes/blocked-hash-thumbnail-
   selector: 'cx-blocked-hash-list',
   templateUrl: './blocked-hash-list-page.component.html',
   styleUrls: ['./blocked-hash-list-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

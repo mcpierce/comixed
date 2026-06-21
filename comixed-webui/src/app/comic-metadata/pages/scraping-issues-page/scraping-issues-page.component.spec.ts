@@ -119,7 +119,7 @@ describe('ScrapingIssuesPageComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatFormFieldModule,
         MatToolbarModule,

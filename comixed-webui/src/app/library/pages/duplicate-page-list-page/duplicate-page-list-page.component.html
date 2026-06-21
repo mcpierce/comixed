@@ -38,19 +38,20 @@
       <mat-card-title class="cx-text-nowrap">
         {{
           "duplicate-pages.show-popup.title"
-            | translate: { hash: popupPage?.hash }
+            | translate: { hash: $safeNavigationMigration(popupPage?.hash) }
         }}
       </mat-card-title>
       <mat-card-subtitle class="cx-text-nowrap">
         {{
           "duplicate-pages.show-popup.subtitle"
-            | translate: { count: popupPage?.comicCount }
+            | translate
+              : { count: $safeNavigationMigration(popupPage?.comicCount) }
         }}
       </mat-card-subtitle>
       <mat-card-content class="cx-padding-5">
         <img
           loading="lazy"
-          [src]="popupPage?.hash | pageHashUrl"
+          [src]="$safeNavigationMigration(popupPage?.hash) | pageHashUrl"
           width="100%"
           height="auto"
           [alt]="popupPage"

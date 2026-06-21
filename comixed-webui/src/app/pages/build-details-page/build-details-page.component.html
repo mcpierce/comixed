@@ -5,45 +5,60 @@
     <mat-card-content class="cx-padding-15">
       <div>
         {{
-          "build-details.label.branch" | translate: { name: details?.branch }
+          "build-details.label.branch"
+            | translate: { name: $safeNavigationMigration(details?.branch) }
         }}
       </div>
       <div>
         {{
           "build-details.label.build-time"
-            | translate: { time: details?.buildTime | date: "long" }
+            | translate
+              : {
+                  time:
+                    $safeNavigationMigration(details?.buildTime) | date: "long"
+                }
         }}
       </div>
       <div>
         {{
           "build-details.label.build-host"
-            | translate: { name: details?.buildHost }
+            | translate: { name: $safeNavigationMigration(details?.buildHost) }
         }}
       </div>
       <div>
         {{
           "build-details.label.build-version"
-            | translate: { version: details?.buildVersion }
+            | translate
+              : { version: $safeNavigationMigration(details?.buildVersion) }
         }}
       </div>
       <div>
         {{
           "build-details.label.commit-time"
-            | translate: { time: details?.commitTime | date: "long" }
+            | translate
+              : {
+                  time:
+                    $safeNavigationMigration(details?.commitTime) | date: "long"
+                }
         }}
       </div>
       <div>
-        {{ "build-details.label.dirty" | translate: { name: details?.dirty } }}
+        {{
+          "build-details.label.dirty"
+            | translate: { name: $safeNavigationMigration(details?.dirty) }
+        }}
       </div>
       <div>
         {{
           "build-details.label.remote-origin-url"
-            | translate: { url: details?.remoteOriginURL }
+            | translate
+              : { url: $safeNavigationMigration(details?.remoteOriginURL) }
         }}
       </div>
       <div>
         {{
-          "build-details.label.jdbc-url" | translate: { url: details?.jdbcUrl }
+          "build-details.label.jdbc-url"
+            | translate: { url: $safeNavigationMigration(details?.jdbcUrl) }
         }}
       </div>
       <div>
@@ -51,11 +66,11 @@
           "build-details.label.java-runtime"
             | translate
               : {
-                  version: details?.javaVersion,
-                  vendor: details?.javaVendor,
-                  osName: details?.osName,
-                  osArch: details?.osArch,
-                  osVersion: details?.osVersion
+                  version: $safeNavigationMigration(details?.javaVersion),
+                  vendor: $safeNavigationMigration(details?.javaVendor),
+                  osName: $safeNavigationMigration(details?.osName),
+                  osArch: $safeNavigationMigration(details?.osArch),
+                  osVersion: $safeNavigationMigration(details?.osVersion)
                 }
         }}
       </div>

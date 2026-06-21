@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import {
   MatCard,
@@ -46,6 +52,7 @@ import { BehaviorSubject } from 'rxjs';
     NumberCardModule
   ],
   templateUrl: './library-stat.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './library-stat.component.scss'
 })
 export class LibraryStatComponent {

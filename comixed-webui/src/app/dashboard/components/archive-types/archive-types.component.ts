@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { RemoteLibrarySegmentState } from '@app/library/models/net/remote-library-segment-state';
 import { ArchiveType } from '@app/comic-books/models/archive-type.enum';
@@ -42,6 +48,7 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe
   ],
   templateUrl: './archive-types.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './archive-types.component.scss'
 })
 export class ArchiveTypesComponent {

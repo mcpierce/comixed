@@ -71,7 +71,7 @@ describe('CreateAdminPageComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatFormFieldModule,
         MatCardModule,

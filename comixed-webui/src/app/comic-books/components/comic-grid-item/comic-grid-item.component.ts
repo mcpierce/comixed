@@ -16,7 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 import { ComicPageComponent } from '@app/comic-books/components/comic-page/comic-page.component';
 import { ComicCoverUrlPipe } from '@app/comic-books/pipes/comic-cover-url.pipe';
@@ -60,6 +67,7 @@ import { LoggerService } from '@angular-ru/cdk/logger';
     MatCardSubtitle
   ],
   templateUrl: './comic-grid-item.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comic-grid-item.component.scss'
 })
 export class ComicGridItemComponent {

@@ -23,7 +23,7 @@ import { QueryParameterService } from '@app/core/services/query-parameter.servic
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 
 describe('FilterTextFormComponent', () => {
   const FILTER_TEXT = 'the text';
@@ -39,7 +39,7 @@ describe('FilterTextFormComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         FilterTextFormComponent
       ],
       providers: [QueryParameterService]

@@ -69,7 +69,7 @@ xdescribe('UserAccountsPageComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([{ path: '**', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatIconModule,
         MatTableModule,
         MatSortModule,

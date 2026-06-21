@@ -16,7 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, Input } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {
   UntypedFormBuilder,
   UntypedFormGroup,
@@ -57,6 +62,7 @@ import { MatInput } from '@angular/material/input';
   selector: 'cx-library-configuration',
   templateUrl: './library-configuration.component.html',
   styleUrls: ['./library-configuration.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

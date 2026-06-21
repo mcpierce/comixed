@@ -43,7 +43,8 @@ import { UpdatePluginRequest } from '@app/library-plugins/models/net/update-plug
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { COMIC_BOOK_2 } from '@app/comic-books/comic-books.fixtures';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -70,7 +71,7 @@ describe('LibraryPluginService', () => {
       imports: [LoggerModule.forRoot()],
       providers: [
         provideMockStore({ initialState }),
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting(),
         {
           provide: WebSocketService,

@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
@@ -47,6 +53,7 @@ import { ComicListViewComponent } from '../../../comic-books/components/comic-li
   selector: 'cx-metadata-process-page',
   templateUrl: './metadata-process-page.component.html',
   styleUrls: ['./metadata-process-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MetadataProcessToolbarComponent,
     MetadataProcessStatusComponent,

@@ -28,7 +28,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -53,7 +53,6 @@ import { ComicBooksModule } from '@app/comic-books/comic-books.module';
   imports: [
     CommonModule,
     ListsRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(readingListsFeature),
     StoreModule.forFeature(readingListDetailsFeature),
     StoreModule.forFeature(readingListEntriesFeature),
@@ -83,6 +82,7 @@ import { ComicBooksModule } from '@app/comic-books/comic-books.module';
     ReadingListsPageComponent,
     ReadingListDetailPageComponent
   ],
-  exports: [CommonModule]
+  exports: [CommonModule],
+  providers: [provideTranslateService()]
 })
 export class ListsModule {}

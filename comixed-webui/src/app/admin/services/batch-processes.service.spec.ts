@@ -48,7 +48,8 @@ import { WebSocketService } from '@app/messaging';
 import { DeleteSelectedJobsRequest } from '@app/admin/models/net/delete-selected-jobs-request';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('BatchProcessesService', () => {
@@ -74,7 +75,7 @@ describe('BatchProcessesService', () => {
             subscribe: jasmine.createSpy('WebSocketService.subscribe()')
           }
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

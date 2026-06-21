@@ -30,14 +30,13 @@ import {
 import { EffectsModule } from '@ngrx/effects';
 import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { YesNoPipe } from './pipes/yes-no.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(BUSY_FEATURE_KEY, busyReducer),
     EffectsModule.forFeature([]),
     MatSnackBarModule,
@@ -56,6 +55,6 @@ import { YesNoPipe } from './pipes/yes-no.pipe';
     MatFormFieldModule,
     YesNoPipe
   ],
-  providers: []
+  providers: [provideTranslateService()]
 })
 export class CoreModule {}

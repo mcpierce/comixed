@@ -16,7 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -52,6 +57,7 @@ import { BlockedHashThumbnailUrlPipe } from '../../pipes/blocked-hash-thumbnail-
   selector: 'cx-blocked-hash-detail-page',
   templateUrl: './blocked-hash-detail-page.component.html',
   styleUrls: ['./blocked-hash-detail-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatIcon,

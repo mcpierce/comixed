@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -43,6 +49,7 @@ import { DatePipe, KeyValuePipe } from '@angular/common';
   selector: 'cx-batch-process-detail-page',
   templateUrl: './batch-process-detail-page.component.html',
   styleUrls: ['./batch-process-detail-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [DatePipe, KeyValuePipe, TranslateModule]
 })
 export class BatchProcessDetailPageComponent implements OnInit, OnDestroy {

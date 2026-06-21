@@ -23,7 +23,7 @@ import { HashSelectionEffects } from './hash-selection.effects';
 import { PAGE_1, PAGE_2, PAGE_3 } from '@app/comic-pages/comic-pages.fixtures';
 import { HashSelectionService } from '@app/comic-pages/services/hash-selection.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import {
   addAllHashesToSelection,
@@ -48,7 +48,7 @@ describe('HashSelectionEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot(), TranslateModule.forRoot()],
+      imports: [LoggerModule.forRoot(), provideTranslateService()],
       providers: [
         HashSelectionEffects,
         provideMockActions(() => actions$),

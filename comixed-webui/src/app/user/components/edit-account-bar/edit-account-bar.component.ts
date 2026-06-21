@@ -18,24 +18,23 @@
 
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   inject,
   Input,
-  OnDestroy,
   Output,
   ViewChild
 } from '@angular/core';
 import { User } from '@app/user/models/user';
-import { BehaviorSubject, Subscription } from 'rxjs';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
 import {
   AbstractControl,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormGroup,
-  Validators,
-  ReactiveFormsModule
+  Validators
 } from '@angular/forms';
 import { ConfirmationService } from '@tragically-slick/confirmation';
 import { selectUserState } from '@app/user/selectors/user.selectors';
@@ -47,30 +46,30 @@ import {
   saveCurrentUser,
   saveUserPreference
 } from '@app/user/actions/user.actions';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { passwordVerifyValidator } from '@app/user/user.functions';
 import {
-  MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCellDef,
-  MatHeaderCell,
-  MatCellDef,
   MatCell,
-  MatHeaderRowDef,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
   MatRowDef,
-  MatRow
+  MatTable,
+  MatTableDataSource
 } from '@angular/material/table';
 import { Preference } from '@app/user/models/preference';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { GravatarModule } from 'ngx-gravatar';
 import {
   MatCard,
-  MatCardContent,
-  MatCardActions
+  MatCardActions,
+  MatCardContent
 } from '@angular/material/card';
-import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -81,6 +80,7 @@ import { DatePipe } from '@angular/common';
   selector: 'cx-edit-account-bar',
   templateUrl: './edit-account-bar.component.html',
   styleUrls: ['./edit-account-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     GravatarModule,
     ReactiveFormsModule,
@@ -108,16 +108,14 @@ import { DatePipe } from '@angular/common';
     MatRowDef,
     MatRow,
     DatePipe,
-    TranslateModule
+    TranslatePipe
   ]
 })
-export class EditAccountBarComponent implements OnDestroy, AfterViewInit {
-  @ViewChild(MatSort) sort: MatSort;
+export class EditAccountBarComponent implements AfterViewInit {
+  @ViewChild(MatSort) sort: MatSort | null = null;
 
   @Output() closeSidebar = new EventEmitter<void>();
   userForm: UntypedFormGroup;
-  userStateSubscription: Subscription;
-  userSubscription: Subscription;
   busy = false;
 
   readonly displayedColumns = ['name', 'value', 'actions'];
@@ -137,21 +135,19 @@ export class EditAccountBarComponent implements OnDestroy, AfterViewInit {
       password: [''],
       passwordVerify: ['']
     });
-    this.userStateSubscription = this.store
-      .select(selectUserState)
-      .subscribe(state => {
-        this.logger.debug(`Setting busy state to ${state.saving}`);
-        this.busy = state.saving;
-      });
+    this.store.select(selectUserState).subscribe(state => {
+      this.logger.debug(`Setting busy state to ${state.saving}`);
+      this.busy = state.saving;
+    });
   }
 
-  private _user: User = null;
+  private _user: User | null = null;
 
-  get user(): User {
+  get user(): User | null {
     return this._user;
   }
 
-  @Input() set user(user: User) {
+  @Input() set user(user: User | null) {
     this._user = user;
     if (!!user) {
       this.userForm.controls.email.setValue(user.email);
@@ -168,10 +164,6 @@ export class EditAccountBarComponent implements OnDestroy, AfterViewInit {
     return this.userForm.controls;
   }
 
-  ngOnDestroy(): void {
-    this.userStateSubscription.unsubscribe();
-  }
-
   ngAfterViewInit(): void {
     this.logger.trace('Assigning table sort');
     this.dataSource.sort = this.sort;
@@ -181,6 +173,8 @@ export class EditAccountBarComponent implements OnDestroy, AfterViewInit {
           return data.name;
         case 'value':
           return data.value;
+        default:
+          return data.name;
       }
     };
   }
@@ -228,7 +222,7 @@ export class EditAccountBarComponent implements OnDestroy, AfterViewInit {
         this.logger.debug('Saving user account changes');
         this.store.dispatch(
           saveCurrentUser({
-            user: { ...this.user, email: this.userForm.controls.email.value },
+            user: { ...this.user!, email: this.userForm.controls.email.value },
             password: this.userForm.controls.password.value
           })
         );

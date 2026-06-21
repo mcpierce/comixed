@@ -64,7 +64,7 @@ describe('LoginPageComponent', () => {
         RouterTestingModule.withRoutes([{ path: '**', redirectTo: '' }]),
         FormsModule,
         ReactiveFormsModule,
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         LoggerModule.forRoot(),
         MatCardModule,
         MatFormFieldModule,

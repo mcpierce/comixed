@@ -25,7 +25,7 @@ import { READING_LIST_3 } from '@app/lists/lists.fixtures';
 import { COMIC_DETAIL_1 } from '@app/comic-books/comic-books.fixtures';
 import { ReadingListService } from '@app/lists/services/reading-list.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import {
   addComicBooksToReadingListFailure,
@@ -53,7 +53,7 @@ describe('ReadingListEntriesEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

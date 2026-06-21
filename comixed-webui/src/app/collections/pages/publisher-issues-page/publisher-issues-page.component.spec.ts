@@ -79,7 +79,7 @@ describe('PublisherIssuesPageComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatPaginatorModule,
         MatMenuModule,
         MatTableModule,

@@ -19,7 +19,7 @@
         <mat-select
           id="plugin-language"
           formControlName="language"
-          [disabled]="pluginLanguageState?.busy"
+          [disabled]="$safeNavigationMigration(pluginLanguageState?.busy)"
         >
           @for (option of pluginLanguageList; track option) {
             <mat-option [value]="option.name">

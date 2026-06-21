@@ -33,7 +33,8 @@ import { interpolate } from '@app/core';
 import { GET_IMPRINTS_URL } from '@app/comic-books/comic-books.constants';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('ImprintService', () => {
@@ -46,7 +47,7 @@ describe('ImprintService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

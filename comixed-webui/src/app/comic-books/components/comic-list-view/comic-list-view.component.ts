@@ -25,7 +25,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   MatCell,
@@ -127,6 +128,7 @@ import { PluginType } from '@app/library-plugins/models/plugin-type';
   selector: 'cx-comic-list-view',
   templateUrl: './comic-list-view.component.html',
   styleUrls: ['./comic-list-view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatCard,
     MatCardTitle,

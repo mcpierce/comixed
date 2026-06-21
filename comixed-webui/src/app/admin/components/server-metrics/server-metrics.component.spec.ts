@@ -20,7 +20,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ServerMetricsComponent } from './server-metrics.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { ServerMetricDetailsComponent } from '@app/admin/components/server-metric-details/server-metric-details.component';
 import {
   initialState as initialMetricsState,
@@ -45,7 +45,7 @@ describe('ServerMetricsComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatFormFieldModule,
         MatSelectModule,
         MatInputModule,

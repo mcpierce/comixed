@@ -28,7 +28,7 @@ import {
 } from '@app/comic-files/comic-file.fixtures';
 import { ComicImportService } from '@app/comic-files/services/comic-import.service';
 import { AlertService } from '@app/core/services/alert.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
@@ -53,7 +53,7 @@ describe('ImportComicFilesEffects', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         LoggerModule.forRoot(),
         MatSnackBarModule
       ],

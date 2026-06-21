@@ -25,7 +25,7 @@ import {
   NO_MATCH
 } from './comic-scraping-volume-selection.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import {
   COMIC_BOOK_4,
@@ -91,7 +91,7 @@ describe('ComicScrapingVolumeSelectionComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatTableModule,
         MatSortModule,

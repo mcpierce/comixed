@@ -23,7 +23,8 @@ import {
   inject,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
@@ -68,6 +69,7 @@ import { ComicPageUrlPipe } from '@app/comic-books/pipes/comic-page-url.pipe';
   selector: 'cx-comic-pages',
   templateUrl: './comic-pages.component.html',
   styleUrls: ['./comic-pages.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ComicPageComponent,
     MatTable,

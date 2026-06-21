@@ -16,9 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { RemoteLibrarySegmentState } from '@app/library/models/net/remote-library-segment-state';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import {
   MatCard,
   MatCardActions,
@@ -44,6 +50,7 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe
   ],
   templateUrl: './comic-states.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './comic-states.component.scss'
 })
 export class ComicStatesComponent {

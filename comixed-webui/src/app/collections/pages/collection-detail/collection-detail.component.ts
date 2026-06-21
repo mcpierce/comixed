@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -51,6 +57,7 @@ import { ComicListViewComponent } from '../../../comic-books/components/comic-li
   selector: 'cx-collection-detail',
   templateUrl: './collection-detail.component.html',
   styleUrls: ['./collection-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [ComicListViewComponent, TranslateModule]
 })
 export class CollectionDetailComponent implements OnInit, OnDestroy {

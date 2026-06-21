@@ -22,7 +22,7 @@ import { MatCardModule } from '@angular/material/card';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { DISPLAYABLE_COMIC_1 } from '@app/comic-books/comic-books.fixtures';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,7 +41,7 @@ describe('ComicDetailCardComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatCardModule,
         MatGridListModule,
         MatChipsModule,

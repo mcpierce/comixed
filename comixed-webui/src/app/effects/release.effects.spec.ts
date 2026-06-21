@@ -22,7 +22,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { ReleaseEffects } from './release.effects';
 import { ReleaseService } from '@app/services/release.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import { CURRENT_RELEASE, LATEST_RELEASE } from '@app/app.fixtures';
 import {
@@ -47,7 +47,7 @@ describe('ReleaseEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

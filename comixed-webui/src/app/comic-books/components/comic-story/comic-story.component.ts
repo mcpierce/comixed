@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import {
   ComicTagType,
   CreditTags
@@ -30,13 +30,14 @@ import {
 } from '@angular/material/expansion';
 import { ComicDetailCardComponent } from '../comic-detail-card/comic-detail-card.component';
 import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
 
 @Component({
   selector: 'cx-comic-story',
   templateUrl: './comic-story.component.html',
   styleUrls: ['./comic-story.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatAccordion,
     MatExpansionPanel,

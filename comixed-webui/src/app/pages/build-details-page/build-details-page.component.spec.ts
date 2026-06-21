@@ -50,7 +50,7 @@ describe('BuildDetailsPageComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatCardModule,
         MatIconModule,
         MatTooltipModule,

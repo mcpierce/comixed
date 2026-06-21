@@ -23,7 +23,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MetadataSource } from '@app/comic-metadata/models/metadata-source';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -86,6 +87,7 @@ import { MatInput } from '@angular/material/input';
   selector: 'cx-story-scraping',
   templateUrl: './story-scraping.component.html',
   styleUrl: './story-scraping.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     MatIconButton,

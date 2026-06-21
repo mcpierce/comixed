@@ -24,7 +24,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SelectableListItem } from '@app/core/models/ui/selectable-list-item';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISPLAYABLE_COMIC_1,
@@ -147,7 +147,7 @@ describe('ComicListViewComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSortModule,
         MatTableModule,
         MatDialogModule,

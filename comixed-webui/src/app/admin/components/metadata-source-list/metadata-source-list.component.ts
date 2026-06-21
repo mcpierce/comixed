@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MetadataSource } from '@app/comic-metadata/models/metadata-source';
@@ -91,6 +92,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
   selector: 'cx-metadata-source-list',
   templateUrl: './metadata-source-list.component.html',
   styleUrls: ['./metadata-source-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

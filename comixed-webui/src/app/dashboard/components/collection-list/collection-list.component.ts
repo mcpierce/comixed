@@ -22,10 +22,11 @@ import {
   EventEmitter,
   Input,
   Output,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import {
@@ -53,6 +54,7 @@ import { RemoteLibrarySegmentState } from '@app/library/models/net/remote-librar
     MatIcon
   ],
   templateUrl: './collection-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './collection-list.component.scss'
 })
 export class CollectionListComponent implements AfterViewInit {

@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { Store } from '@ngrx/store';
@@ -64,6 +65,7 @@ import { PageHashUrlPipe } from '../../../comic-books/pipes/page-hash-url.pipe';
   selector: 'cx-deleted-page-list-page',
   templateUrl: './deleted-page-list-page.component.html',
   styleUrls: ['./deleted-page-list-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     MatPaginator,

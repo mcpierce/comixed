@@ -16,7 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ByPublisherAndYearSegment } from '@app/library/models/net/by-publisher-and-year-segment';
 import {
   MatCard,
@@ -42,6 +48,7 @@ import { AsyncPipe } from '@angular/common';
     AsyncPipe
   ],
   templateUrl: './publisher-year-graph.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './publisher-year-graph.component.scss'
 })
 export class PublisherYearGraphComponent {

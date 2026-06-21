@@ -72,7 +72,7 @@ describe('SeriesListPageComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatToolbarModule,
         MatTableModule,

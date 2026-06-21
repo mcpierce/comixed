@@ -48,7 +48,7 @@ import {
 } from '@app/comic-books/actions/comic-book-selection.actions';
 import { hot } from 'jasmine-marbles';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PUBLISHER_1, SERIES_1 } from '@app/collections/collections.fixtures';
@@ -123,7 +123,7 @@ describe('ComicBookSelectionEffects', () => {
       ],
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ]
     });

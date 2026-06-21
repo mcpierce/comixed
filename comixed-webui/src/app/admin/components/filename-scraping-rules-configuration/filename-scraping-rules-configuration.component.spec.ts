@@ -78,7 +78,7 @@ describe('FilenameScrapingRulesConfigurationComponent', () => {
       imports: [
         NoopAnimationsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         DragDropModule,
         MatTableModule,
         MatInputModule,

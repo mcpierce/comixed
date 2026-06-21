@@ -87,7 +87,7 @@ describe('MetadataProcessPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatMenuModule,
         MatIconModule,

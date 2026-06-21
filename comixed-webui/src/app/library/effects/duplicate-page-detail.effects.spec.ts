@@ -23,7 +23,7 @@ import { DuplicatePageDetailEffects } from './duplicate-page-detail.effects';
 import { DuplicatePageService } from '@app/library/services/duplicate-page.service';
 import { AlertService } from '@app/core/services/alert.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DUPLICATE_PAGE_1 } from '@app/library/library.fixtures';
 import {
@@ -46,7 +46,7 @@ describe('DuplicatePageDetailEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

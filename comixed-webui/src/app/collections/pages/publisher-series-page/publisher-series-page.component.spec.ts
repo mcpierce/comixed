@@ -58,7 +58,7 @@ describe('PublisherSeriesPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatPaginatorModule,
         MatToolbarModule,

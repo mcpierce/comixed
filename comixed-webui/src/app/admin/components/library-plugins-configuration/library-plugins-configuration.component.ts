@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -72,6 +73,7 @@ import { PluginTitlePipe } from '@app/library-plugins/pipes/plugin-title.pipe';
   selector: 'cx-library-plugins-configuration',
   templateUrl: './library-plugins-configuration.component.html',
   styleUrls: ['./library-plugins-configuration.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

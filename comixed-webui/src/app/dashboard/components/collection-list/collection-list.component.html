@@ -58,7 +58,7 @@
   <mat-card-footer>
     <mat-paginator
       showFirstLastButtons="true"
-      [length]="data?.length"
+      [length]="$safeNavigationMigration(data?.length)"
       [pageSize]="rows"
     ></mat-paginator>
   </mat-card-footer>

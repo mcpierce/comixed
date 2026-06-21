@@ -22,7 +22,8 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { QueryParameterService } from '@app/core/services/query-parameter.service';
@@ -70,6 +71,7 @@ import { AsyncPipe, DatePipe } from '@angular/common';
   selector: 'cx-batch-process-list-page',
   templateUrl: './batch-process-list-page.component.html',
   styleUrls: ['./batch-process-list-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatFabButton,
     MatTooltip,

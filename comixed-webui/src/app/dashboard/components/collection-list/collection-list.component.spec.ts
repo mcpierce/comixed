@@ -18,7 +18,7 @@
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CollectionListComponent } from './collection-list.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -37,7 +37,7 @@ describe('CollectionListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         CollectionListComponent,
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatSortModule,
         MatPaginatorModule

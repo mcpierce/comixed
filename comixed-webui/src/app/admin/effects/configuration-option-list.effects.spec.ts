@@ -22,7 +22,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { ConfigurationOptionListEffects } from './configuration-option-list.effects';
 import { ConfigurationService } from '@app/admin/services/configuration.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { AlertService } from '@app/core/services/alert.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {
@@ -58,7 +58,7 @@ describe('ConfigurationOptionListEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

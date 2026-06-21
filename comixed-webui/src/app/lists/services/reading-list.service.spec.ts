@@ -47,7 +47,8 @@ import { DownloadDocument } from '@app/core/models/download-document';
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { DeleteReadingListsRequest } from '@app/lists/models/net/delete-reading-lists-request';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
@@ -107,7 +108,7 @@ describe('ReadingListService', () => {
             subscribe: jasmine.createSpy('WebSocketService.subscribe()')
           }
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

@@ -19,7 +19,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ComicBookListComponent } from './comic-book-list.component';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
   COMIC_DETAIL_1,
@@ -53,7 +53,7 @@ describe('ComicBookListComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '**', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatTooltipModule,
         ComicBookListComponent,

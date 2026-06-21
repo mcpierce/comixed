@@ -133,7 +133,7 @@ describe('ImportComicsPageComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatButtonModule,
         MatCheckboxModule,

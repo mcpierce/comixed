@@ -42,7 +42,7 @@ export interface UserState {
   loading: boolean;
   authenticating: boolean;
   authenticated: boolean;
-  user: User;
+  user: User | null;
   saving: boolean;
 }
 

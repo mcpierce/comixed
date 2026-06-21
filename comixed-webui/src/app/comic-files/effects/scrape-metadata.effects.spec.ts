@@ -24,7 +24,7 @@ import { ComicImportService } from '@app/comic-files/services/comic-import.servi
 import { AlertService } from '@app/core/services/alert.service';
 import { COMIC_DETAIL_2 } from '@app/comic-books/comic-books.fixtures';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FilenameMetadataResponse } from '@app/comic-files/models/net/filename-metadata-response';
 import {
@@ -50,7 +50,7 @@ describe('ScrapeMetadataEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

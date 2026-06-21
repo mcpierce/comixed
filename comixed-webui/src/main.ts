@@ -49,11 +49,11 @@ import { ReleaseEffects } from '@app/effects/release.effects';
 import { ImportCountEffects } from '@app/effects/import-count.effects';
 import { ComicsReadStatisticsEffects } from '@app/effects/comics-read-statistics.effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { LoggerModule } from '@angular-ru/cdk/logger';
+import { provideLogger } from '@angular-ru/cdk/logger';
 import {
+  provideTranslateService,
   TranslateCompiler,
-  TranslateLoader,
-  TranslateModule
+  TranslateLoader
 } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '@app/app.translate';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -66,7 +66,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
-import { FlexLayoutModule } from '@angular-ru/cdk/flex-layout';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { GravatarModule } from 'ngx-gravatar';
@@ -83,6 +82,19 @@ if (environment.production) {
 bootstrapApplication(AppComponent, {
   providers: [
     provideZoneChangeDetection(),
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpBackend]
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useClass: TranslateMessageFormatCompiler
+      },
+      fallbackLang: 'en'
+    }),
+    provideLogger({ useLevelGroup: true }),
     importProvidersFrom(
       AdminModule,
       MessagingModule,
@@ -108,19 +120,6 @@ bootstrapApplication(AppComponent, {
         ComicsReadStatisticsEffects
       ]),
       StoreRouterConnectingModule.forRoot(),
-      LoggerModule.forRoot({ useLevelGroup: true }),
-      TranslateModule.forRoot({
-        loader: {
-          provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
-          deps: [HttpBackend]
-        },
-        compiler: {
-          provide: TranslateCompiler,
-          useClass: TranslateMessageFormatCompiler
-        },
-        defaultLanguage: 'en'
-      }),
       StoreDevtoolsModule.instrument({
         maxAge: 25,
         trace: true,
@@ -135,7 +134,6 @@ bootstrapApplication(AppComponent, {
       MatCardModule,
       MatDividerModule,
       MatSelectModule,
-      FlexLayoutModule,
       MatSidenavModule,
       MatListModule,
       GravatarModule,

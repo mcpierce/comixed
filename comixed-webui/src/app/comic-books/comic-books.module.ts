@@ -48,7 +48,7 @@ import { ComicTitlePipe } from '@app/comic-books/pipes/comic-title.pipe';
 import { comicBookFeature } from '@app/comic-books/reducers/comic-book.reducer';
 import { ComicBookEffects } from '@app/comic-books/effects/comic-book.effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSortModule } from '@angular/material/sort';
@@ -68,7 +68,6 @@ import { ComicListViewComponent } from '@app/comic-books/components/comic-list-v
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { FlexLayoutModule } from '@angular-ru/cdk/flex-layout';
 import { ComicListFilterComponent } from '@app/comic-books/components/comic-list-filter/comic-list-filter.component';
 import { comicBookSelectionFeature } from '@app/comic-books/reducers/comic-book-selection.reducer';
 import { ComicBookSelectionEffects } from '@app/comic-books/effects/comic-book-selection.effects';
@@ -93,7 +92,6 @@ import { ComicDetailCoverUrlPipe } from '@app/comic-books/pipes/comic-detail-cov
       ComicListEffects,
       ComicBookSelectionEffects
     ]),
-    TranslateModule.forRoot(),
     MatCardModule,
     MatTooltipModule,
     MatIconModule,
@@ -114,7 +112,6 @@ import { ComicDetailCoverUrlPipe } from '@app/comic-books/pipes/comic-detail-cov
     CoreModule,
     MatGridListModule,
     MatDividerModule,
-    FlexLayoutModule,
     DragDropModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -154,7 +151,8 @@ import { ComicDetailCoverUrlPipe } from '@app/comic-books/pipes/comic-detail-cov
     IssueMetadataTitlePipe,
     VolumeMetadataTitlePipe,
     ComicDetailCoverUrlPipe
-  ]
+  ],
+  providers: [provideTranslateService()]
 })
 export class ComicBooksModule {
   static forRoot(): ModuleWithProviders<ComicBooksModule> {

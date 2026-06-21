@@ -16,7 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, Input } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { MetadataSource } from '@app/comic-metadata/models/metadata-source';
 import {
   AbstractControl,
@@ -55,6 +60,7 @@ import { MatButton } from '@angular/material/button';
   selector: 'cx-metadata-source-detail',
   templateUrl: './metadata-source-detail.component.html',
   styleUrls: ['./metadata-source-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatCard,

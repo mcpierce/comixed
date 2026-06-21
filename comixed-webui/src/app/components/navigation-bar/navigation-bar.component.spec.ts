@@ -85,7 +85,7 @@ describe('NavigationBarComponent', () => {
       imports: [
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         LoggerModule.forRoot(),
         GravatarModule,
         MatMenuModule,

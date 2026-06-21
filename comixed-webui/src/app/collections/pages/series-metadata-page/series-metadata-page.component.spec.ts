@@ -97,7 +97,7 @@ describe('SeriesMetadataPageComponent', () => {
         NoopAnimationsModule,
         RouterTestingModule.withRoutes([{ path: '*', redirectTo: '' }]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatPaginatorModule,
         MatSortModule,
         MatTableModule,

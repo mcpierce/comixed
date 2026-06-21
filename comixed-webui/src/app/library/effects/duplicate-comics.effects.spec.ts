@@ -41,7 +41,7 @@ import { hot } from 'jasmine-marbles';
 import { AlertService } from '@app/core/services/alert.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { LoadComicsResponse } from '@app/comic-books/models/net/load-comics-response';
 import {
   DISPLAYABLE_COMIC_1,
@@ -79,7 +79,7 @@ describe('DuplicateComicsEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot(), TranslateModule.forRoot()],
+      imports: [LoggerModule.forRoot(), provideTranslateService()],
       providers: [
         DuplicateComicsEffects,
         provideMockActions(() => actions$),

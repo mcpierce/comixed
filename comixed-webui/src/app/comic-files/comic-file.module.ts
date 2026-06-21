@@ -23,7 +23,7 @@ import { ComicFileCoverUrlPipe } from './pipes/comic-file-cover-url.pipe';
 import { ComicFileRouting } from './comic-file.routing';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,7 +47,6 @@ import { scrapeMetadataFeature } from '@app/comic-files/reducers/scrape-metadata
 import { ScrapeMetadataEffects } from '@app/comic-files/effects/scrape-metadata.effects';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { FlexLayoutModule } from '@angular-ru/cdk/flex-layout';
 import { ComicFileLoaderComponent } from './components/comic-file-loader/comic-file-loader.component';
 import { ProcessingStatusPageComponent } from './pages/processing-status-page/processing-status-page.component';
 
@@ -57,7 +56,6 @@ import { ProcessingStatusPageComponent } from './pages/processing-status-page/pr
     FormsModule,
     ReactiveFormsModule,
     ComicFileRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(comicFileListFeature),
     StoreModule.forFeature(comicFilesFeature),
     StoreModule.forFeature(scrapeMetadataFeature),
@@ -80,7 +78,6 @@ import { ProcessingStatusPageComponent } from './pages/processing-status-page/pr
     LibraryModule,
     MatProgressBarModule,
     ComicBooksModule,
-    FlexLayoutModule,
     MatMenuModule,
     MatPaginatorModule,
     ImportComicsPageComponent,
@@ -88,6 +85,7 @@ import { ProcessingStatusPageComponent } from './pages/processing-status-page/pr
     ComicFileLoaderComponent,
     ProcessingStatusPageComponent
   ],
-  exports: [CommonModule]
+  exports: [CommonModule],
+  providers: [provideTranslateService()]
 })
 export class ComicFileModule {}

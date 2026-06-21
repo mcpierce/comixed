@@ -26,7 +26,8 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { UserRouting } from './user.routing';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { CoreModule } from '@app/core/core.module';
 import { MatCardModule } from '@angular/material/card';
@@ -35,13 +36,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { UserService } from '@app/user/services/user.service';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GravatarModule } from 'ngx-gravatar';
-import { UserCardComponent } from './components/user-card/user-card.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { EditAccountBarComponent } from './components/edit-account-bar/edit-account-bar.component';
 import { MatSelectModule } from '@angular/material/select';
@@ -59,7 +59,6 @@ import { ReadComicBooksEffects } from '@app/user/effects/read-comic-books-effect
     CommonModule,
     CoreModule,
     UserRouting,
-    TranslateModule.forRoot(),
     StoreModule.forFeature(initialUserAccountFeature),
     StoreModule.forFeature(userFeature),
     StoreModule.forFeature(manageUsersFeature),
@@ -83,10 +82,13 @@ import { ReadComicBooksEffects } from '@app/user/effects/read-comic-books-effect
     MatToolbarModule,
     MatSelectModule,
     LoginPageComponent,
-    UserCardComponent,
     EditAccountBarComponent,
     CreateAdminPageComponent
   ],
-  providers: [UserService, provideHttpClient(withInterceptorsFromDi())]
+  providers: [
+    UserService,
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
+    provideTranslateService()
+  ]
 })
 export class UserModule {}

@@ -24,7 +24,7 @@ import {
   MatDialogRef
 } from '@angular/material/dialog';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { MatMenuModule } from '@angular/material/menu';
@@ -78,7 +78,7 @@ describe('ComicDetailListDialogComponent', () => {
           }
         ]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatDialogModule,
         MatMenuModule,
         MatFormFieldModule,

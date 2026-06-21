@@ -47,19 +47,28 @@
       <h3>
         {{
           "scraping.current-comic.title"
-            | translate: { count: multiBookScrapingState?.totalComics }
+            | translate
+              : {
+                  count: $safeNavigationMigration(
+                    multiBookScrapingState?.totalComics
+                  )
+                }
         }}
       </h3>
       <mat-card>
         <mat-card-title
           class="cx-text-nowrap cx-align-content-center"
-          [matTooltip]="currentComicBook?.detail | comicTitle"
+          [matTooltip]="
+            $safeNavigationMigration(currentComicBook?.detail) | comicTitle
+          "
         >
-          {{ currentComicBook?.detail | comicTitle }}
+          {{ $safeNavigationMigration(currentComicBook?.detail) | comicTitle }}
         </mat-card-title>
         <mat-card-subtitle
           class="cx-text-nowrap cx-align-content-center"
-          [matTooltip]="currentComicBook?.baseFilename"
+          [matTooltip]="
+            $safeNavigationMigration(currentComicBook?.baseFilename)
+          "
         >
           {{ currentComicBook?.baseFilename }}
         </mat-card-subtitle>

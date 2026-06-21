@@ -31,7 +31,8 @@ import {
   HttpRequest,
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import {
   HTTP_AUTHORIZATION_HEADER,
@@ -76,7 +77,7 @@ describe('HttpInterceptor', () => {
           }
         },
         HttpInterceptor,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

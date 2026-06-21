@@ -73,7 +73,8 @@ import { CheckForAdminResponse } from '@app/user/models/net/check-for-admin-resp
 import {
   HttpResponse,
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { CreateAccountRequest } from '@app/user/models/net/create-account-request';
 import { CreateUserAccountRequest } from '@app/user/models/net/create-user-account-request';
@@ -126,7 +127,7 @@ describe('UserService', () => {
             subscribe: jasmine.createSpy('WebSocketService.subscribe()')
           }
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

@@ -84,7 +84,7 @@ describe('CollectionListComponent', () => {
         ReactiveFormsModule,
         RouterModule.forRoot([]),
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatTableModule,
         MatSortModule,
         MatToolbarModule,

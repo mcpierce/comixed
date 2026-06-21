@@ -65,7 +65,7 @@ describe('EditAccountBarComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         GravatarModule,
         MatDialogModule,
         MatIconModule,

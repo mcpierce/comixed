@@ -2,7 +2,10 @@
   @if (!!page) {
     <mat-card-title>{{ page?.filename }}</mat-card-title>
     <mat-card-subtitle>
-      {{ "comic-page.text." + page?.pageType | translate }}
+      {{
+        "comic-page.text." + $safeNavigationMigration(page?.pageType)
+          | translate
+      }}
     </mat-card-subtitle>
   }
   <mat-card-content>

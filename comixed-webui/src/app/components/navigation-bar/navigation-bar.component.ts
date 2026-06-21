@@ -16,7 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { User } from '@app/user/models/user';
 import { LoggerLevel, LoggerService } from '@angular-ru/cdk/logger';
 import { Router, RouterLinkActive } from '@angular/router';
@@ -60,6 +67,7 @@ import { DatePipe } from '@angular/common';
   selector: 'cx-navigation-bar',
   templateUrl: './navigation-bar.component.html',
   styleUrls: ['./navigation-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbar,
     MatIconButton,

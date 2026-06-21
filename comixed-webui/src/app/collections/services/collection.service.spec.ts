@@ -36,7 +36,8 @@ import { LoadCollectionEntriesRequest } from '@app/collections/models/net/load-c
 import { LoadCollectionEntriesResponse } from '@app/collections/models/net/load-collection-entries-response';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 import { ComicTagType } from '@app/comic-books/models/comic-tag-type';
 
@@ -63,7 +64,7 @@ describe('CollectionService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

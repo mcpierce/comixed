@@ -33,7 +33,7 @@ import {
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { AlertService } from '@app/core/services/alert.service';
 import { SeriesService } from '@app/collections/services/series.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { LoadSeriesListResponse } from '@app/collections/models/net/load-series-list-response';
 import {
   loadSeriesDetail,
@@ -68,7 +68,7 @@ describe('SeriesEffects', () => {
     TestBed.configureTestingModule({
       imports: [
         LoggerModule.forRoot(),
-        TranslateModule.forRoot(),
+        provideTranslateService(),
         MatSnackBarModule
       ],
       providers: [

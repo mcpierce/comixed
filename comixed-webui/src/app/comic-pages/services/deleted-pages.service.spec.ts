@@ -34,7 +34,8 @@ import { LOAD_ALL_DELETED_PAGES_URL } from '@app/comic-pages/comic-pages.constan
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import {
   provideHttpClient,
-  withInterceptorsFromDi
+  withInterceptorsFromDi,
+  withXhr
 } from '@angular/common/http';
 
 describe('DeletedPagesService', () => {
@@ -52,7 +53,7 @@ describe('DeletedPagesService', () => {
     TestBed.configureTestingModule({
       imports: [LoggerModule.forRoot()],
       providers: [
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
         provideHttpClientTesting()
       ]
     });

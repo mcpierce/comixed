@@ -21,7 +21,8 @@ import {
   EventEmitter,
   inject,
   OnDestroy,
-  Output
+  Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { LoggerService } from '@angular-ru/cdk/logger';
@@ -32,12 +33,13 @@ import { MatFormField, MatPrefix } from '@angular/material/form-field';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'cx-filter-text-form',
   templateUrl: './filter-text-form.component.html',
   styleUrl: './filter-text-form.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     ReactiveFormsModule,
     MatFormField,

@@ -23,7 +23,11 @@
             queryParameterService.onCoverYearChanged($event.value)
           "
           formControlName="coverYear"
-          [disabled]="queryParameterService.filterText$.value?.length > 0"
+          [disabled]="
+            $safeNavigationMigration(
+              queryParameterService.filterText$.value?.length
+            ) > 0
+          "
         >
           @for (option of displayableCoverYears; track option) {
             <mat-option [value]="option.value">
@@ -39,7 +43,11 @@
             queryParameterService.onCoverMonthChanged($event.value)
           "
           formControlName="coverMonth"
-          [disabled]="queryParameterService.filterText$.value?.length > 0"
+          [disabled]="
+            $safeNavigationMigration(
+              queryParameterService.filterText$.value?.length
+            ) > 0
+          "
         >
           @for (option of displayableCoverMonths; track option) {
             <mat-option [value]="option.value">
@@ -55,7 +63,11 @@
             queryParameterService.onArchiveTypeChanged($event.value)
           "
           formControlName="archiveType"
-          [disabled]="queryParameterService.filterText$.value?.length > 0"
+          [disabled]="
+            $safeNavigationMigration(
+              queryParameterService.filterText$.value?.length
+            ) > 0
+          "
         >
           @for (option of archiveTypeOptions; track option) {
             <mat-option [value]="option.value">
@@ -71,7 +83,11 @@
             queryParameterService.onComicTypeChanged($event.value)
           "
           formControlName="comicType"
-          [disabled]="queryParameterService.filterText$.value?.length > 0"
+          [disabled]="
+            $safeNavigationMigration(
+              queryParameterService.filterText$.value?.length
+            ) > 0
+          "
         >
           @for (option of comicTypeOptions; track option) {
             <mat-option [value]="option.value">
@@ -87,7 +103,11 @@
             queryParameterService.onPageCountChange($event.value)
           "
           formControlName="pageCount"
-          [disabled]="queryParameterService.filterText$.value?.length > 0"
+          [disabled]="
+            $safeNavigationMigration(
+              queryParameterService.filterText$.value?.length
+            ) > 0
+          "
         >
           @for (option of pageCountOptions; track option) {
             <mat-option [value]="option.value">

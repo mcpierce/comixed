@@ -19,7 +19,7 @@
 import { TestBed } from '@angular/core/testing';
 import { TitleService } from './title.service';
 import { LoggerModule } from '@angular-ru/cdk/logger';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, TranslateModule } from '@ngx-translate/core';
 import { Title } from '@angular/platform-browser';
 
 describe('TitleService', () => {
@@ -30,7 +30,7 @@ describe('TitleService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [LoggerModule.forRoot(), TranslateModule.forRoot()]
+      imports: [LoggerModule.forRoot(), provideTranslateService()]
     });
 
     service = TestBed.inject(TitleService);

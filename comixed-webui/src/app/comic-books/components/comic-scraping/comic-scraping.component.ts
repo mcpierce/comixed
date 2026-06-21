@@ -24,7 +24,8 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  Output
+  Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { ComicBook } from '@app/comic-books/models/comic-book';
 import { Store } from '@ngrx/store';
@@ -84,6 +85,7 @@ import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
   selector: 'cx-comic-scraping',
   templateUrl: './comic-scraping.component.html',
   styleUrls: ['./comic-scraping.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     CommonModule,
     MatToolbar,
