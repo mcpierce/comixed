@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="006_2680_added_comic_data_table.xml" author="mcpierce">
+
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="comic_data"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="comic_data">
+            <column name="comic_data_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="filename" type="varchar(1024)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="archive_type" type="varchar(4)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="comic_state" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="missing" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="file_contents_loaded" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="update_metadata" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="batch_metadata_update" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="batch_scraping" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="organizing" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="target_archive_type" type="varchar(4)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="rename_pages" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="delete_pages" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="edit_details" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="purging" type="bool">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="last_modified_on" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="comic_data" indexName="comic_data_filename_idx">
+            <column name="filename"/>
+        </createIndex>
+
+        <createIndex tableName="comic_data" indexName="comic_data_missing_idx">
+            <column name="missing"/>
+        </createIndex>
+
+        <createIndex tableName="comic_data" indexName="comic_data_comic_state_idx">
+            <column name="comic_state"/>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>
