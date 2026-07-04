@@ -27,6 +27,7 @@ import org.comixedproject.batch.comicbooks.writers.ProcessUnhashedComicsWriter;
 import org.comixedproject.model.comicbooks.ComicBook;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.job.parameters.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.Step;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -47,8 +48,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ProcessUnhashedComicsConfiguration {
   public static final String PROCESS_UNHASHED_COMICS_JOB = "processUnhashedComicsJob";
   public static final String PROCESS_UNHASHED_COMICS_STEP = "processUnhashedComicsStep";
-  public static final String JOB_PROCESS_UNHASHED_COMICS_STARTED =
-      "job.process-unhashed-comics.started";
 
   @Value("${comixed.batch.load-page-hashes.chunk-size:10}")
   private int chunkSize;
@@ -60,6 +59,7 @@ public class ProcessUnhashedComicsConfiguration {
       @Qualifier(PROCESS_UNHASHED_COMICS_STEP) final Step processUnhashedComicsStep) {
     return new JobBuilder(PROCESS_UNHASHED_COMICS_JOB, jobRepository)
         .listener(listener)
+        .incrementer(new RunIdIncrementer())
         .start(processUnhashedComicsStep)
         .build();
   }
