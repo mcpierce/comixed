@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { ComicState } from '@app/comic-books/models/comic-state';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import {
@@ -29,7 +29,7 @@ import { ConfirmationService } from '@tragically-slick/confirmation';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { updateComicBook } from '@app/comic-books/actions/comic-book.actions';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, filter, tap } from 'rxjs';
 import { SelectionOption } from '@app/core/models/ui/selection-option';
 import { Imprint } from '@app/comic-books/models/imprint';
 import { selectImprints } from '@app/comic-books/selectors/imprint-list.selectors';
@@ -79,14 +79,13 @@ import { DisplayableComic } from '@app/comic-books/models/displayable-comic';
     TranslateModule
   ]
 })
-export class ComicDetailEditComponent implements OnInit, OnDestroy {
+export class ComicDetailEditComponent implements OnInit {
   @Input() isAdmin = false;
 
   comicBookForm: UntypedFormGroup;
 
-  imprintSubscription: Subscription;
-  imprintOptions: SelectionOption<Imprint>[] = [];
-  imprints: Imprint[];
+  imprints$ = new BehaviorSubject<Imprint[]>([]);
+  imprintOptions$ = new BehaviorSubject<SelectionOption<Imprint>[]>([]);
   readonly comicTypeOptions = COMIC_TYPE_SELECTION_OPTIONS;
 
   logger = inject(LoggerService);
@@ -116,25 +115,31 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
       addedToLibrary: [''],
       notes: ['']
     });
-    this.imprintSubscription = this.store
+    this.store
       .select(selectImprints)
-      .subscribe(imprints => {
-        this.logger.trace('Loading imprint options');
-        this.imprints = imprints;
-        this.imprintOptions = [
-          {
-            label: '---',
-            value: { imprintId: -1, name: '', publisher: '' }
-          } as SelectionOption<Imprint>
-        ].concat(
-          imprints.map(imprint => {
-            return {
-              label: imprint.name,
-              value: imprint
-            } as SelectionOption<Imprint>;
-          })
-        );
-      });
+      .pipe(
+        filter(imprints => !!imprints),
+        tap(imprints => {
+          this.imprints$.next(imprints);
+          this.doLoadImprint();
+          this.imprintOptions$.next(
+            [
+              {
+                label: '---',
+                value: null
+              } as SelectionOption<Imprint>
+            ].concat(
+              imprints.map(imprint => {
+                return {
+                  label: imprint.name,
+                  value: imprint
+                } as SelectionOption<Imprint>;
+              })
+            )
+          );
+        })
+      )
+      .subscribe();
   }
 
   private _comicBook: DisplayableComic;
@@ -164,7 +169,7 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
     this.comicBookForm.controls.series.setValue(comic.series);
     this.comicBookForm.controls.volume.setValue(comic.volume);
     this.comicBookForm.controls.issueNumber.setValue(comic.issueNumber);
-    this.comicBookForm.controls.imprint.setValue(comic.imprint);
+    this.doLoadImprint();
     this.comicBookForm.controls.sortName.setValue(comic.sortName);
     this.comicBookForm.controls.title.setValue(comic.title);
     if (!!comic.coverDate) {
@@ -193,11 +198,6 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
     return !!this.comicBook && this.comicBook.comicState === ComicState.CHANGED;
   }
 
-  ngOnDestroy(): void {
-    this.logger.trace('Unsubscribing from imprint updates');
-    this.imprintSubscription.unsubscribe();
-  }
-
   ngOnInit(): void {
     this.logger.trace('Loading imprints');
     this.store.dispatch(loadImprints());
@@ -221,7 +221,7 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
             series: this.comicBookForm.controls.series.value,
             volume: this.comicBookForm.controls.volume.value,
             issueNumber: this.comicBookForm.controls.issueNumber.value,
-            imprint: this.comicBookForm.controls.imprint.value,
+            imprint: this.comicBookForm.controls.imprint.value?.name || '',
             sortName: this.comicBookForm.controls.sortName.value,
             title: this.comicBookForm.controls.title.value,
             storeDate: this.comicBookForm.controls.storeDate.value?.getTime(),
@@ -237,17 +237,11 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
     this.comicBook = this._comicBook;
   }
 
-  onImprintSelected(name: string): void {
-    this.logger.trace('Finding imprint');
-    const imprint = this.imprints.find(entry => entry.name === name);
-    this.logger.trace('Setting publisher name');
-    this.comicBookForm.controls.publisher.setValue(
-      imprint?.publisher || this.comicBook.publisher
-    );
+  onImprintSelected(imprint: Imprint): void {
+    this.logger.info('Setting publisher name from imprint:', imprint);
+    this.comicBookForm.controls.publisher.setValue(imprint?.publisher || '');
     this.logger.trace('Setting imprint name');
-    this.comicBookForm.controls.imprint.setValue(
-      imprint?.name || this.comicBook.imprint
-    );
+    this.comicBookForm.controls.imprint.setValue(imprint || null);
   }
 
   onComicTypeSelected(comicType: ComicType) {
@@ -257,5 +251,13 @@ export class ComicDetailEditComponent implements OnInit, OnDestroy {
 
   onCopyFilenameToClipboard(): void {
     this.clipboard.copy(this.comicBook.filename);
+  }
+
+  private doLoadImprint() {
+    const imprint = this.imprints$.value.find(
+      entry => entry.name === this._comicBook?.imprint
+    );
+    console.log('*** imprint:', imprint);
+    this.comicBookForm.controls.imprint.setValue(imprint);
   }
 }

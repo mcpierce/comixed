@@ -18,6 +18,16 @@
 
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { USER_FEATURE_KEY, UserState } from '../reducers/user.reducer';
+import {
+  getPageSize,
+  getUserPreference,
+  isAdmin
+} from '@app/user/user.functions';
+import {
+  MATCH_PUBLISHER_PREFERENCE,
+  MAXIMUM_SCRAPING_RECORDS_PREFERENCE,
+  SKIP_CACHE_PREFERENCE
+} from '@app/library/library.constants';
 
 /** Selects for the feature state. */
 export const selectUserState =
@@ -25,3 +35,53 @@ export const selectUserState =
 
 /** Selects for the user. */
 export const selectUser = createSelector(selectUserState, state => state.user);
+
+/** Selects if the user is an admin. */
+export const selectUserIsAdmin = createSelector(selectUserState, state => {
+  return isAdmin(state?.user);
+});
+
+/** Selects the user's preferred page size. */
+export const selectUserPageSize = createSelector(selectUserState, state => {
+  return getPageSize(state?.user);
+});
+
+/** Selects the user's skip cache preference. */
+export const selectUserSkipCache = createSelector(selectUserState, state => {
+  return (
+    getUserPreference(
+      state?.user?.preferences,
+      SKIP_CACHE_PREFERENCE,
+      `${false}`
+    ) === `${true}`
+  );
+});
+
+/** Selects the user's match publisher preference. */
+export const selectUserMatchPublisher = createSelector(
+  selectUserState,
+  state => {
+    return (
+      getUserPreference(
+        state?.user?.preferences,
+        MATCH_PUBLISHER_PREFERENCE,
+        `${false}`
+      ) === `${true}`
+    );
+  }
+);
+
+/** Selects the user's match publisher preference. */
+export const selectUserMaximumRecords = createSelector(
+  selectUserState,
+  state => {
+    return parseInt(
+      getUserPreference(
+        state?.user?.preferences,
+        MAXIMUM_SCRAPING_RECORDS_PREFERENCE,
+        '0'
+      ),
+      10
+    );
+  }
+);
