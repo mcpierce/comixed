@@ -17,13 +17,13 @@
  */
 
 export interface FilenameScrapingRule {
-  filenameScrapingRuleId: number;
+  filenameScrapingRuleId: number | null;
   name: string;
   rule: string;
-  priority: number;
-  seriesPosition: number;
-  volumePosition: number;
-  issueNumberPosition: number;
-  coverDatePosition: number;
-  dateFormat: string;
+  priority: number | null;
+  seriesPosition: number | null;
+  volumePosition: number | null;
+  issueNumberPosition: number | null;
+  coverDatePosition: number | null;
+  dateFormat: string | null;
 }

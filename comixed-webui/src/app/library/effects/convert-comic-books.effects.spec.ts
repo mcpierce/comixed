@@ -37,7 +37,7 @@ import {
 import { hot } from 'jasmine-marbles';
 
 describe('ConvertComicBooksEffects', () => {
-  const ID = DISPLAYABLE_COMIC_1.comicBookId;
+  const ID = DISPLAYABLE_COMIC_1.comicBookId!!;
   const ARCHIVE_TYPE = ArchiveType.CBZ;
 
   let actions$: Observable<any>;

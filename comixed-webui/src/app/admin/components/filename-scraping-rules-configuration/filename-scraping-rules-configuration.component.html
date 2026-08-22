@@ -2,7 +2,7 @@
   <input
     type="file"
     class="cx-file-input"
-    (change)="onFileSelected($event.target.files[0])"
+    (change)="onFileSelected($event.target?.files)"
     #fileUpload
   />
 

@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -12,7 +11,7 @@
     "target": "ES2022",
     "module": "es2020",
     "paths": {
-      "@app/*": ["app/*"]
+      "@app/*": ["./src/app/*"]
     },
     "useDefineForClassFields": false
   }

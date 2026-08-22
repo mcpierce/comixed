@@ -41,7 +41,7 @@ describe('ComicBookSelection Selectors', () => {
     COMIC_BOOK_4,
     COMIC_BOOK_5
   ];
-  const IDS = COMIC_BOOKS.map(comicBook => comicBook.comicBookId);
+  const IDS = COMIC_BOOKS.map(comicBook => comicBook.comicBookId!!);
 
   let state: ComicBookSelectionState;
 

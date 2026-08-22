@@ -173,7 +173,7 @@ describe('ReadingListDetailPageComponent', () => {
           provide: ActivatedRoute,
           useValue: {
             params: new BehaviorSubject<{}>({
-              id: READING_LIST.readingListId
+              id: READING_LIST.readingListId!!
             }),
             queryParams: new BehaviorSubject<{}>({}),
             snapshot: {} as ActivatedRouteSnapshot
@@ -244,19 +244,19 @@ describe('ReadingListDetailPageComponent', () => {
     beforeEach(() => {
       component.readingListId$.next(-1);
       (activatedRoute.params as BehaviorSubject<{}>).next({
-        id: `${READING_LIST.readingListId}`
+        id: `${READING_LIST.readingListId!!}`
       });
     });
 
     it('sets the reading list id', () => {
       expect(component.readingListId$.value).toEqual(
-        READING_LIST.readingListId
+        READING_LIST.readingListId!!
       );
     });
 
     it('fires an action', () => {
       expect(store.dispatch).toHaveBeenCalledWith(
-        loadReadingList({ id: READING_LIST.readingListId })
+        loadReadingList({ id: READING_LIST.readingListId!! })
       );
     });
   });
@@ -295,14 +295,14 @@ describe('ReadingListDetailPageComponent', () => {
         expect(router.navigate).toHaveBeenCalledWith([
           '/lists',
           'reading',
-          READING_LIST.readingListId
+          READING_LIST.readingListId!!
         ]);
       });
     });
 
     describe('when loading an existing reading list', () => {
       beforeEach(() => {
-        component.readingListId$.next(READING_LIST.readingListId);
+        component.readingListId$.next(READING_LIST.readingListId!!);
         dispatchSpy.calls.reset();
         store.setState({
           ...initialState,
@@ -333,11 +333,11 @@ describe('ReadingListDetailPageComponent', () => {
       it('loads the comics to display', () => {
         expect(store.dispatch).toHaveBeenCalledWith(
           loadComicsForReadingList({
-            readingListId: READING_LIST.readingListId,
+            readingListId: READING_LIST.readingListId!!,
             pageSize: PAGE_SIZE_DEFAULT,
             pageIndex: 0,
-            sortBy: undefined,
-            sortDirection: undefined
+            sortBy: null,
+            sortDirection: null
           })
         );
       });
@@ -368,10 +368,10 @@ describe('ReadingListDetailPageComponent', () => {
     beforeEach(() => {
       component.readingList = READING_LIST;
       component.readingListForm.controls.name.setValue(
-        READING_LIST.name.substr(1)
+        READING_LIST.name.slice(1)
       );
       component.readingListForm.controls.summary.setValue(
-        READING_LIST.summary.substr(1)
+        READING_LIST.summary.slice(1)
       );
       spyOn(confirmationService, 'confirm').and.callFake(
         (confirmation: Confirmation) => confirmation.confirm()
@@ -397,7 +397,7 @@ describe('ReadingListDetailPageComponent', () => {
   });
 
   describe('removing selected entries', () => {
-    const SELECTED_IDS = COMIC_LIST.map(entry => entry.comicDetailId);
+    const SELECTED_IDS = COMIC_LIST.map(entry => entry.comicDetailId!!);
     beforeEach(() => {
       component.readingList = READING_LIST;
       component.selectedIds$.next(SELECTED_IDS);
@@ -423,7 +423,7 @@ describe('ReadingListDetailPageComponent', () => {
   describe('when messaging is started', () => {
     const EMAIL = 'reader@comixedproject.org';
     const LIST_UPDATES = interpolate(READING_LIST_UPDATES_TOPIC, {
-      id: READING_LIST.readingListId,
+      id: READING_LIST.readingListId!!,
       email: EMAIL
     });
     const LIST_REMOVALS = interpolate(READING_LIST_REMOVAL_TOPIC, {
@@ -432,12 +432,12 @@ describe('ReadingListDetailPageComponent', () => {
     let readingListRemovalSubscription: any;
 
     beforeEach(() => {
-      component.readingListId$.next(READING_LIST.readingListId);
+      component.readingListId$.next(READING_LIST.readingListId!!);
       component.email$.next(EMAIL);
       webSocketService.subscribe
         .withArgs(LIST_UPDATES, jasmine.anything())
         .and.callFake((topic, callback) => {
-          callback(READING_LIST);
+          callback(READING_LIST as any);
           return {} as Subscription;
         });
       webSocketService.subscribe
@@ -480,7 +480,7 @@ describe('ReadingListDetailPageComponent', () => {
     it('ignores when a different list was removed', () => {
       readingListRemovalSubscription({
         ...READING_LIST,
-        readingListId: READING_LIST.readingListId + 1
+        readingListId: READING_LIST.readingListId!! + 1
       });
       expect(router.navigateByUrl).not.toHaveBeenCalled();
     });

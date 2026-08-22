@@ -19,7 +19,7 @@
         <mat-select
           id="plugin-language"
           formControlName="language"
-          [disabled]="busy$ | async"
+          [disabled]="(busy$ | async) || false"
         >
           @for (option of pluginLanguageList$ | async; track option) {
             <mat-option [value]="option.name">

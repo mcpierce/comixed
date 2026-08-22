@@ -32,6 +32,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -56,7 +57,7 @@ import { tap } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
-  selector: 'cx-duplicate-comics-page',
+  selector: 'app-duplicate-comics-page',
   imports: [
     AsyncPipe,
     DecimalPipe,
@@ -74,7 +75,8 @@ import { BehaviorSubject } from 'rxjs';
     MatTable,
     TranslatePipe,
     CommonModule,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatNoDataRow
   ],
   templateUrl: './duplicate-comics-list-page.component.html',
   styleUrl: './duplicate-comics-list-page.component.scss'

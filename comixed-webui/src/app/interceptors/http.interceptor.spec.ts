@@ -86,7 +86,7 @@ describe('HttpInterceptor', () => {
   describe('when no authentication token is present', () => {
     let request: HttpRequest<any>;
     let requestClone: HttpRequest<any>;
-    const response = new BehaviorSubject<HttpEvent<any>>(null);
+    const response = new BehaviorSubject<HttpEvent<any> | null>(null);
 
     beforeEach(() => {
       request = new HttpRequest<any>('POST', '', {}, {});
@@ -111,9 +111,9 @@ describe('HttpInterceptor', () => {
   });
 
   describe('when an authentication token is present', () => {
-    let request: HttpRequest<any>;
-    let requestClone: HttpRequest<any>;
-    const response = new BehaviorSubject<HttpEvent<any>>(null);
+    let request: HttpRequest<any> | null;
+    let requestClone: HttpRequest<any> | null;
+    const response = new BehaviorSubject<HttpEvent<any> | null>(null);
 
     beforeEach(() => {
       request = new HttpRequest<any>('POST', '', {}, {});
@@ -127,13 +127,13 @@ describe('HttpInterceptor', () => {
     });
 
     it('attaches the token as a request header', () => {
-      expect(requestClone.headers.get(HTTP_AUTHORIZATION_HEADER)).toEqual(
+      expect(requestClone?.headers.get(HTTP_AUTHORIZATION_HEADER)).toEqual(
         `Bearer ${AUTHENTICATION_TOKEN}`
       );
     });
 
     it('attaches a requested with header', () => {
-      expect(requestClone.headers.get(HTTP_REQUESTED_WITH_HEADER)).toEqual(
+      expect(requestClone?.headers.get(HTTP_REQUESTED_WITH_HEADER)).toEqual(
         HTTP_XML_REQUEST
       );
     });

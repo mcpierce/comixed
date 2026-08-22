@@ -22,8 +22,8 @@ import { FeatureFlag } from '@app/admin/models/feature-flag';
 export function getConfigurationOption(
   options: ConfigurationOption[],
   name: string,
-  defaultValue: string = null
-): string {
+  defaultValue: string | null = null
+): string | null {
   const option = options.find(entry => entry.name === name);
 
   return option?.value || defaultValue;

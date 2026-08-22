@@ -206,12 +206,12 @@ describe('LibraryPageComponent', () => {
               year: null,
               month: null
             }),
-            archiveType$: new BehaviorSubject<ArchiveType>(null),
-            filterText$: new BehaviorSubject<string>(null),
-            comicType$: new BehaviorSubject<ComicType>(null),
+            archiveType$: new BehaviorSubject<ArchiveType | null>(null),
+            filterText$: new BehaviorSubject<string | null>(null),
+            comicType$: new BehaviorSubject<ComicType | null>(null),
             pageCount$: new BehaviorSubject<number | null>(null),
-            sortBy$: new BehaviorSubject<ComicType>(null),
-            sortDirection$: new BehaviorSubject<ComicType>(null),
+            sortBy$: new BehaviorSubject<ComicType | null>(null),
+            sortDirection$: new BehaviorSubject<ComicType | null>(null),
             updateQueryParam: jasmine.createSpy(
               'QueryParameterService.updateQueryParam()'
             )

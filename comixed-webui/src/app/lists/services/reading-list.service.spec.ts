@@ -137,12 +137,12 @@ describe('ReadingListService', () => {
 
   it('can load a single reading list', () => {
     service
-      .loadOne({ id: READING_LIST.readingListId })
+      .loadOne({ id: READING_LIST.readingListId!! })
       .subscribe(response => expect(response).toEqual(READING_LIST));
 
     const req = httpMock.expectOne(
       interpolate(LOAD_READING_LIST_URL, {
-        id: READING_LIST.readingListId
+        id: READING_LIST.readingListId!!
       })
     );
     expect(req.request.method).toEqual('GET');
@@ -166,7 +166,7 @@ describe('ReadingListService', () => {
       .subscribe(response => expect(response).toEqual(READING_LIST));
 
     const req = httpMock.expectOne(
-      interpolate(UPDATE_READING_LIST, { id: READING_LIST.readingListId })
+      interpolate(UPDATE_READING_LIST, { id: READING_LIST.readingListId!! })
     );
     expect(req.request.method).toEqual('PUT');
     expect(req.request.body).toEqual(READING_LIST);
@@ -183,7 +183,7 @@ describe('ReadingListService', () => {
 
     const req = httpMock.expectOne(
       interpolate(ADD_SELECTED_COMIC_BOOKS_TO_READING_LIST_URL, {
-        id: READING_LIST.readingListId
+        id: READING_LIST.readingListId!!
       })
     );
     expect(req.request.method).toEqual('PUT');
@@ -200,7 +200,7 @@ describe('ReadingListService', () => {
 
     const req = httpMock.expectOne(
       interpolate(REMOVE_SELECTED_COMIC_BOOKS_FROM_READING_LIST_URL, {
-        id: READING_LIST.readingListId
+        id: READING_LIST.readingListId!!
       })
     );
     expect(req.request.method).toEqual('DELETE');
@@ -213,7 +213,9 @@ describe('ReadingListService', () => {
       .subscribe(response => expect(response).toEqual(DOWNLOAD_DOCUMENT));
 
     const req = httpMock.expectOne(
-      interpolate(DOWNLOAD_READING_LIST_URL, { id: READING_LIST.readingListId })
+      interpolate(DOWNLOAD_READING_LIST_URL, {
+        id: READING_LIST.readingListId!!
+      })
     );
     expect(req.request.method).toEqual('GET');
     req.flush(DOWNLOAD_DOCUMENT);
@@ -256,13 +258,13 @@ describe('ReadingListService', () => {
       webSocketService.subscribe
         .withArgs(LISTS_UPDATE_TOPIC, jasmine.anything())
         .and.callFake((topic, callback) => {
-          callback(READING_LIST);
+          callback(READING_LIST as any);
           return {} as Subscription;
         });
       webSocketService.subscribe
         .withArgs(LISTS_REMOVED_UPDATE, jasmine.anything())
         .and.callFake((topic, callback) => {
-          callback(READING_LIST);
+          callback(READING_LIST as any);
           return {} as Subscription;
         });
       store.setState({
