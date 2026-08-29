@@ -45,10 +45,6 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="create_metadata_source" type="boolean" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-
             <column name="batch_metadata_update" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
@@ -73,10 +69,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <createIndex tableName="comic_books_v4" indexName="comic_books_v4_create_metadata_source_idx">
-            <column name="create_metadata_source"/>
-        </createIndex>
 
         <createIndex tableName="comic_books_v4" indexName="comic_books_v4_last_modified_on_idx">
             <column name="last_modified_on"/>

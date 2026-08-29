@@ -330,18 +330,6 @@ public class ComicBookService {
   }
 
   /**
-   * Retrieves unprocessed comics that have the create metadata flag set.
-   *
-   * @param chunkSize the number of comics to return
-   * @return the comics
-   */
-  public List<ComicBook> findComicsWithCreateMetadataFlagSet(final int chunkSize) {
-    log.trace("Loading unprocessed comics that need to have their contents loaded");
-    return this.comicBookRepository.findUnprocessedComicsWithCreateMetadataFlagSet(
-        PageRequest.of(0, chunkSize));
-  }
-
-  /**
    * Retrieves unprocessed comics that are waiting to have their contents loaded.
    *
    * @return the comics

@@ -476,25 +476,6 @@ class ComicBookServiceTest {
   }
 
   @Test
-  void findComicsWithCreateMetadataFlagSet() {
-    when(comicBookRepository.findUnprocessedComicsWithCreateMetadataFlagSet(
-            pageableCaptor.capture()))
-        .thenReturn(comicBookList);
-
-    final List<ComicBook> result = service.findComicsWithCreateMetadataFlagSet(TEST_MAXIMUM_COMICS);
-
-    assertNotNull(result);
-    assertSame(comicBookList, result);
-
-    final Pageable pageable = pageableCaptor.getValue();
-    assertNotNull(pageable);
-    assertEquals(0, pageable.getPageNumber());
-    assertEquals(TEST_MAXIMUM_COMICS, pageable.getPageSize());
-
-    verify(comicBookRepository).findUnprocessedComicsWithCreateMetadataFlagSet(pageable);
-  }
-
-  @Test
   void findComicsWithContentToLoad() {
     when(comicBookRepository.findComicsWithContentToLoad(pageableCaptor.capture()))
         .thenReturn(comicBookList);
