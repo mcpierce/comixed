@@ -27,13 +27,10 @@ import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang.math.RandomUtils;
 import org.comixedproject.messaging.PublishingException;
-import org.comixedproject.messaging.comicbooks.PublishComicBookSelectionStateAction;
+import org.comixedproject.messaging.comicbooks.PublishComicSelectionStateAction;
 import org.comixedproject.model.archives.ArchiveType;
-import org.comixedproject.model.comicbooks.ComicDetail;
-import org.comixedproject.model.comicbooks.ComicState;
-import org.comixedproject.model.comicbooks.ComicTagType;
-import org.comixedproject.model.comicbooks.ComicType;
-import org.comixedproject.model.messaging.comicbooks.ComicBookSelectionEvent;
+import org.comixedproject.model.comicbooks.*;
+import org.comixedproject.model.messaging.comicbooks.ComicSelectionEvent;
 import org.comixedproject.model.user.ComiXedUser;
 import org.comixedproject.service.library.DisplayableComicService;
 import org.comixedproject.service.user.ComiXedUserException;
@@ -48,7 +45,7 @@ import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class ComicSelectionServiceTest {
-  private static final Long TEST_COMIC_BOOK_ID = 717L;
+  private static final Long TEST_COMIC_ID = 717L;
   private static final Object TEST_ENCODED_SELECTIONS = "The encoded selections";
   private static final ComicTagType TEST_TAG_TYPE = ComicTagType.STORY;
   private static final String TEST_TAG_VALUE = "Age Of Ultron";
@@ -66,117 +63,117 @@ class ComicSelectionServiceTest {
 
   private final List<Long> selectedIds = new ArrayList<>();
   private final Set<Long> storedSelectedIds = new HashSet<>();
-  private final List<ComicDetail> comicDetailList = new ArrayList<>();
+  private final List<Comic> comicList = new ArrayList<>();
 
   @InjectMocks private ComicSelectionService service;
   @Mock private DisplayableComicService displayableComicService;
   @Mock private UserService userService;
   @Mock private ObjectMapper objectMapper;
-  @Mock private PublishComicBookSelectionStateAction publishComicBookSelectionStateAction;
-  @Mock private ComicDetail comicDetail;
+  @Mock private PublishComicSelectionStateAction publishComicSelectionStateAction;
+  @Mock private Comic comic;
   @Mock private ComiXedUser user;
 
   @Captor private ArgumentCaptor<ComicSelectionService.ListOfIds> idsArgumentCaptor;
-  @Captor private ArgumentCaptor<ComicBookSelectionEvent> eventArgumentCaptor;
+  @Captor private ArgumentCaptor<ComicSelectionEvent> eventArgumentCaptor;
 
   @BeforeEach
   void setUp() throws ComiXedUserException, PublishingException {
-    comicDetailList.add(comicDetail);
+    comicList.add(comic);
     Mockito.lenient().when(userService.findByEmail(Mockito.anyString())).thenReturn(user);
     Mockito.lenient()
         .doNothing()
-        .when(publishComicBookSelectionStateAction)
+        .when(publishComicSelectionStateAction)
         .publish(eventArgumentCaptor.capture());
   }
 
   @Test
   void addComicSelectionForUer_alreadySelected() throws PublishingException {
-    selectedIds.add(TEST_COMIC_BOOK_ID);
+    selectedIds.add(TEST_COMIC_ID);
 
-    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.never())
-        .publish(Mockito.any(ComicBookSelectionEvent.class));
+    Mockito.verify(publishComicSelectionStateAction, Mockito.never())
+        .publish(Mockito.any(ComicSelectionEvent.class));
   }
 
   @Test
   void addComicSelectionForUser() throws PublishingException {
     selectedIds.clear();
 
-    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
-    assertTrue(event.getComicBookIds().contains(TEST_COMIC_BOOK_ID));
+    assertTrue(event.getComicBookIds().contains(TEST_COMIC_ID));
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
   void addComicSelectionForUser_publishingEception() throws PublishingException {
     Mockito.doThrow(PublishingException.class)
-        .when(publishComicBookSelectionStateAction)
+        .when(publishComicSelectionStateAction)
         .publish(eventArgumentCaptor.capture());
 
     selectedIds.clear();
 
-    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.addComicSelectionForUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    assertTrue(selectedIds.contains(TEST_COMIC_BOOK_ID));
+    assertTrue(selectedIds.contains(TEST_COMIC_ID));
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
   void removeComicSelectionFromUser_notSelected() throws PublishingException {
     selectedIds.clear();
 
-    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.never())
-        .publish(Mockito.any(ComicBookSelectionEvent.class));
+    Mockito.verify(publishComicSelectionStateAction, Mockito.never())
+        .publish(Mockito.any(ComicSelectionEvent.class));
   }
 
   @Test
   void removeComicSelectionFromUser() throws PublishingException {
-    selectedIds.add(TEST_COMIC_BOOK_ID);
+    selectedIds.add(TEST_COMIC_ID);
 
-    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    assertFalse(selectedIds.contains(TEST_COMIC_BOOK_ID));
+    assertFalse(selectedIds.contains(TEST_COMIC_ID));
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
   void removeComicSelectionFromUser_publishingException() throws PublishingException {
     Mockito.doThrow(PublishingException.class)
-        .when(publishComicBookSelectionStateAction)
+        .when(publishComicSelectionStateAction)
         .publish(eventArgumentCaptor.capture());
 
-    selectedIds.add(TEST_COMIC_BOOK_ID);
+    selectedIds.add(TEST_COMIC_ID);
 
-    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_BOOK_ID);
+    service.removeComicSelectionFromUser(TEST_EMAIL, selectedIds, TEST_COMIC_ID);
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
-    assertFalse(event.getComicBookIds().contains(TEST_COMIC_BOOK_ID));
+    assertFalse(event.getComicBookIds().contains(TEST_COMIC_ID));
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
   void addingMultipleComics() throws PublishingException {
     final List<Long> comicIds = new ArrayList<>();
-    comicIds.add(TEST_COMIC_BOOK_ID);
+    comicIds.add(TEST_COMIC_ID);
 
     Mockito.when(
             displayableComicService.getIdsByFilter(
@@ -208,13 +205,13 @@ class ComicSelectionServiceTest {
         true);
 
     assertFalse(selectedIds.isEmpty());
-    assertTrue(selectedIds.contains(TEST_COMIC_BOOK_ID));
+    assertTrue(selectedIds.contains(TEST_COMIC_ID));
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(comicDetailList.size()))
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(comicList.size()))
         .publish(event);
 
     Mockito.verify(displayableComicService, Mockito.times(1))
@@ -233,8 +230,8 @@ class ComicSelectionServiceTest {
   @Test
   void removeMultipleComics() throws PublishingException {
     final List<Long> comicIds = new ArrayList<>();
-    comicIds.add(TEST_COMIC_BOOK_ID);
-    selectedIds.add(TEST_COMIC_BOOK_ID);
+    comicIds.add(TEST_COMIC_ID);
+    selectedIds.add(TEST_COMIC_ID);
 
     Mockito.when(
             displayableComicService.getIdsByFilter(
@@ -265,11 +262,11 @@ class ComicSelectionServiceTest {
 
     assertTrue(selectedIds.isEmpty());
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(comicDetailList.size()))
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(comicList.size()))
         .publish(event);
 
     Mockito.verify(displayableComicService, Mockito.times(1))
@@ -293,15 +290,15 @@ class ComicSelectionServiceTest {
 
     assertTrue(selectedIds.isEmpty());
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
-  void decodeSelections_withNull() throws ComicBookSelectionException {
+  void decodeSelections_withNull() throws ComicSelectionException {
     final List result = service.decodeSelections(null);
 
     assertNotNull(result);
@@ -314,14 +311,14 @@ class ComicSelectionServiceTest {
         .thenThrow(JacksonException.class);
 
     assertThrows(
-        ComicBookSelectionException.class, () -> service.decodeSelections(TEST_ENCODED_SELECTIONS));
+        ComicSelectionException.class, () -> service.decodeSelections(TEST_ENCODED_SELECTIONS));
   }
 
   @Test
-  void decodeSelections() throws ComicBookSelectionException, JacksonException {
+  void decodeSelections() throws ComicSelectionException, JacksonException {
     final ComicSelectionService.ListOfIds encodedIds =
         new ComicSelectionService.ListOfIds(storedSelectedIds);
-    storedSelectedIds.add(TEST_COMIC_BOOK_ID);
+    storedSelectedIds.add(TEST_COMIC_ID);
 
     Mockito.when(objectMapper.readValue(Mockito.anyString(), Mockito.any(Class.class)))
         .thenReturn(encodedIds);
@@ -330,14 +327,14 @@ class ComicSelectionServiceTest {
 
     assertNotNull(result);
     assertEquals(storedSelectedIds.size(), result.size());
-    assertEquals(TEST_COMIC_BOOK_ID, result.get(0));
+    assertEquals(TEST_COMIC_ID, result.get(0));
 
     Mockito.verify(objectMapper, Mockito.times(1))
         .readValue(TEST_ENCODED_SELECTIONS.toString(), ComicSelectionService.ListOfIds.class);
   }
 
   @Test
-  void encodeSelections() throws JacksonException, ComicBookSelectionException {
+  void encodeSelections() throws JacksonException, ComicSelectionException {
     Mockito.when(objectMapper.writeValueAsString(idsArgumentCaptor.capture()))
         .thenReturn(TEST_ENCODED_SELECTIONS.toString());
 
@@ -358,24 +355,24 @@ class ComicSelectionServiceTest {
     Mockito.when(objectMapper.writeValueAsString(idsArgumentCaptor.capture()))
         .thenThrow(JacksonException.class);
 
-    assertThrows(ComicBookSelectionException.class, () -> service.encodeSelections(selectedIds));
+    assertThrows(ComicSelectionException.class, () -> service.encodeSelections(selectedIds));
   }
 
   @Test
-  void publishSelections() throws ComicBookSelectionException, PublishingException {
+  void publishSelections() throws ComicSelectionException, PublishingException {
     service.publishSelections(TEST_EMAIL, selectedIds);
 
-    final ComicBookSelectionEvent event = eventArgumentCaptor.getValue();
+    final ComicSelectionEvent event = eventArgumentCaptor.getValue();
     assertSame(user, event.getUser());
     assertSame(selectedIds, event.getComicBookIds());
 
-    Mockito.verify(publishComicBookSelectionStateAction, Mockito.times(1)).publish(event);
+    Mockito.verify(publishComicSelectionStateAction, Mockito.times(1)).publish(event);
   }
 
   @Test
   void addByTagTypeAndValue() {
     final List<Long> existingIds = new ArrayList<>();
-    existingIds.add(TEST_COMIC_BOOK_ID);
+    existingIds.add(TEST_COMIC_ID);
 
     Mockito.when(
             displayableComicService.getIdsByTagTypeAndValue(
@@ -386,7 +383,7 @@ class ComicSelectionServiceTest {
 
     service.addByTagTypeAndValue(emptyIds, TEST_TAG_TYPE, TEST_TAG_VALUE);
 
-    assertTrue(emptyIds.contains(TEST_COMIC_BOOK_ID));
+    assertTrue(emptyIds.contains(TEST_COMIC_ID));
 
     Mockito.verify(displayableComicService, Mockito.times(1))
         .getIdsByTagTypeAndValue(TEST_TAG_TYPE, TEST_TAG_VALUE);
@@ -395,7 +392,7 @@ class ComicSelectionServiceTest {
   @Test
   void removeByTagTypeAndValue() {
     final List<Long> existingIds = new ArrayList<>();
-    existingIds.add(TEST_COMIC_BOOK_ID);
+    existingIds.add(TEST_COMIC_ID);
 
     Mockito.when(
             displayableComicService.getIdsByTagTypeAndValue(
@@ -403,12 +400,12 @@ class ComicSelectionServiceTest {
         .thenReturn(existingIds);
 
     final List emptyIds = new ArrayList();
-    emptyIds.add(TEST_COMIC_BOOK_ID);
-    emptyIds.add(TEST_COMIC_BOOK_ID * 2L);
+    emptyIds.add(TEST_COMIC_ID);
+    emptyIds.add(TEST_COMIC_ID * 2L);
 
     service.removeByTagTypeAndValue(emptyIds, TEST_TAG_TYPE, TEST_TAG_VALUE);
 
-    assertFalse(emptyIds.contains(TEST_COMIC_BOOK_ID));
+    assertFalse(emptyIds.contains(TEST_COMIC_ID));
     assertFalse(emptyIds.isEmpty());
 
     Mockito.verify(displayableComicService, Mockito.times(1))

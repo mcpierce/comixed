@@ -18,7 +18,7 @@
 
 package org.comixedproject.batch.comicbooks.listeners;
 
-import static org.comixedproject.batch.comicbooks.LoadComicBooksConfiguration.LOAD_COMIC_BOOKS_JOB;
+import static org.comixedproject.batch.comicbooks.LoadComicsConfiguration.LOAD_COMIC_BOOKS_JOB;
 
 import org.comixedproject.messaging.PublishingException;
 import org.comixedproject.messaging.batch.PublishBatchProcessDetailUpdateAction;
@@ -34,8 +34,8 @@ import org.springframework.batch.core.job.JobInstance;
 import org.springframework.batch.core.job.parameters.JobParameters;
 
 @ExtendWith(MockitoExtension.class)
-class loadComicBooksJobListenerTest {
-  @InjectMocks private LoadComicBooksJobListener listener;
+class loadComicsJobListenerTest {
+  @InjectMocks private LoadComicsJobListener listener;
   @Mock private JobInstance jobInstance;
   @Mock private JobExecution jobExecution;
   @Mock private PublishBatchProcessDetailUpdateAction publishBatchProcessDetailUpdateAction;

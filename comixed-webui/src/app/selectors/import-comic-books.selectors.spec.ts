@@ -18,12 +18,12 @@
 
 import {
   IMPORT_COMIC_BOOKS_FEATURE_KEY,
-  ImportComicBooksState
-} from '../reducers/import-comic-books.reducer';
+  ImportComicsState
+} from '../reducers/import-comics.reducer';
 import { selectProcessingComicBooksBatches } from './import-comic-books.selectors';
 
 describe('ImportComicBooks Selectors', () => {
-  let state: ImportComicBooksState;
+  let state: ImportComicsState;
 
   beforeEach(() => {
     state = {

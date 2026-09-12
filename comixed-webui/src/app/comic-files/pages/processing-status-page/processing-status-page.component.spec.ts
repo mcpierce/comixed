@@ -21,7 +21,7 @@ import { ProcessingStatusPageComponent } from './processing-status-page.componen
 import {
   IMPORT_COMIC_BOOKS_FEATURE_KEY,
   initialState as initialImportComicBooksComicsState
-} from '@app/reducers/import-comic-books.reducer';
+} from '@app/reducers/import-comics.reducer';
 import { provideMockStore } from '@ngrx/store/testing';
 import { LoggerModule } from '@angular-ru/cdk/logger';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
