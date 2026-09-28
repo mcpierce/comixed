@@ -1,0 +1,30 @@
+{
+  "dashboard": {
+    "statistics": {
+      "character": {
+        "title": "Characters"
+      },
+      "comic-state": {
+        "title": "Comics By State"
+      },
+      "location": {
+        "title": "Locations"
+      },
+      "publisher": {
+        "title": "Publishers"
+      },
+      "publisher-year": {
+        "title": "Publisher By Year"
+      },
+      "series": {
+        "title": "Series"
+      },
+      "story": {
+        "title": "Stories"
+      },
+      "team": {
+        "title": "Teams"
+      }
+    }
+  }
+}
