@@ -16,14 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { provideRouter } from '@angular/router';
-import { dashboardRoutes } from '@app/dashboard/dashboard-routes';
+import { API_ROOT_URL } from '@app/app-constants';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule],
-  providers: [provideRouter(dashboardRoutes)]
-})
-export class DashboardModule {}
+export const LOGIN_PAGE_URL = '/login';
+
+export const LOGIN_URL = `${API_ROOT_URL}/login`;
+
+export const AUTHENTICATION_TOKEN_KEY = 'comixed.auth-token';
+
+export const HTTP_AUTHORIZATION_HEADER = 'Authorization';
+export const HTTP_REQUESTED_WITH_HEADER = 'X-Requested-With';
+export const HTTP_XML_REQUEST = 'XMLHttpRequest';

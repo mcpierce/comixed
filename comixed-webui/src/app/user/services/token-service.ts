@@ -16,14 +16,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { provideRouter } from '@angular/router';
-import { dashboardRoutes } from '@app/dashboard/dashboard-routes';
+import { inject, Service } from '@angular/core';
+import { LoggerService } from '@angular-ru/cdk/logger';
+import { AUTHENTICATION_TOKEN_KEY } from '@app/user/user-constants';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule],
-  providers: [provideRouter(dashboardRoutes)]
-})
-export class DashboardModule {}
+@Service()
+export class TokenService {
+  logger = inject(LoggerService);
+
+  setAuthToken(token: string) {
+    this.logger.trace('Saving authentication token');
+    window.localStorage.setItem(AUTHENTICATION_TOKEN_KEY, token);
+  }
+
+  getAuthToken(): string {
+    this.logger.trace('Retrieving authentication token');
+    return window.localStorage.getItem(AUTHENTICATION_TOKEN_KEY) || '';
+  }
+
+  clearAuthToken() {
+    this.logger.trace('Clearing authentication token');
+    window.localStorage.removeItem(AUTHENTICATION_TOKEN_KEY);
+  }
+}

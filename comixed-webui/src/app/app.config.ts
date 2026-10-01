@@ -22,21 +22,26 @@ import {
   provideBrowserGlobalErrorListeners
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { appRoutes } from '@app/app.routes';
+import { appRoutes } from '@app/app-routes';
 import { environment } from '../environments/environment';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { DashboardModule } from '@app/dashboard/dashboard-module';
+import { UserModule } from '@app/user/user-module';
+import { authenticationInterceptor } from '@app/user/interceptors/authentication-interceptor';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { provideLogger } from '@angular-ru/cdk/logger';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    provideLogger(),
     provideRouter(appRoutes),
     environment.providers,
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([authenticationInterceptor])),
     provideTranslateService({
       lang: 'en',
       fallbackLang: 'en',
@@ -48,6 +53,13 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       StoreModule.forRoot({}, {}),
       EffectsModule.forRoot([]),
+      StoreDevtoolsModule.instrument({
+        maxAge: 25,
+        trace: true,
+        logOnly: environment.production,
+        connectInZone: true
+      }),
+      UserModule,
       DashboardModule
     )
   ]

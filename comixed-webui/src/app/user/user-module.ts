@@ -19,11 +19,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { provideRouter } from '@angular/router';
-import { dashboardRoutes } from '@app/dashboard/dashboard-routes';
+import { userRoutes } from '@app/user/user-routes';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule],
-  providers: [provideRouter(dashboardRoutes)]
+  providers: [provideRouter(userRoutes)]
 })
-export class DashboardModule {}
+export class UserModule {}

@@ -16,14 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { provideRouter } from '@angular/router';
-import { dashboardRoutes } from '@app/dashboard/dashboard-routes';
+import { AUTHENTICATION_FEATURE_KEY } from '../reducers/authentication.reducer';
+import { selectAuthenticationState } from './authentication.selectors';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule],
-  providers: [provideRouter(dashboardRoutes)]
-})
-export class DashboardModule {}
+describe('AuthenticationService Selectors', () => {
+  it('should select the feature state', () => {
+    const result = selectAuthenticationState({
+      [AUTHENTICATION_FEATURE_KEY]: {}
+    });
+
+    expect(result).toEqual({});
+  });
+});

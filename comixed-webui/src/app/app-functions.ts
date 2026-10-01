@@ -16,14 +16,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { provideRouter } from '@angular/router';
-import { dashboardRoutes } from '@app/dashboard/dashboard-routes';
+import { API_ROOT_URL } from '@app/app-constants';
+import * as _ from 'lodash';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule],
-  providers: [provideRouter(dashboardRoutes)]
-})
-export class DashboardModule {}
+export function interpolate(template: string, values: any = {}): string {
+  _.merge(values, { API_ROOT_URL });
+  _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
+  const compiled = _.template(template);
+  return compiled(values);
+}
