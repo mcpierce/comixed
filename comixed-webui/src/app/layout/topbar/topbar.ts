@@ -16,4 +16,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { Component, inject } from '@angular/core';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { WebSocketService } from '@app/messaging/web-socket-service';
+
+@Component({
+  imports: [MatToolbar, MatIconButton, MatIcon],
+  selector: 'app-topbar',
+  styleUrl: './topbar.scss',
+  templateUrl: './topbar.html',
+})
+export class Topbar {
+  websocketService = inject(WebSocketService);
+}

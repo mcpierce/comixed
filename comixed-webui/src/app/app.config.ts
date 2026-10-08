@@ -16,4 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from '@app/app.routes';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes)],
+};

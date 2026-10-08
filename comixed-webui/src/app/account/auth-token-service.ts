@@ -16,4 +16,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { Service } from '@angular/core';
+import { AUTH_TOKEN_KEY } from '@app/account/account-constants';
+
+@Service()
+export class AuthTokenService {
+  saveAuthToken(token: string) {
+    window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+  }
+
+  hasAuthToken(): boolean {
+    return !!window.localStorage.getItem(AUTH_TOKEN_KEY);
+  }
+
+  getAuthToken() {
+    return window.localStorage.getItem(AUTH_TOKEN_KEY) || '';
+  }
+
+  removeAuthToken() {
+    window.localStorage.removeItem(AUTH_TOKEN_KEY);
+  }
+}

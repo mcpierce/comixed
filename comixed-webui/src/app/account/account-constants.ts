@@ -16,4 +16,4 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+export const AUTH_TOKEN_KEY = 'comixed.auth-token';

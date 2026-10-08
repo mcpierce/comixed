@@ -16,4 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { Component } from '@angular/core';
+import { MatToolbar } from '@angular/material/toolbar';
+
+@Component({
+  imports: [MatToolbar],
+  selector: 'app-footer',
+  styleUrl: './footer.scss',
+  templateUrl: './footer.html',
+})
+export class Footer {}

@@ -16,4 +16,17 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { Component, signal } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { Topbar } from '@app/layout/topbar/topbar';
+import { Footer } from '@app/layout/footer/footer';
+
+@Component({
+  imports: [RouterOutlet, Topbar, Footer],
+  selector: 'app-root',
+  styleUrl: './app.scss',
+  templateUrl: './app.html',
+})
+export class App {
+  protected readonly title = signal('comixed');
+}

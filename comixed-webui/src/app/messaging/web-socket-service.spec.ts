@@ -16,4 +16,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-export const environment = {};
+import { TestBed } from '@angular/core/testing';
+import { WebSocketService } from '@app/messaging/web-socket-service';
+
+describe('WebSocketService', () => {
+  let service: WebSocketService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(WebSocketService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+
+  it('should not have a connection on creation', () => {
+    expect(service.stompClient).toBeNull();
+  });
+});
