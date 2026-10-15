@@ -26,6 +26,7 @@ import { PublisherDetailPage } from '@app/collections/pages/publisher-detail-pag
 import { SeriesDetailPage } from '@app/collections/pages/series-detail-page/series-detail-page';
 import { ComicListPage } from '@app/library/pages/comic-list-page/comic-list-page';
 import { ImportComicsPage } from '@app/library/pages/import-comics-page/import-comics-page';
+import { ComicDetailPage } from '@app/library/pages/comic-detail-page/comic-detail-page';
 
 export const appRoutes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/dashboard' },
@@ -59,5 +60,6 @@ export const appRoutes: Routes = [
     component: ComicListPage,
     data: { deleted: true }
   },
-  { path: 'library/:tagType', component: TagListPage }
+  { path: 'library/:tagType', component: TagListPage },
+  { path: 'library/comics/:comicId', component: ComicDetailPage }
 ];
