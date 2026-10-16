@@ -34,7 +34,7 @@ describe('App', () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
-        provideRouter([{ path: '*', redirectTo: '' }]),
+        provideRouter([{ path: 'accounts/initial', redirectTo: '' }]),
         provideLogger({ minLevel: LoggerLevel.OFF }),
         AccountService,
         provideTranslateService()
@@ -50,9 +50,5 @@ describe('App', () => {
 
   it('should create the app', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should load the current user', () => {
-    expect(loadCurrentUserSpy).toHaveBeenCalled();
   });
 });

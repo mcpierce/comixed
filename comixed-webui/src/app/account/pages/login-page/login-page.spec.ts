@@ -22,7 +22,7 @@ import { LoggerLevel, provideLogger } from '@angular-ru/cdk/logger';
 import { provideTranslateService } from '@ngx-translate/core';
 import { beforeEach, Mock } from 'vitest';
 import { provideRouter } from '@angular/router';
-import { USER_READER } from '@app/account/user-fixtures';
+import { USER_READER } from '@app/account/account-fixtures';
 import { AccountService } from '@app/account/services/account-service';
 
 describe('LoginPage', () => {

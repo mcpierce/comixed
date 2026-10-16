@@ -25,7 +25,9 @@
   </ng-template>
 
   <ng-template #center>
-    <app-library-statistics-panel></app-library-statistics-panel>
+    @if (currentUserStore.isAuthenticated()) {
+      <app-library-statistics-panel></app-library-statistics-panel>
+    }
   </ng-template>
 
   <ng-template #end>

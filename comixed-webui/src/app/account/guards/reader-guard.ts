@@ -16,7 +16,20 @@
  * along with this program. If not, see <http://www.gnu.org/licenses>
  */
 
-import { Routes } from '@angular/router';
-import { LoginPage } from '@app/account/pages/login-page/login-page';
+import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CurrentUserStore } from '@app/account/stores/current-user-store';
+import { LoggerService } from '@angular-ru/cdk/logger';
 
-export const userRoutes: Routes = [{ path: 'login', component: LoginPage }];
+export const readerGuard: CanActivateFn = (route, state) => {
+  const logger = inject(LoggerService);
+  const currentUserStore = inject(CurrentUserStore);
+
+  if (currentUserStore.isAuthenticated()) {
+    logger.debug('Is user a reader?', currentUserStore.isReader());
+    return currentUserStore.isReader();
+  } else {
+    logger.debug('User is not logged in');
+    return false;
+  }
+};

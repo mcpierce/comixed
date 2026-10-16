@@ -18,12 +18,16 @@
 
 import { User } from '@app/account/models/user';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { ROLE_NAME_ADMIN } from '@app/account/user-constants';
+import {
+  ROLE_NAME_ADMIN,
+  ROLE_NAME_READER
+} from '@app/account/account-constants';
 
 interface CurrentUserState {
   isLoading: boolean;
   isAuthenticated: boolean;
   isAdmin: boolean;
+  isReader: boolean;
   user: User | null;
   email: string;
   readComics: number[];
@@ -35,6 +39,7 @@ const initialState: CurrentUserState = {
   isLoading: false,
   isAuthenticated: false,
   isAdmin: false,
+  isReader: false,
   user: null,
   email: '',
   readComics: [],
@@ -59,6 +64,9 @@ export const CurrentUserStore = signalStore(
         isAuthenticated: !!user,
         isAdmin:
           !!user && user.roles.map(role => role.name).includes(ROLE_NAME_ADMIN),
+        isReader:
+          !!user &&
+          user.roles.map(role => role.name).includes(ROLE_NAME_READER),
         user: user,
         email: user?.email || '',
         readComics: user?.readComics || [],

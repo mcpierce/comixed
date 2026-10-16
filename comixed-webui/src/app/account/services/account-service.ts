@@ -20,18 +20,65 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { LoggerService } from '@angular-ru/cdk/logger';
 import { interpolate } from '@app/app-functions';
-import { LOAD_CURRENT_USER_URL, LOGIN_URL } from '@app/account/user-constants';
+import {
+  CHECK_FOR_ADMIN_ACCOUNT_URL,
+  CREATE_ADMIN_ACCOUNT_URL,
+  LOAD_CURRENT_USER_URL,
+  LOGIN_URL
+} from '@app/account/account-constants';
 import { CurrentUserStore } from '@app/account/stores/current-user-store';
 import { User } from '@app/account/models/user';
 import { LoginResponse } from '@app/account/models/net/login-response';
 import { TokenService } from '@app/account/services/token-service';
+import { InitialAdminStore } from '@app/account/stores/initial-admin-store';
+import { CheckForAdminResponse } from '@app/account/models/net/check-for-admin-response';
+import { CreateAdminAccountRequest } from '@app/account/models/net/create-admin-account-request';
 
 @Service()
 export class AccountService {
   readonly logger = inject(LoggerService);
   readonly client = inject(HttpClient);
   readonly tokenService = inject(TokenService);
+  readonly initialAccountStore = inject(InitialAdminStore);
   readonly currentUserStore = inject(CurrentUserStore);
+
+  checkForAdminAccount(): void {
+    this.logger.trace('Checking for existing admin account');
+    this.client
+      .get<CheckForAdminResponse>(interpolate(CHECK_FOR_ADMIN_ACCOUNT_URL))
+      .subscribe({
+        next: response => {
+          this.logger.debug('Found existing account?', response.hasExisting);
+          this.initialAccountStore.update(response.hasExisting);
+        },
+        error: error =>
+          this.logger.error(
+            'Failed to check for existing admin account:',
+            error
+          )
+      });
+  }
+
+  createAdminAccount(args: { email: string; password: string }): void {
+    this.initialAccountStore.update(false);
+    this.logger.trace('Creating admin account');
+    this.client
+      .post(interpolate(CREATE_ADMIN_ACCOUNT_URL), {
+        email: args.email,
+        password: args.password
+      } as CreateAdminAccountRequest)
+      .subscribe({
+        complete: () => {
+          this.logger.debug(
+            'Successfully created initial admin account:',
+            args.email
+          );
+          this.initialAccountStore.update(true);
+        },
+        error: error =>
+          this.logger.error('Failed to create initial admin account:', error)
+      });
+  }
 
   loadCurrentUser(): void {
     this.logger.trace('Loading current user');

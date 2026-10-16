@@ -23,39 +23,64 @@ import { CurrentUserStore } from '@app/account/stores/current-user-store';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { LibraryService } from '@app/library/services/library-service';
 import { WebSocketService } from '@app/messaging/services/web-socket-service';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Topbar } from '@app/layout/components/topbar/topbar';
+import { InitialAdminStore } from '@app/account/stores/initial-admin-store';
 
 @Component({
-  imports: [RouterOutlet, Topbar],
+  imports: [Topbar, RouterOutlet],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html'
 })
 export class App {
-  private readonly authenticationService = inject(AccountService);
-  private readonly libraryService = inject(LibraryService);
-  private readonly currentUserStore = inject(CurrentUserStore);
-  private readonly webSocketService = inject(WebSocketService);
-  private readonly logger = inject(LoggerService);
+  readonly logger = inject(LoggerService);
+  readonly initialAdminStore = inject(InitialAdminStore);
+  readonly currentUserStore = inject(CurrentUserStore);
+
+  readonly router = inject(Router);
+  readonly accountService = inject(AccountService);
+  readonly libraryService = inject(LibraryService);
+  readonly webSocketService = inject(WebSocketService);
 
   constructor() {
+    this.accountService.checkForAdminAccount();
+    toObservable<boolean>(this.initialAdminStore.checked)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: checked => {
+          if (!checked) {
+            this.logger.trace('Checking for initial admin account');
+            this.accountService.checkForAdminAccount();
+          }
+        }
+      });
+    toObservable<boolean>(this.initialAdminStore.exists)
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: exists => {
+          if (this.initialAdminStore.checked()) {
+            if (!exists) {
+              this.logger.trace('Redirecting to account creation page');
+              this.router.navigateByUrl('/accounts/initial');
+            } else {
+              this.accountService.loadCurrentUser();
+            }
+          }
+        }
+      });
     toObservable<boolean>(this.currentUserStore.isAuthenticated)
       .pipe(takeUntilDestroyed())
       .subscribe({
         next: value => {
           if (value) {
-            this.logger.trace('Connecting the websocket');
             this.webSocketService.connect().subscribe();
             this.logger.trace('Loading the remote library state');
             this.libraryService.loadLibraryState();
           } else {
-            this.logger.trace('Disconnecting the websocket');
             this.webSocketService.disconnect();
           }
         }
       });
-    this.logger.trace('Fetching the current user');
-    this.authenticationService.loadCurrentUser();
   }
 }

@@ -25,11 +25,16 @@ import {
 import { HttpParams, provideHttpClient } from '@angular/common/http';
 import { AccountService } from '@app/account/services/account-service';
 import { CurrentUserStore } from '@app/account/stores/current-user-store';
-import { LOAD_CURRENT_USER_URL, LOGIN_URL } from '@app/account/user-constants';
+import {
+  CHECK_FOR_ADMIN_ACCOUNT_URL,
+  LOAD_CURRENT_USER_URL,
+  LOGIN_URL
+} from '@app/account/account-constants';
 import { interpolate } from '@app/app-functions';
-import { USER_READER } from '@app/account/user-fixtures';
+import { USER_READER } from '@app/account/account-fixtures';
 import { LoginResponse } from '@app/account/models/net/login-response';
 import { TokenService } from '@app/account/services/token-service';
+import { CheckForAdminResponse } from '@app/account/models/net/check-for-admin-response';
 
 describe('AccountService', () => {
   const TEST_USER = USER_READER;
@@ -61,10 +66,22 @@ describe('AccountService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should check for the existing admin account', () => {
+    const loadedSpy = vi.spyOn(service.initialAccountStore, 'update');
+    service.checkForAdminAccount();
+    const req = httpController.expectOne(
+      interpolate(CHECK_FOR_ADMIN_ACCOUNT_URL)
+    );
+    expect(req.request.method).toEqual('GET');
+    req.flush({ hasExisting: true } as CheckForAdminResponse);
+    httpController.verify();
+    expect(loadedSpy).toHaveBeenCalledWith(true);
+  });
+
   describe('loading the current user', () => {
     it('success', async () => {
       const loadedSpy = vi.spyOn(service.currentUserStore, 'loaded');
-      await service.loadCurrentUser();
+      service.loadCurrentUser();
       const req = httpController.expectOne(interpolate(LOAD_CURRENT_USER_URL));
       expect(req.request.method).toEqual('GET');
       req.flush(TEST_USER);
@@ -77,7 +94,7 @@ describe('AccountService', () => {
     it('success', async () => {
       const loginSpy = vi.spyOn(service.currentUserStore, 'loginSuccess');
 
-      await service.login({ email: TEST_EMAIL, password: TEST_PASSWORD });
+      service.login({ email: TEST_EMAIL, password: TEST_PASSWORD });
       const req = httpController.expectOne(interpolate(LOGIN_URL));
       expect(req.request.method).toEqual('POST');
       expect(req.request.body).toEqual(
