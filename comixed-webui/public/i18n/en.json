@@ -271,6 +271,11 @@
       "variable-use": "What It Holds"
     },
     "page-title": "Library Settings",
+    "placeholder": {
+      "file-renaming-rule": "The rule for naming a comic files...",
+      "page-renaming-rule": "The rule for naming a comic page...",
+      "root-directory": "The top directory for your library..."
+    },
     "text": {
       "file-system-settings-title": "File System Settings",
       "other-settings-title": "Features",
@@ -323,12 +328,26 @@
   },
   "metadata-source-list-page": {
     "label": {
+      "available": "Available?",
       "preferred": "Preferred?",
-      "properties": "Properties",
-      "source-name": "Metadata Source Name"
+      "source-homepage": "Homepage",
+      "source-name": "Metadata Source Name",
+      "source-version": "Version"
     },
     "page-title": "Metadata Source List",
     "trail-title": "Metadata Sources"
+  },
+  "metadata-source-page": {
+    "label": {
+      "preferred-source": "This is the preferred metadata source.",
+      "properties": "Adaptor Properties",
+      "property-name": "Property Name",
+      "property-value": "Property Value",
+      "source-name": "Source Name:"
+    },
+    "placeholder": {
+      "source-name": "The name of the metadata source adaptor..."
+    }
   },
   "publisher-comic-list-page": {
     "label": {
