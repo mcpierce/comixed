@@ -602,6 +602,11 @@
           "mark-read": "Mark as read",
           "mark-unread": "Unmark"
         },
+        "recreate": {
+          "cb7": "Convert To CB7...",
+          "cbz": "Convert To CBZ...",
+          "root": "Recreate Comic Files"
+        },
         "rescan": "Rescan...",
         "scrape": "Scrape metadata..."
       }

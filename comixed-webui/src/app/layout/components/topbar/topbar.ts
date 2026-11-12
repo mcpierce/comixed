@@ -162,6 +162,26 @@ export class Topbar {
           },
           {
             label: this.translateService.instant(
+              'topbar.menu.selected-comics.recreate.root'
+            ),
+            icon: 'pi pi-folder',
+            items: [
+              {
+                label: this.translateService.instant(
+                  'topbar.menu.selected-comics.recreate.cbz'
+                ),
+                disabled: this.selectedCount === 0
+              },
+              {
+                label: this.translateService.instant(
+                  'topbar.menu.selected-comics.recreate.cb7'
+                ),
+                disabled: this.selectedCount === 0
+              }
+            ]
+          },
+          {
+            label: this.translateService.instant(
               'topbar.menu.selected-comics.scrape'
             ),
             icon: 'pi pi-cloud',
