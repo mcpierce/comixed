@@ -50,7 +50,7 @@
           </label>
         </div>
 
-        <div class="cx-form-field-wide">
+        <div class="cx-form-field">
           <p-ifta-label>
             <p-select
               id="metadata-source-select"
@@ -64,6 +64,14 @@
             <label for="metadata-source-select">
               {{ "comic-metadata-detail.label.metadata-source" | translate }}
             </label>
+          </p-ifta-label>
+        </div>
+        <div class="cx-form-field">
+          <p-ifta-label>
+            <label for="reference-id">
+              {{ "comic-metadata-detail.label.reference-id" | translate }}
+            </label>
+            <input id="reference-id" pInputText formControlName="referenceId" />
           </p-ifta-label>
         </div>
 
